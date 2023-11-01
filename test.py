@@ -55,6 +55,7 @@ driver = webdriver.Chrome(service=ChromeService(driver_path))
 
 # ページのタイトルを表示する
 
+driver.get("http://www.yahoo.co.jp/")
 get_title = driver.title
 print(get_title)
 print("========== kekka ========== 動いてる？")
