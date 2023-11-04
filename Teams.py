@@ -11,6 +11,10 @@ from selenium.webdriver.chrome.service import Service as ChromeService
 #import os
 import time
 
+from selenium.webdriver.support.select import Select
+
+from selenium.webdriver.support.ui import Select
+
 from selenium.webdriver.common.by import By
 
 
@@ -92,15 +96,30 @@ form = driver.find_element(By.XPATH,'//*[@id="accordionSidebar"]/li[6]/a')
 
 form.click()
 
-form = driver.find_element(By.XPATH,'//*[@id="collapse5"]/div/a[5]')
 
-#time.sleep(10)
 
+dropdown = driver.find_element(By.ID,'page-top')
+#
+# select = Select(dropdown)
+#
+time.sleep(1)
+
+driver.find_element(By.XPATH,'//*[@id="collapse5"]/div/a[5]').click()
+
+
+
+time.sleep(60)
 form.click()
+
+# <a style="cursor: pointer;" class="collapse-item" onclick="sub_menu_open('schedule/rs_print_monschedule.php?mc=0605', 'ky_child_window_0605')">勤務表出力</a>
+
+
+# find_element_by_css_selector("#ff > input[type='button']")
+
 
 time.sleep(10)
 
-#form = driver.find_element(By.XPATH,'//*[@id="excelout"]')
+form = driver.find_element(By.XPATH,'//*[@id="excelout"]')
 
 form.click()
 
