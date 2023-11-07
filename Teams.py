@@ -108,45 +108,30 @@ driver.find_element(By.XPATH,'//*[@id="collapse5"]/div/a[5]').click()
 
 
 
-time.sleep(60)
-form.click()
+time.sleep(30)
+
+# form.click()
 
 # <a style="cursor: pointer;" class="collapse-item" onclick="sub_menu_open('schedule/rs_print_monschedule.php?mc=0605', 'ky_child_window_0605')">勤務表出力</a>
 
 
 # find_element_by_css_selector("#ff > input[type='button']")
 
+driver.implicitly_wait(10)
 
-time.sleep(10)
 
-form = driver.find_element(By.XPATH,'//*[@id="excelout"]')
+# form = driver.find_element(By.XPATH,'//*[@id="excelout"]"]')
+
+form = driver.find_element(By.CSS_SELECTOR,'#excelout"]')
+
 
 form.click()
 
-time.sleep(20)
+driver.implicitly_wait(20)
 
 form = driver.find_element(By.XPATH,'//*[@id="close"]/a')
 
 form.click()
 
-# get_title = driver.title
-# print(get_title)
-# print("========== kekka ========== 動いてる？")
-# print(driver.page_source)
+# "download.default_directory":os.getcwd()+\\"download_folder"
 
-
-#
-# driver.quit()
-
-
-# driver.get('https://www.insource.co.jp/bup/middle-schedule.html')
-
-# driver.maximize_window()
-#
-# time.sleep(2)
-#
-# form = driver.find_element(By.XPATH,'//*[@id="search"]/div/input')
-#
-# form.send_keys('Python')
-#
-# form.submit()
