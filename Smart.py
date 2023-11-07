@@ -34,10 +34,10 @@ from selenium.webdriver.common.by import By
 # driver_path = join(root, "chromedriver.exe")
 
 
-options = webdriver.ChromeOptions()
+# options = webdriver.ChromeOptions()
 
 
-print("========== kekka ========== 動いてる？")
+# print("========== kekka ========== 動いてる？")
 
 
 # service = Service(driver_path)
@@ -47,9 +47,9 @@ print("========== kekka ========== 動いてる？")
 # 起動時にオプションをつける。（ポート指定により、起動済みのブラウザのドライバーを取得）
 # driver_path = "C:\\Users\\406239\\AppData\\Local\\Programs\\Python\\Python39\\chromedriver_binary\\chromedriver.exe"
 
-driver_path = "C:\\Users\\406239\\PycharmProjects\\pythonProject1\\chromedriver_binary\\chromedriver.exe"
-driver = webdriver.Chrome(service=ChromeService(driver_path))
-options.add_experimental_option("debuggerAddress", "127.0.0.1:9333")
+# driver_path = "C:\\Users\\406239\\PycharmProjects\\pythonProject1\\chromedriver_binary\\chromedriver.exe"
+# driver = webdriver.Chrome(service=ChromeService(driver_path))
+# options.add_experimental_option("debuggerAddress", "127.0.0.1:9333")
 # driver = webdriver.Chrome(executable_path=driver_path, options=options)
 
 
@@ -71,6 +71,8 @@ from selenium.webdriver.chrome.service import Service as ChromeService
 import time
 
 from selenium.webdriver.common.by import By
+
+# from selenium.webdriver.common.by import className
 
 
 #from webdriver_manager.chrome import ChromeDriverManager
@@ -96,7 +98,7 @@ from selenium.webdriver.common.by import By
 options = webdriver.ChromeOptions()
 
 
-print("========== kekka ========== 動いてる？")
+print("========== G-smartを開く ========== ")
 
 
 # service = Service(driver_path)
@@ -108,15 +110,12 @@ print("========== kekka ========== 動いてる？")
 
 driver_path = "C:\\Users\\406239\\PycharmProjects\\pythonProject1\\chromedriver_binary\\chromedriver.exe"
 driver = webdriver.Chrome(service=ChromeService(driver_path))
-options.add_experimental_option("debuggerAddress", "127.0.0.1:9333")
+# options.add_experimental_option("debuggerAddress", "127.0.0.1:9333")
 # driver = webdriver.Chrome(executable_path=driver_path, options=options)
 
 
 
-# driver = webdriver.Chrome(service,options=options)
-
-
-# ページのタイトルを表示する
+# G-smartのページを開いて、ログインする
 
 driver.get("http://gate.isso.nhk.or.jp/fw/dfw/dmn/dm/dmenu")
 
@@ -135,95 +134,50 @@ form = driver.find_element(By.XPATH,'//*[@id="password2"]')
 
 form.send_keys('*kabu92772462')
 
-# form.submit()
-
 time.sleep(2)
 
 form = driver.find_element(By.XPATH,'//*[@id="main"]/table/tbody/tr[5]/td[2]/input')
 
 form.click()
-time.sleep(10)
 
-form = driver.find_element(By.XPATH,'//*[@id="backendmenu"]/div[4]/h3')
 
-form.click()
+print("========== G-smartにログイン完了・統合認証TOPページ ========== ") #この上まではOK。
+
+
+
+
+driver.implicitly_wait(30)
+
+
+# <h3 class="boxTitle4" style="background: url(&quot;./img/plus.png&quot;) right center no-repeat;"><img src="/fw/dfw/dmn/img/somu.png">&nbsp;総務・経理・人材育成・部局システム</h3>
+
+# frame_1 = driver.find_element(By.CLASS_NAME,"accordionBox")
+
+frame_1 = driver.find_element(By.CSS_SELECTOR,"#backendmenu > div:nth-child(5) > h3")
+
+# frame_1 = driver.find_element(By.XPATH,'//*[@id="backendmenu"]/div[4]/h3')
+
+# frame_1 = driver.find_element(By.CSS_SELECTOR,"#backendmenu > div:nth-child(5) > p > a:nth-child(1) > img")
+
+# driver.switch_to.frame(frame_1)
+
+print('CSS Selector')
 
 time.sleep(1)
+
+frame_1.click()
+
+time.sleep(2)
+
+frame_2 = driver.find_element(By.XPATH,'//*[@id="backendmenu"]/div[4]/p/a[1]/img')
+
+driver.switch_to.frame(frame_2)
 
 form = driver.find_element(By.XPATH,'//*[@id="backendmenu"]/div[4]/p/a[1]/img')
 
 form.click()
 
-form = driver.find_element(By.XPATH,'//*[@id="collapse5"]/div/a[5]')
-
-#time.sleep(10)
-
-form.click()
-
-time.sleep(10)
-
-#form = driver.find_element(By.XPATH,'//*[@id="excelout"]')
-
-form.click()
-
-time.sleep(20)
-
-form = driver.find_element(By.XPATH,'//*[@id="close"]/a')
-
-form.click()
-
-# get_title = driver.title
-# print(get_title)
-# print("========== kekka ========== 動いてる？")
-# print(driver.page_source)
-
-
-#
-# driver.quit()
-
-
-# driver.get('https://www.insource.co.jp/bup/middle-schedule.html')
-
-# driver.maximize_window()
-#
-# time.sleep(2)
-#
-# form = driver.find_element(By.XPATH,'//*[@id="search"]/div/input')
-#
-# form.send_keys('Python')
-#
-# form.submit()")
-
-driver.maximize_window()
-
-time.sleep(1)
-form = driver.find_element(By.XPATH,'//*[@id="selector_form"]/div/div/div/button')
-
-form.click()
-
-time.sleep(1)
-
-form = driver.find_element(By.XPATH,'//*[@id="username"]')
-
-form.send_keys('1010406239')
-
-form = driver.find_element(By.XPATH,'//*[@id="uid_password"]')
-
-form.send_keys('*kabu92772462')
-
-form.submit()
-
-time.sleep(1)
-
-form = driver.find_element(By.XPATH,'//*[@id="btnClose"]')
-
-form.click()
-
-time.sleep(1)
-
-form = driver.find_element(By.XPATH,'//*[@id="accordionSidebar"]/li[6]/a')
-
-form.click()
+driver.switch_to.default_content()
 
 form = driver.find_element(By.XPATH,'//*[@id="collapse5"]/div/a[5]')
 
@@ -231,36 +185,10 @@ form = driver.find_element(By.XPATH,'//*[@id="collapse5"]/div/a[5]')
 
 form.click()
 
-time.sleep(10)
-
-#form = driver.find_element(By.XPATH,'//*[@id="excelout"]')
-
-form.click()
-
-time.sleep(20)
-
-form = driver.find_element(By.XPATH,'//*[@id="close"]/a')
-
-form.click()
-
-# get_title = driver.title
-# print(get_title)
-# print("========== kekka ========== 動いてる？")
-# print(driver.page_source)
 
 
-#
-# driver.quit()
 
 
-# driver.get('https://www.insource.co.jp/bup/middle-schedule.html')
 
-# driver.maximize_window()
-#
-# time.sleep(2)
-#
-# form = driver.find_element(By.XPATH,'//*[@id="search"]/div/input')
-#
-# form.send_keys('Python')
-#
-# form.submit()
+
+
