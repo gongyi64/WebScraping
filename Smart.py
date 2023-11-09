@@ -119,6 +119,8 @@ driver = webdriver.Chrome(service=ChromeService(driver_path))
 
 driver.get("http://gate.isso.nhk.or.jp/fw/dfw/dmn/dm/dmenu")
 
+# driver.get("http://gate.isso.nhk.or.jp/fw/dfw/dmn/dm/dmenu")
+
 driver.maximize_window()
 
 time.sleep(1)
