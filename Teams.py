@@ -119,62 +119,37 @@ dropdown = driver.find_element(By.ID,'page-top')
 #
 time.sleep(1)
 
-
+# from selenium.webdriver.support.ui import WebDriverWait
 
 driver.find_element(By.XPATH,'//*[@id="collapse5"]/div/a[5]').click()
+print(driver.page_source)
 
-time.sleep(10)
-script = 'javascript:void(0);'
-form.driver.execute_script(script)
+print(driver.current_url)
 
-time.sleep(30)
-# form.click()
-
-# <a style="cursor: pointer;" class="collapse-item" onclick="sub_menu_open('schedule/rs_print_monschedule.php?mc=0605','ky_child_window_0605')">勤務表出力</a>
-
-
-# find_element_by_css_selector("#ff > input[type='button']")
+# driver.get("https://gate.isso.nhk.or.jp/fw/dfw/lkteams/schedule/rs_print_monschedule_t1.php?action=init")
 
 driver.implicitly_wait(10)
-driver.maximize_window()
 
-driver.switch_to.frame(driver.find_element(By.NAME,"actbar.cfx"))
+handle_array = driver.window_handles
 
-# driver.find_element(By.CSS_SELECTOR,"#action").click()
+print("handle_arrayの表示配列最初と次")
+print(handle_array[0])
+print(handle_array[1])
+# print(handle_array[2])
 
-# driver.find_element(By.CSS_SELECTOR,'#excelout').click()
+driver.switch_to.window(handle_array[1])
 
-form = driver.find_element(By.XPATH,'//*[@id="excelout"]"]')
-form.click()
-# form = driver.find_element(By.CSS_SELECTOR,'#excelout"]')
-time.sleep(3)
+time.sleep(10)
+# driver.find_element(By.XPATH,'//*[@id="excelout"]"]"]').click()
 
-# script = 'javascript: onclick="sub_menu_open(https://gate.isso.nhk.or.jp/fw/dfw/lkteams/schedule/rs_print_monschedule.php?mc=0605,ky_child_window_0605'
+# driver.find_element(By.XPATH,'//*[@id="close"]/a').click()
+
+driver.find_element(By.CSS_SELECTOR,'#excelout').click()
+
+# script = 'javascript:void(0);'
 # form.driver.execute_script(script)
 
-# form.click()
+print("出力押した")
 
-driver.implicitly_wait(5)
+driver.implicitly_wait(10)
 
-script = 'javascript:void(0);'
-form.driver.execute_script(script)
-
-
-
-form = driver.find_element(By.XPATH,'//*[@id="close"]/a')
-
-form.click()
-
-# "download.default_directory":os.getcwd()+\\"download_folder"
-
-
-
-#
-#
-# elements = driver.find_elements_by_tag_name("a")
-# loc = elements[0].location
-# x, y = loc['x'], loc['y']
-# actions = ActionChains(driver)
-# actions.move_by_offset(x, y)
-# actions.click()
-# actions.perform()
