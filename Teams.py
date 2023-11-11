@@ -151,5 +151,5 @@ driver.find_element(By.CSS_SELECTOR,'#excelout').click()
 
 print("出力押した")
 
-driver.implicitly_wait(10)
+driver.implicitly_wait(15)
 
