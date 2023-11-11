@@ -150,42 +150,65 @@ print("========== G-smartにログイン完了・統合認証TOPページ ======
 
 driver.implicitly_wait(30)
 
+print(driver.current_url)
+
+
+driver.implicitly_wait(10)
+
+# driver.find_element(By.XPATH,"//*[@id="backendmenu"]/div[4]/h3").click()
+
+driver.find_element(By.CSS_SELECTOR,"#backendmenu > div:nth-child(5) > h3").click()
+
+time.sleep(2)
+
+handle_array = driver.window_handles
+
+
+
+print("handle_arrayの表示配列最初と次")
+print(handle_array[0])
+print(handle_array[1])
+
+driver.switch_to.window(handle_array[1])
+
+time.sleep(10)
+
 
 # <h3 class="boxTitle4" style="background: url(&quot;./img/plus.png&quot;) right center no-repeat;"><img src="/fw/dfw/dmn/img/somu.png">&nbsp;総務・経理・人材育成・部局システム</h3>
 
 # frame_1 = driver.find_element(By.CLASS_NAME,"accordionBox")
 
-frame_1 = driver.find_element(By.CSS_SELECTOR,"#backendmenu > div:nth-child(5) > h3")
+# driver.find_element(By.CSS_SELECTOR,"#backendmenu > div:nth-child(5) > h3").click()
 
-# frame_1 = driver.find_element(By.XPATH,'//*[@id="backendmenu"]/div[4]/h3')
+driver.find_element(By.XPATH,'//*[@id="backendmenu"]/div[4]/p/a[1]/img').click()
 
 # frame_1 = driver.find_element(By.CSS_SELECTOR,"#backendmenu > div:nth-child(5) > p > a:nth-child(1) > img")
 
 # driver.switch_to.frame(frame_1)
 
-print('CSS Selector')
+print('CSS Selector押した？')
 
 time.sleep(1)
 
-frame_1.click()
+
 
 time.sleep(2)
 
 frame_2 = driver.find_element(By.XPATH,'//*[@id="backendmenu"]/div[4]/p/a[1]/img')
 
-driver.switch_to.frame(frame_2)
+# driver.switch_to.frame(frame_2)
 
-form = driver.find_element(By.XPATH,'//*[@id="backendmenu"]/div[4]/p/a[1]/img')
+# form = driver.find_element(By.XPATH,'//*[@id="backendmenu"]/div[4]/p/a[1]/img')
+#
+# form.click()
+#
+# driver.switch_to.default_content()
 
-form.click()
-
-driver.switch_to.default_content()
-
-form = driver.find_element(By.XPATH,'//*[@id="collapse5"]/div/a[5]')
-
-#time.sleep(10)
-
-form.click()
+# form = driver.find_element(By.XPATH,'//*[@id="collapse5"]/div/a[5]')
+#
+# #time.sleep(10)
+#
+# form.click()
 
 
 
