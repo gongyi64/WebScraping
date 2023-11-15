@@ -1,67 +1,4 @@
 
-# from webdriver_manager.chrome import ChromeDriverManager
-# from selenium.webdriver.chrome.service import Service
-# # from selenium.webdriver.chrome.options import Options
-
-
-# selenium 4
-
-from selenium import webdriver
-from selenium.webdriver.chrome.service import Service as ChromeService
-#import os
-import time
-
-from selenium.webdriver.common.by import By
-
-
-#from webdriver_manager.chrome import ChromeDriverManager
-
-#driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))
-
-#最新のドライバーだとエラーが出るのでその対応策。https://qiita.com/hs2023/questions/ffab105c5692692624ab
-
-# import requests
-# res = requests.get('https://chromedriver.storage.googleapis.com/LATEST_RELEASE')
-# driver = webdriver.Chrome(ChromeDriverManager(res.text).install())
-
-
-
-# from os.path import join
-# #
-# root = join(__file__, "..")
-
-# webdriverオブジェクトを作る（ブラウザが開く）
-# driver_path = join(root, "chromedriver.exe")
-
-
-# options = webdriver.ChromeOptions()
-
-
-# print("========== kekka ========== 動いてる？")
-
-
-# service = Service(driver_path)
-# service = Service(executable_path=driver_path)# 2) executable_pathを指定
-# driver = webdriver.Chrome(service=service)# 3) serviceを渡す
-
-# 起動時にオプションをつける。（ポート指定により、起動済みのブラウザのドライバーを取得）
-# driver_path = "C:\\Users\\406239\\AppData\\Local\\Programs\\Python\\Python39\\chromedriver_binary\\chromedriver.exe"
-
-# driver_path = "C:\\Users\\406239\\PycharmProjects\\pythonProject1\\chromedriver_binary\\chromedriver.exe"
-# driver = webdriver.Chrome(service=ChromeService(driver_path))
-# options.add_experimental_option("debuggerAddress", "127.0.0.1:9333")
-# driver = webdriver.Chrome(executable_path=driver_path, options=options)
-
-
-
-# driver = webdriver.Chrome(service,options=options)
-
-
-# ページのタイトルを表示する
-# from webdriver_manager.chrome import ChromeDriverManager
-# from selenium.webdriver.chrome.service import Service
-# # from selenium.webdriver.chrome.options import Options
-
 
 # selenium 4
 
@@ -81,19 +18,6 @@ from selenium.webdriver.common.by import By
 
 #最新のドライバーだとエラーが出るのでその対応策。https://qiita.com/hs2023/questions/ffab105c5692692624ab
 
-# import requests
-# res = requests.get('https://chromedriver.storage.googleapis.com/LATEST_RELEASE')
-# driver = webdriver.Chrome(ChromeDriverManager(res.text).install())
-
-
-
-# from os.path import join
-# #
-# root = join(__file__, "..")
-
-# webdriverオブジェクトを作る（ブラウザが開く）
-# driver_path = join(root, "chromedriver.exe")
-
 
 options = webdriver.ChromeOptions()
 
@@ -110,8 +34,7 @@ print("========== G-smartを開く ========== ")
 
 driver_path = "C:\\Users\\406239\\PycharmProjects\\pythonProject1\\chromedriver_binary\\chromedriver.exe"
 driver = webdriver.Chrome(service=ChromeService(driver_path))
-# options.add_experimental_option("debuggerAddress", "127.0.0.1:9333")
-# driver = webdriver.Chrome(executable_path=driver_path, options=options)
+
 
 
 
@@ -119,7 +42,6 @@ driver = webdriver.Chrome(service=ChromeService(driver_path))
 
 driver.get("http://gate.isso.nhk.or.jp/fw/dfw/dmn/dm/dmenu")
 
-# driver.get("http://gate.isso.nhk.or.jp/fw/dfw/dmn/dm/dmenu")
 
 driver.maximize_window()
 
@@ -155,46 +77,70 @@ print(driver.current_url)
 
 driver.implicitly_wait(10)
 
-# driver.find_element(By.XPATH,"//*[@id="backendmenu"]/div[4]/h3").click()
+#console_log = document.getElementsByClassName('accordionBox','boxTitle4')[0].style.display = 'background: url(&quot;./img/plus.png&quot;) right center no-repeat;'
 
-driver.find_element(By.CSS_SELECTOR,"#backendmenu > div:nth-child(5) > h3").click()
+# driver.get("http://gate.nhk.or.jp/fw/dfw/noccont/syuchi/Syuchi.asp")
+
+frame_1 = driver.find_element(By.XPATH,"/html/frameset/frameset/frame[1]")
+
+driver.switch_to.frame(frame_1)
+
+stats = driver.find_elements(By.ID,"backendmenu")
+
+print(stats)
+
+
+
+print('総務系のメインメニュー押した？')
+
+#driver.execute_script("document.getElementsByClassName('accordionBox','boxTitle4')[0].style.display = 'background: url(&quot;./img/plus.png&quot;) right center no-repeat;'")
+
+# driver.execute_script("document.getElementsByClassName('boxTitle4')[0].style.display = 'block';")
+
+
 
 time.sleep(2)
 
-handle_array = driver.window_handles
-
-
-
-print("handle_arrayの表示配列最初と次")
-print(handle_array[0])
-print(handle_array[1])
-
-driver.switch_to.window(handle_array[1])
-
-time.sleep(10)
+# handle_array = driver.window_handles
+#
+#
+#
+# print("handle_arrayの表示配列最初と次")
+# print(handle_array[0])
+# print(handle_array[1])
+#
+# driver.switch_to.window(handle_array[1])
+#
+# time.sleep(10)
 
 
 # <h3 class="boxTitle4" style="background: url(&quot;./img/plus.png&quot;) right center no-repeat;"><img src="/fw/dfw/dmn/img/somu.png">&nbsp;総務・経理・人材育成・部局システム</h3>
 
-# frame_1 = driver.find_element(By.CLASS_NAME,"accordionBox")
 
-# driver.find_element(By.CSS_SELECTOR,"#backendmenu > div:nth-child(5) > h3").click()
+
+
+
+driver.find_element(By.XPATH,'//*[@id="backendmenu"]/div[4]/h3').click()  #総務経理関係のメインメニュークリック
+
+# driver.implicitly_wait(30)
+time.sleep(5)
 
 driver.find_element(By.XPATH,'//*[@id="backendmenu"]/div[4]/p/a[1]/img').click()
 
-# frame_1 = driver.find_element(By.CSS_SELECTOR,"#backendmenu > div:nth-child(5) > p > a:nth-child(1) > img")
+time.sleep(3)
 
-# driver.switch_to.frame(frame_1)
-
-print('CSS Selector押した？')
-
-time.sleep(1)
+# driver.switch_to.default_content
 
 
+print('G-smart押した？')
 
-time.sleep(2)
+driver.implicitly_wait(30)
 
-frame_2 = driver.find_element(By.XPATH,'//*[@id="backendmenu"]/div[4]/p/a[1]/img')
+
+
+# time.sleep(2)
+
+# frame_2 = driver.find_element(By.XPATH,'//*[@id="backendmenu"]/div[4]/p/a[1]/img')
 
 # driver.switch_to.frame(frame_2)
 
