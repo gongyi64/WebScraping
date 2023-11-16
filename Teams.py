@@ -144,12 +144,14 @@ time.sleep(10)
 
 # driver.find_element(By.XPATH,'//*[@id="close"]/a').click()
 
-driver.find_element(By.CSS_SELECTOR,'#excelout').click()
+driver.find_element(By.CSS_SELECTOR,'#excelout').click()　#この画面で出力する月を選択させる。
 
 # script = 'javascript:void(0);'
 # form.driver.execute_script(script)
 
 print("出力押した")
 
-driver.implicitly_wait(40)
+time.sleep(100)
+
+driver.implicitly_wait(100) #ダウンロードフォルダへ格納　これを別フォルダへ移動させる。
 
