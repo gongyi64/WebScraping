@@ -8,7 +8,7 @@
 
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service as ChromeService
-#import os
+import os
 import time
 
 from selenium.webdriver.support.select import Select
@@ -122,9 +122,9 @@ time.sleep(1)
 # from selenium.webdriver.support.ui import WebDriverWait
 
 driver.find_element(By.XPATH,'//*[@id="collapse5"]/div/a[5]').click()
-print(driver.page_source)
+# print(driver.page_source)
 
-print(driver.current_url)
+# print(driver.current_url)
 
 # driver.get("https://gate.isso.nhk.or.jp/fw/dfw/lkteams/schedule/rs_print_monschedule_t1.php?action=init")
 
@@ -139,19 +139,40 @@ print(handle_array[1])
 
 driver.switch_to.window(handle_array[1])
 
-time.sleep(10)
-# driver.find_element(By.XPATH,'//*[@id="excelout"]"]"]').click()
+time.sleep(5)
 
-# driver.find_element(By.XPATH,'//*[@id="close"]/a').click()
 
-driver.find_element(By.CSS_SELECTOR,'#excelout').click()　#この画面で出力する月を選択させる。
+years = driver.find_element(By.CSS_SELECTOR,"#FormData > div.control.cfx > select:nth-child(8)")
+
+years.send_keys("2023")
+
+months = driver.find_element(By.CSS_SELECTOR,"#FormData > div.control.cfx > select:nth-child(10)")
+
+months.send_keys("11月")
+
+
+
+##FormData > div.control.cfx > select:nth-child(8)#年のセレクトCSS_Selector
+
+##FormData > div.control.cfx > select:nth-child(10)#月のセレクトCSS_Selector
+
+
+
+driver.find_element(By.CSS_SELECTOR,'#excelout').click()#この画面で出力する月を選択させる。
 
 # script = 'javascript:void(0);'
 # form.driver.execute_script(script)
 
 print("出力押した")
 
-time.sleep(100)
+time.sleep(30)
 
-driver.implicitly_wait(100) #ダウンロードフォルダへ格納　これを別フォルダへ移動させる。
+# driver.implicitly_wait(100) #ダウンロードフォルダへ格納　これを別フォルダへ移動させる。
 
+dir_path = "C:\\Users\\406239\\OneDrive - (株)NHKテクノロジーズ\\デスクトップ\\ドキュメント\\Downloads"
+
+# C:\Users\406239\OneDrive - (株)NHKテクノロジーズ\デスクトップ\ドキュメント\Downloads
+
+files = os.listdir(dir_path)
+
+print(files)#ダウンロードフォルダへ格納させたファイル名取得。このファイルで必要なものを抽出して所望のファルダへ移動させる。日付の後が大きいものが最新。
