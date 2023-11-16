@@ -158,7 +158,7 @@ months.send_keys("11月")
 
 
 
-driver.find_element(By.CSS_SELECTOR,'#excelout').click()#この画面で出力する月を選択させる。
+driver.find_element(By.CSS_SELECTOR,'#excelout').click()
 
 # script = 'javascript:void(0);'
 # form.driver.execute_script(script)
