@@ -1,9 +1,4 @@
 
-# from webdriver_manager.chrome import ChromeDriverManager
-# from selenium.webdriver.chrome.service import Service
-# # from selenium.webdriver.chrome.options import Options
-
-
 # selenium 4
 
 from selenium import webdriver
@@ -11,15 +6,9 @@ from selenium.webdriver.chrome.service import Service as ChromeService
 import os
 import time
 
-from selenium.webdriver.support.select import Select
-
 from selenium.webdriver.support.ui import Select
 
 from selenium.webdriver.common.by import By
-
-# from selenium.webdriver.common.action_chains import ActionChains
-#
-# print("No.1:ActionChain import OK")
 
 time.sleep(3)
 #from webdriver_manager.chrome import ChromeDriverManager
@@ -27,20 +16,6 @@ time.sleep(3)
 #driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))
 
 #最新のドライバーだとエラーが出るのでその対応策。https://qiita.com/hs2023/questions/ffab105c5692692624ab
-
-# import requests
-# res = requests.get('https://chromedriver.storage.googleapis.com/LATEST_RELEASE')
-# driver = webdriver.Chrome(ChromeDriverManager(res.text).install())
-
-
-
-# from os.path import join
-# #
-# root = join(__file__, "..")
-
-# webdriverオブジェクトを作る（ブラウザが開く）
-# driver_path = join(root, "chromedriver.exe")
-
 
 options = webdriver.ChromeOptions()
 
@@ -110,16 +85,9 @@ form = driver.find_element(By.XPATH,'//*[@id="accordionSidebar"]/li[6]/a')
 form.click()
 
 
-
-
-
 dropdown = driver.find_element(By.ID,'page-top')
-#
-# select = Select(dropdown)
-#
-time.sleep(1)
 
-# from selenium.webdriver.support.ui import WebDriverWait
+time.sleep(1)
 
 driver.find_element(By.XPATH,'//*[@id="collapse5"]/div/a[5]').click()
 # print(driver.page_source)
@@ -192,14 +160,14 @@ file_name,ext = os.path.splitext(newest_file)
 newest_file = str(newest_file)
 print(file_name)
 print(ext)
-# filename = f"{newest_file}.xls"
 
-# A = {}+'.'+'xls'.format(file_name)
-# pre_rename_file = str(newest_file)
+
+
 print('最新の勤務ファイル')
-# print(A)
 
-oldpath = fr"C:\Users\406239\OneDrive - (株)NHKテクノロジーズ\デスクトップ\ドキュメント\Downloads\{file_name}{ext}"
+#fでformat変数、ｒで\\を\で表記可能。変数は、{}で囲む。文字は、””で囲む。formatで書くと、+は不要なのでカンタン。
+
+oldpath = fr"C:\Users\406239\OneDrive - (株)NHKテクノロジーズ\デスクトップ\ドキュメント\Downloads\{newest_file}"
 
 newpath = "C:\\Users\\406239\\OneDrive - (株)NHKテクノロジーズ\\デスクトップ\\ドキュメント\\Downloads\\monschedule_202312.xls"
 
@@ -209,4 +177,3 @@ os.rename(oldpath,newpath)
 
 print(os.path.exists(newpath))
 
-print(newest_file)
