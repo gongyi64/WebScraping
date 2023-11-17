@@ -143,12 +143,15 @@ time.sleep(5)
 
 
 years = driver.find_element(By.CSS_SELECTOR,"#FormData > div.control.cfx > select:nth-child(8)")
+years_select = Select(years)
+# years.send_keys("2023")
+years_select.select_by_value('2023')
 
-years.send_keys("2023")
 
 months = driver.find_element(By.CSS_SELECTOR,"#FormData > div.control.cfx > select:nth-child(10)")
-
-months.send_keys("11月")
+months_select = Select(months)
+# months.send_keys("11月")
+months_select.select_by_value('12')
 
 
 
@@ -165,7 +168,7 @@ driver.find_element(By.CSS_SELECTOR,'#excelout').click()
 
 print("出力押した")
 
-time.sleep(30)
+time.sleep(25)
 
 # driver.implicitly_wait(100) #ダウンロードフォルダへ格納　これを別フォルダへ移動させる。
 
@@ -176,3 +179,34 @@ dir_path = "C:\\Users\\406239\\OneDrive - (株)NHKテクノロジーズ\\デス�
 files = os.listdir(dir_path)
 
 print(files)#ダウンロードフォルダへ格納させたファイル名取得。このファイルで必要なものを抽出して所望のファルダへ移動させる。日付の後が大きいものが最新。
+
+files_in = [s for s in files if '202311' in s]#出力した月の中で最新のもの
+
+print(files_in)
+
+newest_file = max(files_in)#最新ファイルの取得#出力した月の中で最新のもの
+
+print(newest_file)
+
+file_name,ext = os.path.splitext(newest_file)
+newest_file = str(newest_file)
+print(file_name)
+print(ext)
+# filename = f"{newest_file}.xls"
+
+# A = {}+'.'+'xls'.format(file_name)
+# pre_rename_file = str(newest_file)
+print('最新の勤務ファイル')
+# print(A)
+
+oldpath = fr"C:\Users\406239\OneDrive - (株)NHKテクノロジーズ\デスクトップ\ドキュメント\Downloads\{file_name}{ext}"
+
+newpath = "C:\\Users\\406239\\OneDrive - (株)NHKテクノロジーズ\\デスクトップ\\ドキュメント\\Downloads\\monschedule_202312.xls"
+
+print(os.path.exists(oldpath))
+
+os.rename(oldpath,newpath)
+
+print(os.path.exists(newpath))
+
+print(newest_file)
