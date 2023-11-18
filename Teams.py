@@ -5,6 +5,9 @@ from selenium import webdriver
 from selenium.webdriver.chrome.service import Service as ChromeService
 import os
 import time
+import datetime
+
+import pyexcel as p
 
 from selenium.webdriver.support.ui import Select
 
@@ -161,7 +164,10 @@ newest_file = str(newest_file)
 print(file_name)
 print(ext)
 
-
+dt_now = datetime.datetime.now()
+output_time = dt_now.strftime('%Y%m%d_%H%M')
+print(type(output_time))
+print(output_time)
 
 print('最新の勤務ファイル')
 
@@ -169,7 +175,7 @@ print('最新の勤務ファイル')
 
 oldpath = fr"C:\Users\406239\OneDrive - (株)NHKテクノロジーズ\デスクトップ\ドキュメント\Downloads\{newest_file}"
 
-newpath =r"C:\Users\406239\OneDrive - (株)NHKテクノロジーズ\デスクトップ\★勤務確認などのダウンロードデータ★\NHK勤務表出力ファイル\monschedule_202312.xls"
+newpath = fr"C:\Users\406239\OneDrive - (株)NHKテクノロジーズ\デスクトップ\★勤務確認などのダウンロードデータ★\NHK勤務表出力ファイル\monschedule_202312_{output_time}.xls"
 
 
 print(os.path.exists(oldpath))
@@ -178,7 +184,8 @@ os.rename(oldpath,newpath)
 
 print(os.path.exists(newpath))
 
-import pyexcel as p
+#import pyexcel as p
 
-p.save_book_as(file_name= "C:\\Users\\406239\\OneDrive - (株)NHKテクノロジーズ\デスクトップ\\★勤務確認などのダウンロードデータ★\\NHK勤務表出力ファイル\\monschedule_202312.xls",dest_file_name = "C:\\Users\\406239\\OneDrive - (株)NHKテクノロジーズ\\デスクトップ\\★勤務確認などのダウンロードデータ★\\NHK勤務表出力ファイル\\monschedule_202312.xlsx")
+#p.save_book_as(file_name= "C:\\Users\\406239\\OneDrive - (株)NHKテクノロジーズ\デスクトップ\\★勤務確認などのダウンロードデータ★\\NHK勤務表出力ファイル\\monschedule_202312.xls",dest_file_name = "C:\\Users\\406239\\OneDrive - (株)NHKテクノロジーズ\\デスクトップ\\★勤務確認などのダウンロードデータ★\\NHK勤務表出力ファイル\\monschedule_202312.xlsx")
 
+#p.save_book_as(file_name= "C:\\Users\\406239\\OneDrive - (株)NHKテクノロジーズ\デスクトップ\\monschedule_202312.xls",dest_file_name = "C:\\Users\\406239\\OneDrive - (株)NHKテクノロジーズ\\デスクトップ\\★勤務確認などのダウンロードデータ★\\NHK勤務表出力ファイル\\monschedule_202312.xlsx")
