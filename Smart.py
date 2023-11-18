@@ -101,17 +101,7 @@ print('総務系のメインメニュー押した？')
 
 time.sleep(2)
 
-# handle_array = driver.window_handles
-#
-#
-#
-# print("handle_arrayの表示配列最初と次")
-# print(handle_array[0])
-# print(handle_array[1])
-#
-# driver.switch_to.window(handle_array[1])
-#
-# time.sleep(10)
+
 
 
 # <h3 class="boxTitle4" style="background: url(&quot;./img/plus.png&quot;) right center no-repeat;"><img src="/fw/dfw/dmn/img/somu.png">&nbsp;総務・経理・人材育成・部局システム</h3>
@@ -134,17 +124,30 @@ time.sleep(3)
 
 print('G-smart押した？')
 
-driver.implicitly_wait(30)
+driver.implicitly_wait(10)
+
+handle_array = driver.window_handles
 
 
 
-# time.sleep(2)
+print("handle_arrayの表示配列最初と次toその次")
+print(handle_array[0])
+print(handle_array[1])
 
+driver.switch_to.window(handle_array[0])
+
+time.sleep(5)
+
+
+driver.find_element(By.CSS_SELECTOR,'#AppsNavLink').click()
+# driver.find_element(By.XPATH,'//*[@id="AppsNavLink"]').click()
+
+time.sleep(20)
 # frame_2 = driver.find_element(By.XPATH,'//*[@id="backendmenu"]/div[4]/p/a[1]/img')
 
 # driver.switch_to.frame(frame_2)
 
-# form = driver.find_element(By.XPATH,'//*[@id="backendmenu"]/div[4]/p/a[1]/img')
+
 #
 # form.click()
 #
