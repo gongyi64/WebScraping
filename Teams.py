@@ -1,3 +1,44 @@
+# pySimpleGUI Version
+
+
+import sys
+
+import PySimpleGUI as sg
+
+# value = sg.popup_get_file('TEAMSで勤務表をダウンロードします。')#使用するダウンロード済みの勤務表元ファイルを選択
+
+
+sg.theme('Python')
+
+layout =[[sg.Text('[NT勤務自動ダウンロード]',font = ('Noto Serif CJK JP',14))],
+
+        [sg.Text('[九州沖縄TEAMSで月間勤務表出力し、フォルダに配置。月名を確認のこと。] ',font = ('meiryo',10))],
+
+        [sg.Text('チェックしたい年月を入力',text_color='#FF0000',font =( 'meiryo,8')),sg.InputText(size = (10,2),key= '-YM-')],
+        [sg.Text('[実行ボタンを押して入力完了。Windowを閉じる（右上×マーククリック）とスタート。] ',font = ('meiryo',10))],
+        [sg.Button('実行', button_color=('red','#808080'),key = '-SUBMIT-')]]
+
+window = sg.Window('勤務表制作APP',layout,size = (600,200))
+
+
+while True:
+   event,values = window.read()
+   if event == '-SUBMIT-':
+
+            num = values['-YM-']#チェックする年月を202211と6桁の数字で入力する。
+            print(num)#6桁の年月
+
+
+
+   if event == sg.WIN_CLOSED:
+         break
+
+window.close()
+nen=num[:4]#頭4桁年数
+num = num[4:]#下2桁月数
+# print(num)
+
+# print(value)
 
 # selenium 4
 
@@ -6,8 +47,10 @@ from selenium.webdriver.chrome.service import Service as ChromeService
 import os
 import time
 import datetime
+import sys
 
 import pyexcel as p
+import glob
 
 from selenium.webdriver.support.ui import Select
 
@@ -116,13 +159,13 @@ time.sleep(5)
 years = driver.find_element(By.CSS_SELECTOR,"#FormData > div.control.cfx > select:nth-child(8)")
 years_select = Select(years)
 # years.send_keys("2023")
-years_select.select_by_value('2023')
+years_select.select_by_value(nen)
 
 
 months = driver.find_element(By.CSS_SELECTOR,"#FormData > div.control.cfx > select:nth-child(10)")
 months_select = Select(months)
 # months.send_keys("11月")
-months_select.select_by_value('12')
+months_select.select_by_value(num)
 
 
 
@@ -189,3 +232,27 @@ print(os.path.exists(newpath))
 #p.save_book_as(file_name= "C:\\Users\\406239\\OneDrive - (株)NHKテクノロジーズ\デスクトップ\\★勤務確認などのダウンロードデータ★\\NHK勤務表出力ファイル\\monschedule_202312.xls",dest_file_name = "C:\\Users\\406239\\OneDrive - (株)NHKテクノロジーズ\\デスクトップ\\★勤務確認などのダウンロードデータ★\\NHK勤務表出力ファイル\\monschedule_202312.xlsx")
 
 #p.save_book_as(file_name= "C:\\Users\\406239\\OneDrive - (株)NHKテクノロジーズ\デスクトップ\\monschedule_202312.xls",dest_file_name = "C:\\Users\\406239\\OneDrive - (株)NHKテクノロジーズ\\デスクトップ\\★勤務確認などのダウンロードデータ★\\NHK勤務表出力ファイル\\monschedule_202312.xlsx")
+
+
+
+
+xls_path = r"C:\Users\406239\OneDrive - (株)NHKテクノロジーズ\デスクトップ\★勤務確認などのダウンロードデータ★\NHK勤務表出力ファイル"
+
+# os.path("xls_path")
+
+# def convert_xls_to_xlsx():
+#     it = glob.glob("*.xls")
+#     for xls in it:
+#         xlsx = "{}".format(xls) + "x"
+#         print(xlsx)
+#         p.save_book_as(file_name='{}'.format(xls), dest_file_name='{}'.format(xlsx))
+#
+# print(sys.argv[0])
+#
+# print(os.listdir(xls_path))
+#
+# print(os.path.isdir(xls_path))
+#
+# convert_xls_to_xlsx()
+#
+# print(os.listdir(xls_path))
