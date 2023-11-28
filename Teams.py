@@ -1,4 +1,5 @@
-# pySimpleGUI Version
+# pySimpleGUI Version---NHK勤務表自動ダウンロードソフト　202311
+#TEAMSへ自動ログインして、所望の年月のNHK勤務表をダウンロードし、xlsxファイル人変換する。
 
 
 import sys
@@ -240,6 +241,7 @@ path = fr'C:\Users\406239\OneDrive - (株)NHKテクノロジーズ\デスクト�
 
 wb.save(path)
 
+wb.close()
 
 
 
