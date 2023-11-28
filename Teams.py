@@ -12,10 +12,10 @@ sg.theme('Python')
 
 layout =[[sg.Text('[NT勤務自動ダウンロード]',font = ('Noto Serif CJK JP',14))],
 
-        [sg.Text('[九州沖縄TEAMSで月間勤務表出力し、フォルダに配置。月名を確認のこと。] ',font = ('meiryo',10))],
+        [sg.Text('[九州沖縄TEAMSで月間勤務表出力し、★勤務確認などダウンロードフォルダに配置。] ',font = ('meiryo',10))],
 
-        [sg.Text('チェックしたい年月を入力',text_color='#FF0000',font =( 'meiryo,8')),sg.InputText(size = (10,2),key= '-YM-')],
-        [sg.Text('[実行ボタンを押して入力完了。Windowを閉じる（右上×マーククリック）とスタート。] ',font = ('meiryo',10))],
+        [sg.Text('出力したい年月（数字6桁）を入力',text_color='#FF0000',font =( 'meiryo,8')),sg.InputText(size = (10,2),key= '-YM-')],
+        [sg.Text('[実行ボタンを押して入力。Windowを閉じる（右上×マーククリック）とスタート。] ',font = ('meiryo',10))],
         [sg.Button('実行', button_color=('red','#808080'),key = '-SUBMIT-')]]
 
 window = sg.Window('勤務表制作APP',layout,size = (600,200))
@@ -67,6 +67,7 @@ options = webdriver.ChromeOptions()
 
 
 print("========== 機材Teams　ログイン中========== ")
+sg.popup_ok('機材TEAMSへログインします！',title = 'OK？')
 
 
 # service = Service(driver_path)
@@ -182,8 +183,8 @@ driver.find_element(By.CSS_SELECTOR,'#excelout').click()
 
 print("出力押した")
 
-time.sleep(25)
-
+time.sleep(15)
+driver.find_element(By.CSS_SELECTOR,'#close > a').click()
 # driver.implicitly_wait(100) #ダウンロードフォルダへ格納　これを別フォルダへ移動させる。
 
 dir_path = "C:\\Users\\406239\\OneDrive - (株)NHKテクノロジーズ\\デスクトップ\\ドキュメント\\Downloads"
@@ -212,7 +213,7 @@ output_time = dt_now.strftime('%Y%m%d_%H%M')
 print(type(output_time))
 print(output_time)
 
-print('最新の勤務ファイル')
+# print('最新の勤務ファイル')
 
 #fでformat変数、ｒで\\を\で表記可能。変数は、{}で囲む。文字は、””で囲む。formatで書くと、+は不要なのでカンタン。
 
@@ -227,16 +228,23 @@ os.rename(oldpath,newpath)
 
 print(os.path.exists(newpath))
 
-#import pyexcel as p
+#xlsを一旦開いてから、xlsxで保存する。openpyexLを使用するため。変換は面倒そうなので、これがカンタン。
 
-#p.save_book_as(file_name= "C:\\Users\\406239\\OneDrive - (株)NHKテクノロジーズ\デスクトップ\\★勤務確認などのダウンロードデータ★\\NHK勤務表出力ファイル\\monschedule_202312.xls",dest_file_name = "C:\\Users\\406239\\OneDrive - (株)NHKテクノロジーズ\\デスクトップ\\★勤務確認などのダウンロードデータ★\\NHK勤務表出力ファイル\\monschedule_202312.xlsx")
+import xlwings as xw
 
-#p.save_book_as(file_name= "C:\\Users\\406239\\OneDrive - (株)NHKテクノロジーズ\デスクトップ\\monschedule_202312.xls",dest_file_name = "C:\\Users\\406239\\OneDrive - (株)NHKテクノロジーズ\\デスクトップ\\★勤務確認などのダウンロードデータ★\\NHK勤務表出力ファイル\\monschedule_202312.xlsx")
+path = fr'C:\Users\406239\OneDrive - (株)NHKテクノロジーズ\デスクトップ\★勤務確認などのダウンロードデータ★\NHK勤務表出力ファイル\monschedule_202312_{output_time}.xls'
+
+wb = xw.Book(path)
+
+path = fr'C:\Users\406239\OneDrive - (株)NHKテクノロジーズ\デスクトップ\★勤務確認などのダウンロードデータ★\NHK勤務表出力ファイル\monschedule_202312_{output_time}.xlsx'
+
+wb.save(path)
 
 
 
 
-xls_path = r"C:\Users\406239\OneDrive - (株)NHKテクノロジーズ\デスクトップ\★勤務確認などのダウンロードデータ★\NHK勤務表出力ファイル"
+
+# xls_path = r"C:\Users\406239\OneDrive - (株)NHKテクノロジーズ\デスクトップ\★勤務確認などのダウンロードデータ★\NHK勤務表出力ファイル"
 
 # os.path("xls_path")
 
