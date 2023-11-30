@@ -1,4 +1,8 @@
+# # selenium 4
 
+
+#
+# driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))
 
 # selenium 4
 
@@ -9,12 +13,14 @@ import time
 
 from selenium.webdriver.common.by import By
 
+from webdriver_manager.chrome import ChromeDriverManager
+
 # from selenium.webdriver.common.by import className
 
 
-#from webdriver_manager.chrome import ChromeDriverManager
-
-#driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))
+# from webdriver_manager.chrome import ChromeDriverManager
+#
+# driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))
 
 #最新のドライバーだとエラーが出るのでその対応策。https://qiita.com/hs2023/questions/ffab105c5692692624ab
 
@@ -113,7 +119,7 @@ time.sleep(2)
 driver.find_element(By.XPATH,'//*[@id="backendmenu"]/div[4]/h3').click()  #総務経理関係のメインメニュークリック
 
 # driver.implicitly_wait(30)
-time.sleep(5)
+time.sleep(3)
 
 driver.find_element(By.XPATH,'//*[@id="backendmenu"]/div[4]/p/a[1]/img').click()
 
@@ -122,45 +128,95 @@ time.sleep(3)
 # driver.switch_to.default_content
 
 
-print('G-smart押した？')
+print('G-smart押したあと')
 
 driver.implicitly_wait(10)
 
 handle_array = driver.window_handles
 
+print("handle_arrayの表示配列最初と次toその次")
+print(handle_array[0])
+print(handle_array[1])
 
+driver.switch_to.window(handle_array[1])
+
+# frame_2 = driver.find_element(By.CSS_SELECTOR,'#_pprIFrame')
+#
+# driver.switch_to.frame(frame_2)
+
+
+
+
+
+
+
+
+time.sleep(10)
+
+handle_array = driver.window_handles
 
 print("handle_arrayの表示配列最初と次toその次")
 print(handle_array[0])
 print(handle_array[1])
 
-driver.switch_to.window(handle_array[0])
+driver.switch_to.window(handle_array[1])
+
+
+#管理者メニューのXpath
+
+CSS_Select = driver.find_elements(By.CSS_SELECTOR,'#AppsNavLink')[4].click()#一番上の選択はできる
+#4番目を押したいのでどうすれば？find_elementsとし、リストの要素を取得して解決
+
+
+
+
+
+
+#<a id="AppsNavLink" href="http://nhksmrt.isso.nhk.or.jp/OA_HTML/OA.jsp?OAFunc=OAHOMEPAGE&amp;akRegionApplicationId=0&amp;navRespId=78937&amp;navRespAppId=20016&amp;navSecGrpId=0&amp;transactionid=373107157&amp;oapc=2&amp;oas=4qmIeywfLoeL4q8iPEG2ew.." class="xh">1D2C出退勤_101_セルフ_管理者</a>
+
+#driver.execute_script('javascript:http://nhksmrt.isso.nhk.or.jp/OA_HTML/OA.jsp?OAFunc=OAHOMEPAGE&amp;akRegionApplicationId=0&amp;navRespId=78937&amp;navRespAppId=20016&amp;navSecGrpId=0&amp;transactionid=373107157&amp;oapc=2&amp;oas=4qmIeywfLoeL4q8iPEG2ew..')
+
+#driver.find_element(By.XPATH,'//*[@id="AppsNavLink"] and [contains(text()="1D2C出退勤_101_セルフ_管理者")]').click()
+
+# driver.find_element(By.CLASS_NAME('x4n')).click()
+
+#driver.find_element(By.CLASS_NAME,'x4n' and contains(text()="1D2C出退勤_101_セルフ_管理者")).click()
 
 time.sleep(5)
-
-
-driver.find_element(By.CSS_SELECTOR,'#AppsNavLink').click()
-# driver.find_element(By.XPATH,'//*[@id="AppsNavLink"]').click()
-
-time.sleep(20)
 # frame_2 = driver.find_element(By.XPATH,'//*[@id="backendmenu"]/div[4]/p/a[1]/img')
 
 # driver.switch_to.frame(frame_2)
 
+driver.find_element(By.ID,'N122').click()
 
+
+time.sleep(5)
+
+# handle_array = driver.window_handles
 #
-# form.click()
+# print("handle_arrayの表示配列最初と次toその次")
+# print(handle_array[0])
+# print(handle_array[1])
 #
-# driver.switch_to.default_content()
-
-# form = driver.find_element(By.XPATH,'//*[@id="collapse5"]/div/a[5]')
 #
-# #time.sleep(10)
+# driver.switch_to.window(handle_array[1])
+
+driver.find_element(By.NAME,'eplyNo').send_keys('406239')
+driver.find_element(By.XPATH,'/html/body/form/table[2]/tbody/tr[3]/td[2]/input[2]').click()
+
+time.sleep(2)
+
+driver.find_element(By.XPATH,'/html/body/form/table[4]/tbody/tr[2]/td[1]/input').click()
+
+# handle_array = driver.window_handles
 #
-# form.click()
+# print("handle_arrayの表示配列最初と次toその次")
+# print(handle_array[0])
+# print(handle_array[1])#handle　windowは、同じ！
+#
+# driver.switch_to.window(handle_array[1])
 
-
-
+time.sleep(10)
 
 
 
