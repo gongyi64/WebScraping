@@ -13,6 +13,10 @@ import time
 
 from selenium.webdriver.common.by import By
 
+import pandas as pd
+
+# from pyvirtualdisplay import Display
+
 from webdriver_manager.chrome import ChromeDriverManager
 
 # from selenium.webdriver.common.by import className
@@ -183,40 +187,85 @@ CSS_Select = driver.find_elements(By.CSS_SELECTOR,'#AppsNavLink')[4].click()#一
 #driver.find_element(By.CLASS_NAME,'x4n' and contains(text()="1D2C出退勤_101_セルフ_管理者")).click()
 
 time.sleep(5)
-# frame_2 = driver.find_element(By.XPATH,'//*[@id="backendmenu"]/div[4]/p/a[1]/img')
-
-# driver.switch_to.frame(frame_2)
 
 driver.find_element(By.ID,'N122').click()
 
 
 time.sleep(5)
 
-# handle_array = driver.window_handles
-#
-# print("handle_arrayの表示配列最初と次toその次")
-# print(handle_array[0])
-# print(handle_array[1])
-#
-#
-# driver.switch_to.window(handle_array[1])
 
 driver.find_element(By.NAME,'eplyNo').send_keys('406239')
-driver.find_element(By.XPATH,'/html/body/form/table[2]/tbody/tr[3]/td[2]/input[2]').click()
+
+driver.find_element(By.NAME,'dispYmY').clear()#予め値が入っているので一旦クリア
+
+driver.find_element(By.NAME,'dispYmY').send_keys('2023')
+
+driver.find_element(By.NAME,'dispYmM').clear()#予め値が入っているので一旦クリア
+
+driver.find_element(By.NAME,'dispYmM').send_keys('11')
+
+# driver.find_element(By.XPATH,'/html/body/form/table[2]/tbody/tr[3]/td[2]/input[1]').click()#一般・専門職押す
+
+driver.find_element(By.XPATH,'/html/body/form/table[2]/tbody/tr[3]/td[2]/input[2]').click()#経営職押す
 
 time.sleep(2)
 
-driver.find_element(By.XPATH,'/html/body/form/table[4]/tbody/tr[2]/td[1]/input').click()
+driver.find_element(By.XPATH,'/html/body/form/table[4]/tbody/tr[2]/td[1]/input').click()#表示ボタン押す
 
 # handle_array = driver.window_handles
 #
 # print("handle_arrayの表示配列最初と次toその次")
 # print(handle_array[0])
-# print(handle_array[1])#handle　windowは、同じ！
+# print(handle_array[1])#window handleは、同じでした。
 #
 # driver.switch_to.window(handle_array[1])
 
+element = driver.find_element(By.XPATH,'/html/body/table[2]',)
+
+trs = element.find_elements(By.TAG_NAME,'tr')
+
+# print(trs)
+
 time.sleep(10)
+# df_kinmu = pd.DataFrame()
+
+
+df = []
+
+for i in range(1,len(trs)):
+    tds = trs[i].find_elements(By.TAG_NAME, "td")
+
+    line = ""
+
+
+    for j in range(0,len(tds)):
+      if j < len(tds)-1:
+                line += "%s\t" % (tds[j].text)#"\t";tab
+      else:
+                line += "%s" % (tds[j].text)
+
+    print(line+"\r\n")
+    df.append(line)#df=df.append~と書いたら値はNone！
+
+
+print(df)
+
+df_kinmu = pd.DataFrame(df)
+
+
+
+df_kinmu = df_kinmu.replace('\t',',',regex = True).replace('\n','',regex = True)
+
+
+
+df_kinmu.str.split(',',expand = True)
+
+print(df_kinmu)
+
+
+
+
+
 
 
 
