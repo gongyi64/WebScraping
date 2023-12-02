@@ -245,22 +245,75 @@ for i in range(1,len(trs)):
                 line += "%s" % (tds[j].text)
 
     print(line+"\r\n")
+    # line.split('\t')
     df.append(line)#df=df.append~と書いたら値はNone！
-
 
 print(df)
 
-df_kinmu = pd.DataFrame(df)
+df_kinmu = pd.Series(df)
 
-
-
-df_kinmu = df_kinmu.replace('\t',',',regex = True).replace('\n','',regex = True)
-
-
-
-df_kinmu.str.split(',',expand = True)
+print('Seriesです')
 
 print(df_kinmu)
+
+# print(df_kinmu.columns.tolist())#Seriesにtolist()はだめ。
+
+print(type(df_kinmu))#Series
+
+# ''.join(df_kinmu.splitlines())#Seriesではだめ
+
+df_org = df_kinmu.str.split('\t',expand = True)
+
+# ''.join(df_org[0].splitlines())#Seriesではだめ\nを消したい
+
+print(df_org)
+
+print(type(df_org))#Dataframe
+
+#0行目をcolumnにするコード　（以下）
+df_org.columns = df_org.iloc[0]
+
+df_org = df_org.drop(df_org.index[0])
+
+df_org.reset_index(drop=True,inplace=True)
+
+
+print('data 加工後')
+
+print(df_org.columns.tolist())
+
+print(df_org)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# df[0].replace('\n','',regex = True)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
