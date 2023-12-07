@@ -270,6 +270,52 @@ print(df_org)
 
 print(type(df_org))#Dataframe
 
+print('一番上の行')
+
+print(df_org.loc[0])
+
+#結合セルによるデータずれの補正。ひとつひとつやるしかなさそう。
+
+df_org.loc[0].replace('事  由','実  績',inplace = True)
+
+df_org.loc[0].replace('備  考','事  由',inplace = True)
+
+df_org.loc[0].replace('深　夜\n時間数','備  考',inplace = True)
+
+df_org.loc[0].replace('休日','深　夜\n時間数',inplace = True)
+
+df_org.loc[0].replace('宿泊','休日',inplace = True)
+
+df_org.loc[0].replace('日帰','休日',inplace = True)
+
+df_org.loc[0].replace('緊\n急','休日',inplace = True)
+
+df_org.loc[0].replace('休\n張','宿泊',inplace = True)
+
+df_org.loc[0].iat[12] = '宿泊'
+
+df_org.loc[0].iat[13] = '宿泊'
+
+df_org.loc[0].iat[14] = '日帰'
+
+df_org.loc[0].iat[15] = '日帰'
+
+df_org.loc[0].iat[16] = '緊\n急'
+
+df_org.loc[0].iat[17] = '休\n張'
+
+
+print('インサート後？')
+
+print(df_org.loc[0])
+
+print('次の行')
+
+print(df_org.loc[1])
+
+print(df_org.loc[1].shift(2))
+
+
 #0行目をcolumnにするコード　（以下）
 df_org.columns = df_org.iloc[0]
 
@@ -282,10 +328,14 @@ print('data 加工後')
 
 print(df_org.columns.tolist())
 
+# columns_smart = df_org.columns.tolist()
+#
+
+
 print(df_org)
 
 
-
+df_org.to_excel('smart_kinmu.xlsx') #smartの勤務表
 
 
 
