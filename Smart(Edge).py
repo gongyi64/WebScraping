@@ -136,6 +136,7 @@ print("handle_arrayの表示配列最初と次toその次")
 print(handle_array[0])
 print(handle_array[1])
 
+
 driver.switch_to.window(handle_array[0])
 
 time.sleep(5)
