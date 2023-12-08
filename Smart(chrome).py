@@ -15,6 +15,43 @@ from selenium.webdriver.common.by import By
 
 import pandas as pd
 
+
+import sys
+
+import PySimpleGUI as sg
+
+# value = sg.popup_get_file('TEAMSで勤務表をダウンロードします。')#使用するダウンロード済みの勤務表元ファイルを選択
+
+
+sg.theme('Python')
+
+layout =[[sg.Text('[NT勤務自動ダウンロード]',font = ('Noto Serif CJK JP',14))],
+
+        [sg.Text('[G-smartから勤務実績を取り込みます。] ',font = ('meiryo',10))],
+
+        [sg.Text('出力したい年月（数字6桁）を入力',text_color='#FF0000',font =( 'meiryo,8')),sg.InputText(size = (10,2),key= '-YM-')],
+        [sg.Text('[実行ボタンを押して入力。Windowを閉じる（右上×マーククリック）とスタート。] ',font = ('meiryo',10))],
+        [sg.Button('実行', button_color=('red','#808080'),key = '-SUBMIT-')]]
+
+window = sg.Window('勤務表制作APP',layout,size = (600,200))
+
+
+while True:
+   event,values = window.read()
+   if event == '-SUBMIT-':
+
+            num = values['-YM-']#チェックする年月を202211と6桁の数字で入力する。
+            print(num)#6桁の年月
+
+
+
+   if event == sg.WIN_CLOSED:
+         break
+
+window.close()
+nen=num[:4]#頭4桁年数
+mon = num[4:]#下2桁月数
+
 # from pyvirtualdisplay import Display
 
 from webdriver_manager.chrome import ChromeDriverManager
@@ -194,19 +231,61 @@ driver.find_element(By.ID,'N122').click()
 time.sleep(5)
 
 
-driver.find_element(By.NAME,'eplyNo').send_keys('406239')
+#氏名と社員番号の辞書を作成し、入力に使用する。0:専門職、一般職　1:経営職　2:スタッフ
+
+eplyNo_name_dict = {406239:'白川　公一',380672:'三角　和浩',378035:'岩田　貴夫',410993:'黒岩　英次',805519:'仲本　祥子',880079:'砂川　航輝',806185:'辻　ひかる',880334:'山城　実咲',880518:'古波蔵　晃久'}#,360986:'山城　徳松'
+
+eply_dict = {406239:'1',380672:'0',378035:'0',410993:'0',805519:'0',880079:'0',806185:'0',880334:'0',880518:'0'}#,360986:'2'
+
+
+print(list(eplyNo_name_dict.keys()))
+
+print('keyのデータ数')
+
+print(len(list(eplyNo_name_dict.keys())))
+
+#for分で全員分のデータを取り込み、Excelへ。作成中。
+
+# for i in range(len(list(eplyNo_name_dict.keys()))):
+#
+#       input_eplyNo = list(eplyNo_name_dict.keys())[i]
+
+input_eplyNo = list(eplyNo_name_dict.keys())[0]
+
+print (input_eplyNo)
+
+
+val_s = eply_dict[406239]
+
+print(val_s)
+
+name = eplyNo_name_dict[406239]
+
+print (name)
+
+
+driver.find_element(By.NAME,'eplyNo').send_keys(input_eplyNo)
 
 driver.find_element(By.NAME,'dispYmY').clear()#予め値が入っているので一旦クリア
 
-driver.find_element(By.NAME,'dispYmY').send_keys('2023')
+driver.find_element(By.NAME,'dispYmY').send_keys(nen)
 
 driver.find_element(By.NAME,'dispYmM').clear()#予め値が入っているので一旦クリア
 
-driver.find_element(By.NAME,'dispYmM').send_keys('11')
+driver.find_element(By.NAME,'dispYmM').send_keys(mon)
 
-# driver.find_element(By.XPATH,'/html/body/form/table[2]/tbody/tr[3]/td[2]/input[1]').click()#一般・専門職押す
+if val_s == '0':
 
-driver.find_element(By.XPATH,'/html/body/form/table[2]/tbody/tr[3]/td[2]/input[2]').click()#経営職押す
+   driver.find_element(By.XPATH,'/html/body/form/table[2]/tbody/tr[3]/td[2]/input[1]').click()#一般・専門職押す
+
+if val_s == '1':
+
+  driver.find_element(By.XPATH,'/html/body/form/table[2]/tbody/tr[3]/td[2]/input[2]').click()#経営職押す
+
+else:
+    pass
+
+# driver.find_element(By.XPATH,'/html/body/form/table[2]/tbody/tr[3]/td[2]/input[1]').click()#一般職・専門職押す
 
 time.sleep(2)
 
@@ -317,47 +396,6 @@ print(df_org.loc[1])
 
 # df_org.loc[1].shift(3)
 #
-# #結合セルによるデータずれの補正（2行目）。ひとつひとつやるしかなさそう。
-#
-# print('shift後の2行目')
-#
-# print(df_org.loc[1])
-#
-# df_org.loc[1].iat[0] = ''
-#
-# df_org.loc[1].iat[1] = ''
-#
-# df_org.loc[1].iat[2] = ''
-#
-# df_org.loc[1].iat[3] = '出勤-退勤'
-#
-# df_org.loc[1].iat[4] = '睡眠等'
-#
-# df_org.loc[1].iat[5] = ''
-#
-# df_org.loc[1].iat[6] = ''
-#
-# df_org.loc[1].iat[7] = ''
-#
-# df_org.loc[1].iat[8] = 'Ａ'
-#
-# df_org.loc[1].iat[9] = 'Ｂ'
-#
-# df_org.loc[1].iat[10] = 'Ｃ'
-#
-# df_org.loc[1].iat[11] = 'Ａ'
-#
-# df_org.loc[1].iat[12] = 'Ｂ'
-#
-# df_org.loc[1].iat[13] = 'Ｃ'
-#
-# df_org.loc[1].iat[14] = '100\nkm'
-#
-# df_org.loc[1].iat[15] = '８\nＨ'
-# #
-# df_org.loc[1].iat[16] = '緊\n急'
-#
-# df_org.loc[1].iat[17] = '休\n張'
 
 
 #0行目をcolumnにするコード　（以下）
@@ -374,14 +412,11 @@ print('data 加工後')
 
 print(df_org.columns.tolist())
 
-# columns_smart = df_org.columns.tolist()
-#
-
 
 print(df_org)
 
 
-df_org.to_excel('smart_kinmu.xlsx') #smartの勤務表
+df_org.to_excel('c:/Users/406239/OneDrive - (株)NHKテクノロジーズ/デスクトップ/★勤務確認などのダウンロードデータ★/検証中/{}_smart_kinmu.xlsx'.format(num),sheet_name='{}_{}'.format(num,name))
 
 
 
