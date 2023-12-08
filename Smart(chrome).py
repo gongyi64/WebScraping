@@ -247,49 +247,53 @@ print(len(list(eplyNo_name_dict.keys())))
 #for分で全員分のデータを取り込み、Excelへ。作成中。
 
 # for i in range(len(list(eplyNo_name_dict.keys()))):
-#
-#       input_eplyNo = list(eplyNo_name_dict.keys())[i]
 
-input_eplyNo = list(eplyNo_name_dict.keys())[0]
+for i in range(2):
 
-print (input_eplyNo)
+    input_eplyNo = list(eplyNo_name_dict.keys())[i]
 
+    # input_eplyNo = list(eplyNo_name_dict.keys())[0]
 
-val_s = eply_dict[406239]
-
-print(val_s)
-
-name = eplyNo_name_dict[406239]
-
-print (name)
+    print (input_eplyNo)
 
 
-driver.find_element(By.NAME,'eplyNo').send_keys(input_eplyNo)
+    val_s = eply_dict[input_eplyNo]
 
-driver.find_element(By.NAME,'dispYmY').clear()#予め値が入っているので一旦クリア
+    print(val_s)
 
-driver.find_element(By.NAME,'dispYmY').send_keys(nen)
+    name = eplyNo_name_dict[input_eplyNo]
 
-driver.find_element(By.NAME,'dispYmM').clear()#予め値が入っているので一旦クリア
+    print (name)
+    print(input_eplyNo)
 
-driver.find_element(By.NAME,'dispYmM').send_keys(mon)
+    driver.find_element(By.NAME, 'eplyNo').clear()  # 予め値が入っているので一旦クリア
 
-if val_s == '0':
+    driver.find_element(By.NAME,'eplyNo').send_keys(input_eplyNo)
 
-   driver.find_element(By.XPATH,'/html/body/form/table[2]/tbody/tr[3]/td[2]/input[1]').click()#一般・専門職押す
+    driver.find_element(By.NAME,'dispYmY').clear()#予め値が入っているので一旦クリア
 
-if val_s == '1':
+    driver.find_element(By.NAME,'dispYmY').send_keys(nen)
 
-  driver.find_element(By.XPATH,'/html/body/form/table[2]/tbody/tr[3]/td[2]/input[2]').click()#経営職押す
+    driver.find_element(By.NAME,'dispYmM').clear()#予め値が入っているので一旦クリア
 
-else:
-    pass
+    driver.find_element(By.NAME,'dispYmM').send_keys(mon)
+
+    if val_s == '0':
+
+        driver.find_element(By.XPATH,'/html/body/form/table[2]/tbody/tr[3]/td[2]/input[1]').click()#一般・専門職押す
+
+    if val_s == '1':
+
+        driver.find_element(By.XPATH,'/html/body/form/table[2]/tbody/tr[3]/td[2]/input[2]').click()#経営職押す
+
+    else:
+        pass
 
 # driver.find_element(By.XPATH,'/html/body/form/table[2]/tbody/tr[3]/td[2]/input[1]').click()#一般職・専門職押す
 
-time.sleep(2)
+    time.sleep(2)
 
-driver.find_element(By.XPATH,'/html/body/form/table[4]/tbody/tr[2]/td[1]/input').click()#表示ボタン押す
+    driver.find_element(By.XPATH,'/html/body/form/table[4]/tbody/tr[2]/td[1]/input').click()#表示ボタン押す
 
 # handle_array = driver.window_handles
 #
@@ -299,127 +303,134 @@ driver.find_element(By.XPATH,'/html/body/form/table[4]/tbody/tr[2]/td[1]/input')
 #
 # driver.switch_to.window(handle_array[1])
 
-element = driver.find_element(By.XPATH,'/html/body/table[2]',)
+    element = driver.find_element(By.XPATH,'/html/body/table[2]',)
 
-trs = element.find_elements(By.TAG_NAME,'tr')
+    trs = element.find_elements(By.TAG_NAME,'tr')
 
 # print(trs)
 
-time.sleep(10)
+    time.sleep(10)
 # df_kinmu = pd.DataFrame()
 
 
-df = []
+    df = []
 
-for i in range(1,len(trs)):
-    tds = trs[i].find_elements(By.TAG_NAME, "td")
+    for i in range(1,len(trs)):
+        tds = trs[i].find_elements(By.TAG_NAME, "td")
 
-    line = ""
+        line = ""
 
 
-    for j in range(0,len(tds)):
-      if j < len(tds)-1:
+        for j in range(0,len(tds)):
+            if j < len(tds)-1:
                 line += "%s\t" % (tds[j].text)#"\t";tab
-      else:
+            else:
                 line += "%s" % (tds[j].text)
 
-    print(line+"\r\n")
+        print(line+"\r\n")
     # line.split('\t')
-    df.append(line)#df=df.append~と書いたら値はNone！
+        df.append(line)#df=df.append~と書いたら値はNone！
 
-print(df)
+    print(df)
 
-df_kinmu = pd.Series(df)
+    df_kinmu = pd.Series(df)
 
-print('Seriesです')
+    print('Seriesです')
 
-print(df_kinmu)
+    print(df_kinmu)
 
 # print(df_kinmu.columns.tolist())#Seriesにtolist()はだめ。
 
-print(type(df_kinmu))#Series
+    print(type(df_kinmu))#Series
 
 # ''.join(df_kinmu.splitlines())#Seriesではだめ
 
-df_org = df_kinmu.str.split('\t',expand = True)
+    df_org = df_kinmu.str.split('\t',expand = True)
 
 # ''.join(df_org[0].splitlines())#Seriesではだめ\nを消したい
 
-print(df_org)
+    print(df_org)
 
-print(type(df_org))#Dataframe
+    print(type(df_org))#Dataframe
 
-print('一番上の行')
+    print('一番上の行')
 
-print(df_org.loc[0])
+    print(df_org.loc[0])
 
 #結合セルによるデータずれの補正(1行目）。2行目と統合させ1行に変更。ひとつひとつやるしかなさそう。
 
-df_org.loc[0].replace('実  績','出勤-退勤',inplace = True)
+    df_org.loc[0].replace('実  績','出勤-退勤',inplace = True)
 
-df_org.loc[0].replace('事  由','睡眠等',inplace = True)
+    df_org.loc[0].replace('事  由','睡眠等',inplace = True)
 
-df_org.loc[0].replace('備  考','事  由',inplace = True)
+    df_org.loc[0].replace('備  考','事  由',inplace = True)
 
-df_org.loc[0].replace('深　夜\n時間数','備  考',inplace = True)
+    df_org.loc[0].replace('深　夜\n時間数','備  考',inplace = True)
 
-df_org.loc[0].replace('休日','深　夜\n時間数',inplace = True)
+    df_org.loc[0].replace('休日','深　夜\n時間数',inplace = True)
 
-df_org.loc[0].replace('宿泊','休日A',inplace = True)
+    df_org.loc[0].replace('宿泊','休日A',inplace = True)
 
-df_org.loc[0].replace('日帰','休日B',inplace = True)
+    df_org.loc[0].replace('日帰','休日B',inplace = True)
 
-df_org.loc[0].replace('緊\n急','休日C',inplace = True)
+    df_org.loc[0].replace('緊\n急','休日C',inplace = True)
 
-df_org.loc[0].replace('休\n張','宿泊A',inplace = True)
+    df_org.loc[0].replace('休\n張','宿泊A',inplace = True)
 
-df_org.loc[0].iat[12] = '宿泊B'
+    df_org.loc[0].iat[12] = '宿泊B'
 
-df_org.loc[0].iat[13] = '宿泊C'
+    df_org.loc[0].iat[13] = '宿泊C'
 
-df_org.loc[0].iat[14] = '日帰100km'
+    df_org.loc[0].iat[14] = '日帰100km'
 
-df_org.loc[0].iat[15] = '日帰８H'
+    df_org.loc[0].iat[15] = '日帰８H'
 
-df_org.loc[0].iat[16] = '緊\n急'
+    df_org.loc[0].iat[16] = '緊\n急'
 
-df_org.loc[0].iat[17] = '休\n張'
+    df_org.loc[0].iat[17] = '休\n張'
 
 
-print('インサート後？')
+    print('インサート後？')
 
-print(df_org.loc[0])
+    print(df_org.loc[0])
 
-print('次の行')
+    print('次の行')
 
-print(df_org.loc[1])
+    print(df_org.loc[1])
 
 # df_org.loc[1].shift(3)
 #
 
 
 #0行目をcolumnにするコード　（以下）
-df_org.columns = df_org.iloc[0]
+    df_org.columns = df_org.iloc[0]
 
-df_org = df_org.drop(df_org.index[0])
+    df_org = df_org.drop(df_org.index[0])
 
-df_org.reset_index(drop=True,inplace=True)
+    df_org.reset_index(drop=True,inplace=True)
 
-df_org = df_org.drop([0])#2行名削除
-
-
-print('data 加工後')
-
-print(df_org.columns.tolist())
+    df_org = df_org.drop([0])#2行名削除
 
 
-print(df_org)
+    print('data 加工後')
+
+    print(df_org.columns.tolist())
 
 
-df_org.to_excel('c:/Users/406239/OneDrive - (株)NHKテクノロジーズ/デスクトップ/★勤務確認などのダウンロードデータ★/検証中/{}_smart_kinmu.xlsx'.format(num),sheet_name='{}_{}'.format(num,name))
+    print(df_org)
 
 
 
+
+    df_org.to_excel('c:/Users/406239/OneDrive - (株)NHKテクノロジーズ/デスクトップ/★勤務確認などのダウンロードデータ★/検証中/{}_smart_kinmu.xlsx'.format(num),sheet_name='{}_{}'.format(num,name))
+
+    print("handle_arrayの表示配列最初と次toその次")
+    print(handle_array[0])
+    print(handle_array[1])
+
+    driver.switch_to.window(handle_array[1])
+
+    driver.find_element(By.XPATH, '/ html / body / form / table / tbody / tr[2] / td[4] / input').click()  # 終了押す
 
 
 
