@@ -244,11 +244,11 @@ print('keyのデータ数')
 
 print(len(list(eplyNo_name_dict.keys())))
 
-#for分で全員分のデータを取り込み、Excelへ。作成中。
+#for分で全員分のデータを取り込み、Excelへ。作成中。/html/body/form/table[3]/tbody/tr[2]/td/input（名前のXpath）
 
 # for i in range(len(list(eplyNo_name_dict.keys()))):
 
-for i in range(2):
+for i in range(1):#三角さんでチェック最終的には、rangeは上行で。今は白川。
 
     input_eplyNo = list(eplyNo_name_dict.keys())[i]
 
@@ -294,6 +294,12 @@ for i in range(2):
     time.sleep(2)
 
     driver.find_element(By.XPATH,'/html/body/form/table[4]/tbody/tr[2]/td[1]/input').click()#表示ボタン押す
+
+#################################以上G-Smart画面へのログイン・表示########################
+
+#################################勤務実績の取り込み########################
+
+
 
 # handle_array = driver.window_handles
 #
@@ -357,25 +363,95 @@ for i in range(2):
 
     print(df_org.loc[0])
 
-#結合セルによるデータずれの補正(1行目）。2行目と統合させ1行に変更。ひとつひとつやるしかなさそう。
+#一般職のデータ整列用に一旦コメントアウトしている以下
 
-    df_org.loc[0].replace('実  績','出勤-退勤',inplace = True)
+# #経営職の勤務票処理=================================
+#
+# #結合セルによるデータずれの補正(1行目）。2行目と統合させ1行に変更。ひとつひとつやるしかなさそう。
+#
+#     df_org.loc[0].replace('実  績','出勤-退勤',inplace = True)
+#
+#     df_org.loc[0].replace('事  由','睡眠等',inplace = True)
+#
+#     df_org.loc[0].replace('備  考','事  由',inplace = True)
+#
+#     df_org.loc[0].replace('深　夜\n時間数','備  考',inplace = True)
+#
+#     df_org.loc[0].replace('休日','深　夜\n時間数',inplace = True)
+#
+#     df_org.loc[0].replace('宿泊','休日A',inplace = True)
+#
+#     df_org.loc[0].replace('日帰','休日B',inplace = True)
+#
+#     df_org.loc[0].replace('緊\n急','休日C',inplace = True)
+#
+#     df_org.loc[0].replace('休\n張','宿泊A',inplace = True)
+#
+#     df_org.loc[0].iat[12] = '宿泊B'
+#
+#     df_org.loc[0].iat[13] = '宿泊C'
+#
+#     df_org.loc[0].iat[14] = '日帰100km'
+#
+#     df_org.loc[0].iat[15] = '日帰８H'
+#
+#     df_org.loc[0].iat[16] = '緊\n急'
+#
+#     df_org.loc[0].iat[17] = '休\n張'
+#
+#
+#     print('インサート後？')
+#
+#     print(df_org.loc[0])
+#
+#     print('次の行')
+#
+#     print(df_org.loc[1])
+#
+# # df_org.loc[1].shift(3)
+# #
+#
+#
+# #0行目をcolumnにするコード　（以下）
+#     df_org.columns = df_org.iloc[0]
+#
+#     df_org = df_org.drop(df_org.index[0])
+#
+#     df_org.reset_index(drop=True,inplace=True)
+#
+#     df_org = df_org.drop([0])#2行名削除
+#
+#
+#     print('data 加工後')
+#
+#     print(df_org.columns.tolist())
+#
+#
+#     print(df_org)
+#
+#     # 経営職の勤務票処理=================================
 
-    df_org.loc[0].replace('事  由','睡眠等',inplace = True)
+    # 一般・専門職の勤務票処理=================================
 
-    df_org.loc[0].replace('備  考','事  由',inplace = True)
+    # 結合セルによるデータずれの補正(1行目）。2行目と統合させ1行に変更。ひとつひとつやるしかなさそう。
 
-    df_org.loc[0].replace('深　夜\n時間数','備  考',inplace = True)
+    df_org.loc[0].replace('実  績', '出勤-退勤', inplace=True)
 
-    df_org.loc[0].replace('休日','深　夜\n時間数',inplace = True)
+    df_org.loc[0].replace('事  由', '睡眠等', inplace=True)
 
-    df_org.loc[0].replace('宿泊','休日A',inplace = True)
+    df_org.loc[0].replace('備  考', '事  由', inplace=True)
 
-    df_org.loc[0].replace('日帰','休日B',inplace = True)
+    df_org.loc[0].replace('深　夜\n時間数', '備  考', inplace=True)
 
-    df_org.loc[0].replace('緊\n急','休日C',inplace = True)
+    df_org.loc[0].replace('休日', '深　夜\n時間数', inplace=True)
 
-    df_org.loc[0].replace('休\n張','宿泊A',inplace = True)
+    df_org.loc[0].replace('宿泊', '休日A', inplace=True)
+
+    df_org.loc[0].replace('日帰', '休日B', inplace=True)
+
+    df_org.loc[0].replace('緊\n急', '休日C', inplace=True)
+
+    df_org.loc[0].replace('休\n張', '宿泊A', inplace=True)
 
     df_org.loc[0].iat[12] = '宿泊B'
 
@@ -389,7 +465,6 @@ for i in range(2):
 
     df_org.loc[0].iat[17] = '休\n張'
 
-
     print('インサート後？')
 
     print(df_org.loc[0])
@@ -398,28 +473,25 @@ for i in range(2):
 
     print(df_org.loc[1])
 
-# df_org.loc[1].shift(3)
-#
+    # df_org.loc[1].shift(3)
+    #
 
-
-#0行目をcolumnにするコード　（以下）
+    # 0行目をcolumnにするコード　（以下）
     df_org.columns = df_org.iloc[0]
 
     df_org = df_org.drop(df_org.index[0])
 
-    df_org.reset_index(drop=True,inplace=True)
+    df_org.reset_index(drop=True, inplace=True)
 
-    df_org = df_org.drop([0])#2行名削除
-
+    df_org = df_org.drop([0])  # 2行名削除
 
     print('data 加工後')
 
     print(df_org.columns.tolist())
 
-
     print(df_org)
 
-
+    #  一般・専門職の勤務票処理=================================
 
 
     df_org.to_excel('c:/Users/406239/OneDrive - (株)NHKテクノロジーズ/デスクトップ/★勤務確認などのダウンロードデータ★/検証中/{}_smart_kinmu.xlsx'.format(num),sheet_name='{}_{}'.format(num,name))
