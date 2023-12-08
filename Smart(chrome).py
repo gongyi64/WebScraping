@@ -274,9 +274,11 @@ print('一番上の行')
 
 print(df_org.loc[0])
 
-#結合セルによるデータずれの補正。ひとつひとつやるしかなさそう。
+#結合セルによるデータずれの補正(1行目）。2行目と統合させ1行に変更。ひとつひとつやるしかなさそう。
 
-df_org.loc[0].replace('事  由','実  績',inplace = True)
+df_org.loc[0].replace('実  績','出勤-退勤',inplace = True)
+
+df_org.loc[0].replace('事  由','睡眠等',inplace = True)
 
 df_org.loc[0].replace('備  考','事  由',inplace = True)
 
@@ -284,21 +286,21 @@ df_org.loc[0].replace('深　夜\n時間数','備  考',inplace = True)
 
 df_org.loc[0].replace('休日','深　夜\n時間数',inplace = True)
 
-df_org.loc[0].replace('宿泊','休日',inplace = True)
+df_org.loc[0].replace('宿泊','休日A',inplace = True)
 
-df_org.loc[0].replace('日帰','休日',inplace = True)
+df_org.loc[0].replace('日帰','休日B',inplace = True)
 
-df_org.loc[0].replace('緊\n急','休日',inplace = True)
+df_org.loc[0].replace('緊\n急','休日C',inplace = True)
 
-df_org.loc[0].replace('休\n張','宿泊',inplace = True)
+df_org.loc[0].replace('休\n張','宿泊A',inplace = True)
 
-df_org.loc[0].iat[12] = '宿泊'
+df_org.loc[0].iat[12] = '宿泊B'
 
-df_org.loc[0].iat[13] = '宿泊'
+df_org.loc[0].iat[13] = '宿泊C'
 
-df_org.loc[0].iat[14] = '日帰'
+df_org.loc[0].iat[14] = '日帰100km'
 
-df_org.loc[0].iat[15] = '日帰'
+df_org.loc[0].iat[15] = '日帰８H'
 
 df_org.loc[0].iat[16] = '緊\n急'
 
@@ -313,7 +315,49 @@ print('次の行')
 
 print(df_org.loc[1])
 
-print(df_org.loc[1].shift(2))
+# df_org.loc[1].shift(3)
+#
+# #結合セルによるデータずれの補正（2行目）。ひとつひとつやるしかなさそう。
+#
+# print('shift後の2行目')
+#
+# print(df_org.loc[1])
+#
+# df_org.loc[1].iat[0] = ''
+#
+# df_org.loc[1].iat[1] = ''
+#
+# df_org.loc[1].iat[2] = ''
+#
+# df_org.loc[1].iat[3] = '出勤-退勤'
+#
+# df_org.loc[1].iat[4] = '睡眠等'
+#
+# df_org.loc[1].iat[5] = ''
+#
+# df_org.loc[1].iat[6] = ''
+#
+# df_org.loc[1].iat[7] = ''
+#
+# df_org.loc[1].iat[8] = 'Ａ'
+#
+# df_org.loc[1].iat[9] = 'Ｂ'
+#
+# df_org.loc[1].iat[10] = 'Ｃ'
+#
+# df_org.loc[1].iat[11] = 'Ａ'
+#
+# df_org.loc[1].iat[12] = 'Ｂ'
+#
+# df_org.loc[1].iat[13] = 'Ｃ'
+#
+# df_org.loc[1].iat[14] = '100\nkm'
+#
+# df_org.loc[1].iat[15] = '８\nＨ'
+# #
+# df_org.loc[1].iat[16] = '緊\n急'
+#
+# df_org.loc[1].iat[17] = '休\n張'
 
 
 #0行目をcolumnにするコード　（以下）
@@ -322,6 +366,8 @@ df_org.columns = df_org.iloc[0]
 df_org = df_org.drop(df_org.index[0])
 
 df_org.reset_index(drop=True,inplace=True)
+
+df_org = df_org.drop([0])#2行名削除
 
 
 print('data 加工後')
