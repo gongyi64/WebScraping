@@ -248,7 +248,7 @@ print(len(list(eplyNo_name_dict.keys())))
 
 # for i in range(len(list(eplyNo_name_dict.keys()))):
 
-for i in range(1):#三角さんでチェック最終的には、rangeは上行で。今は白川。
+for i in range(4,9):#三角さんでチェック最終的には、rangeは上行で。今は白川。
 
     input_eplyNo = list(eplyNo_name_dict.keys())[i]
 
@@ -321,7 +321,7 @@ for i in range(1):#三角さんでチェック最終的には、rangeは上行�
 
     df = []
 
-    for i in range(1,len(trs)):
+    for i in range(0,len(trs)):#経営職では、1からにしていた。後日要チェック
         tds = trs[i].find_elements(By.TAG_NAME, "td")
 
         line = ""
@@ -363,107 +363,82 @@ for i in range(1):#三角さんでチェック最終的には、rangeは上行�
 
     print(df_org.loc[0])
 
+
 #一般職のデータ整列用に一旦コメントアウトしている以下
 
-# #経営職の勤務票処理=================================
-#
-# #結合セルによるデータずれの補正(1行目）。2行目と統合させ1行に変更。ひとつひとつやるしかなさそう。
-#
-#     df_org.loc[0].replace('実  績','出勤-退勤',inplace = True)
-#
-#     df_org.loc[0].replace('事  由','睡眠等',inplace = True)
-#
-#     df_org.loc[0].replace('備  考','事  由',inplace = True)
-#
-#     df_org.loc[0].replace('深　夜\n時間数','備  考',inplace = True)
-#
-#     df_org.loc[0].replace('休日','深　夜\n時間数',inplace = True)
-#
-#     df_org.loc[0].replace('宿泊','休日A',inplace = True)
-#
-#     df_org.loc[0].replace('日帰','休日B',inplace = True)
-#
-#     df_org.loc[0].replace('緊\n急','休日C',inplace = True)
-#
-#     df_org.loc[0].replace('休\n張','宿泊A',inplace = True)
-#
-#     df_org.loc[0].iat[12] = '宿泊B'
-#
-#     df_org.loc[0].iat[13] = '宿泊C'
-#
-#     df_org.loc[0].iat[14] = '日帰100km'
-#
-#     df_org.loc[0].iat[15] = '日帰８H'
-#
-#     df_org.loc[0].iat[16] = '緊\n急'
-#
-#     df_org.loc[0].iat[17] = '休\n張'
-#
-#
-#     print('インサート後？')
-#
-#     print(df_org.loc[0])
-#
-#     print('次の行')
-#
-#     print(df_org.loc[1])
-#
-# # df_org.loc[1].shift(3)
-# #
-#
-#
-# #0行目をcolumnにするコード　（以下）
-#     df_org.columns = df_org.iloc[0]
-#
-#     df_org = df_org.drop(df_org.index[0])
-#
-#     df_org.reset_index(drop=True,inplace=True)
-#
-#     df_org = df_org.drop([0])#2行名削除
-#
-#
-#     print('data 加工後')
-#
-#     print(df_org.columns.tolist())
-#
-#
-#     print(df_org)
-#
-#     # 経営職の勤務票処理=================================
+#一般・専門職の勤務票処理=================================
 
-    # 一般・専門職の勤務票処理=================================
+#結合セルによるデータずれの補正(1行目）。2行目と統合させ1行に変更。ひとつひとつやるしかなさそう。
 
-    # 結合セルによるデータずれの補正(1行目）。2行目と統合させ1行に変更。ひとつひとつやるしかなさそう。
+    df_org.loc[0].replace('所 定','所定出退勤',inplace = True)
 
-    df_org.loc[0].replace('実  績', '出勤-退勤', inplace=True)
+    df_org.loc[0].replace('実  績','出勤-退勤',inplace = True)
 
-    df_org.loc[0].replace('事  由', '睡眠等', inplace=True)
+    df_org.loc[0].replace('時間外','仮眠',inplace = True)
 
-    df_org.loc[0].replace('備  考', '事  由', inplace=True)
+    df_org.loc[0].replace('前日時間外\n時間外合計','時間外',inplace = True)
 
-    df_org.loc[0].replace('深　夜\n時間数', '備  考', inplace=True)
+    df_org.loc[0].replace('深夜','前日時間外\n時間外合計',inplace = True)
 
-    df_org.loc[0].replace('休日', '深　夜\n時間数', inplace=True)
+    df_org.loc[0].replace('休 日','深夜',inplace = True)
 
-    df_org.loc[0].replace('宿泊', '休日A', inplace=True)
+    df_org.loc[0].replace('事 由','時間外',inplace = True)
 
-    df_org.loc[0].replace('日帰', '休日B', inplace=True)
+    df_org.loc[0].iat[9] = ''
 
-    df_org.loc[0].replace('緊\n急', '休日C', inplace=True)
+    df_org.loc[0].iat[10] = '休日A'
 
-    df_org.loc[0].replace('休\n張', '宿泊A', inplace=True)
+    df_org.loc[0].iat[11] = '休日B'
 
-    df_org.loc[0].iat[12] = '宿泊B'
+    df_org.loc[0].iat[12] = '事　由'
 
-    df_org.loc[0].iat[13] = '宿泊C'
+    df_org.loc[0].iat[13] = '備　考'
 
     df_org.loc[0].iat[14] = '日帰100km'
 
     df_org.loc[0].iat[15] = '日帰８H'
 
-    df_org.loc[0].iat[16] = '緊\n急'
+    df_org.loc[0].iat[16] = '宿泊A'
 
-    df_org.loc[0].iat[17] = '休\n張'
+    df_org.loc[0].iat[17] = '宿泊B'
+
+    df_org.loc[0].iat[18] = '宿泊c'
+
+    df_org.loc[0].iat[19] = '早朝'
+
+    df_org.loc[0].iat[20] = '休張'
+
+    df_org.loc[0].iat[21] = '休日A'
+
+    df_org.loc[0].iat[22] = '休日B'
+
+    df_org.loc[0].iat[23] = '休日C'
+
+    df_org.loc[0].iat[24] = '緊急'
+
+    df_org.loc[0].iat[25] = '航空'
+
+    df_org.loc[0].iat[26] = '水中'
+
+    df_org.loc[0].iat[27] = '海上'
+
+    df_org.loc[0].iat[28] = '高所'
+
+    df_org.loc[0].iat[29] = '高圧'
+
+    df_org.loc[0].iat[30] = '高地'
+
+    df_org.loc[0].iat[31] = '地下'
+
+    df_org.loc[0].iat[32] = '石綿'
+
+    df_org.loc[0].iat[33] = '放射線'
+
+
+
+
+
+
 
     print('インサート後？')
 
@@ -473,28 +448,112 @@ for i in range(1):#三角さんでチェック最終的には、rangeは上行�
 
     print(df_org.loc[1])
 
-    # df_org.loc[1].shift(3)
-    #
+# df_org.loc[1].shift(3)
+#
 
-    # 0行目をcolumnにするコード　（以下）
+
+#0行目をcolumnにするコード　（以下）
     df_org.columns = df_org.iloc[0]
 
     df_org = df_org.drop(df_org.index[0])
 
-    df_org.reset_index(drop=True, inplace=True)
+    df_org.reset_index(drop=True,inplace=True)
 
-    df_org = df_org.drop([0])  # 2行名削除
+    df_org = df_org.drop([0])#2行名削除
+
 
     print('data 加工後')
 
     print(df_org.columns.tolist())
 
+
     print(df_org)
 
-    #  一般・専門職の勤務票処理=================================
+    # 一般・専門職の勤務票処理=================================
 
+    # 経営職職の勤務票処理=================================
 
-    df_org.to_excel('c:/Users/406239/OneDrive - (株)NHKテクノロジーズ/デスクトップ/★勤務確認などのダウンロードデータ★/検証中/{}_smart_kinmu.xlsx'.format(num),sheet_name='{}_{}'.format(num,name))
+    # 結合セルによるデータずれの補正(1行目）。2行目と統合させ1行に変更。ひとつひとつやるしかなさそう。
+
+    # df_org.loc[0].iat[0] = '日付'
+    #
+    # df_org.loc[0].iat[1] = '曜日'
+    #
+    # df_org.loc[0].replace('仮 眠', '所定出退勤', inplace=True)
+    #
+    # df_org.loc[0].replace('Ａ', '出勤-退勤', inplace=True)
+    #
+    # df_org.loc[0].replace('B', '仮眠', inplace=True)
+    #
+    # df_org.loc[0].replace('100\nkm', '時間外', inplace=True)
+    #
+    # df_org.loc[0].replace('８\nＨ', '時間外合計', inplace=True)
+    #
+    # df_org.loc[0].iat[7] = '深夜'
+    #
+    # df_org.loc[0].iat[8] = '休日A'
+    #
+    # df_org.loc[0].iat[9] = '休日B'
+    #
+    # df_org.loc[0].iat[10] = '事　由'
+    #
+    # df_org.loc[0].iat[11] = '備　考'
+    #
+    # df_org.loc[0].iat[12] = '日帰100km'
+    #
+    # df_org.loc[0].iat[13] = '日帰８H'
+
+    # df_org.loc[0].iat[14] = '宿泊A'
+
+    # df_org.loc[0].iat[15] = '宿泊B'
+
+    # df_org.loc[0].iat[16] = '宿泊C'
+    #
+    # df_org.loc[0].iat[17] = '早朝'
+
+    # df_org.loc[0].iat[18] = '休張'
+
+    # df_org.loc[0].iat[17] = '早朝'
+    #
+    # df_org.loc[0].append('')
+    #
+    # df_org.loc[0].append('航\n空')
+    #
+    # df_org.loc[0].append('高\n所')
+    #
+    #
+    #
+    # print('インサート後？')
+    #
+    # print(df_org.loc[0])
+    #
+    # print('次の行')
+    #
+    # print(df_org.loc[1])
+    #
+    # # df_org.loc[1].shift(3)
+    # #
+    #
+    # # 0行目をcolumnにするコード　（以下）
+    # df_org.columns = df_org.iloc[0]
+    #
+    # df_org = df_org.drop(df_org.index[0])
+    #
+    # df_org.reset_index(drop=True, inplace=True)
+    #
+    # df_org = df_org.drop([0])  # 2行名削除
+    #
+    # print('data 加工後')
+    #
+    # print(df_org.columns.tolist())
+    #
+    # print(df_org)
+    #
+    # #  経営職の勤務票処理=================================
+
+    with pd.ExcelWriter('c:/Users/406239/OneDrive - (株)NHKテクノロジーズ/デスクトップ/★勤務確認などのダウンロードデータ★/検証中/{}_smart_kinmu.xlsx'.format(num),engine='openpyxl', mode ='a',if_sheet_exists ='replace') as writer:
+         df_org.to_excel(writer, sheet_name='{}_{}'.format(num,name))
+    # df_org.to_excel('c:/Users/406239/OneDrive - (株)NHKテクノロジーズ/デスクトップ/★勤務確認などのダウンロードデータ★/検証中/{}_smart_kinmu.xlsx'.format(num),sheet_name='{}_{}'.format(num,name))
 
     print("handle_arrayの表示配列最初と次toその次")
     print(handle_array[0])
@@ -502,7 +561,7 @@ for i in range(1):#三角さんでチェック最終的には、rangeは上行�
 
     driver.switch_to.window(handle_array[1])
 
-    driver.find_element(By.XPATH, '/ html / body / form / table / tbody / tr[2] / td[4] / input').click()  # 終了押す
+    driver.find_element(By.XPATH, '/html/body/table[4]/tbody/tr[2]/td[4]/input').click()  # 終了押す
 
 
 
