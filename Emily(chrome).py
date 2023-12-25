@@ -1,50 +1,51 @@
-# pySimpleGUI Version---NHK勤務表自動ダウンロードソフト　202311
-#TEAMSへ自動ログインして、所望の年月のNHK勤務表をダウンロードし、xlsxファイル人変換する。
+# pySimpleGUI Version---Emily 自動ログインツール　202312
+#Emilyへ自動ログインして、各自のメニューにアクセスする。。
 
 
+import PySimpleGUI as sg
+import re
 
-
-# # selenium 4
-# from selenium import webdriver
-# from selenium.webdriver.chrome.service import Service as ChromeService
-# from webdriver_manager.chrome import ChromeDriverManager
-#
-# driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))
-
-# value = sg.popup_get_file('TEAMSで勤務表をダウンロードします。')#使用するダウンロード済みの勤務表元ファイルを選択
-
+manNos = ('827861 相庭直史','406239 白川公一','380672 三角和浩','378035 岩田貴夫','805519 仲本祥子','880079 砂川航輝','806185 辻ひかる','880334 山城実咲','880518 古波蔵晃久','410993 黒岩英次','710463 山城徳松')
+#manNos = ('827861','406239','380672','378035','805519','880079','806185','880334','880518','410993','710463')
 
 sg.theme('Python')
 
-layout =[[sg.Text('[NT勤務自動ダウンロード]',font = ('Noto Serif CJK JP',14))],
+layout =[[sg.Text('[NT_Emily_自動操作ソフト]',font = ('Noto Serif CJK JP',14))],
 
-        [sg.Text('[九州沖縄TEAMSで月間勤務表出力し、★勤務確認などダウンロードフォルダに配置。] ',font = ('meiryo',10))],
+         [sg.Text('[Emilyに別ブラウザでログインしたいときに、、、。] ',font = ('meiryo',10))],
 
-        [sg.Text('出力したい年月（数字6桁）を入力',text_color='#FF0000',font =( 'meiryo,8')),sg.InputText(size = (10,2),key= '-YM-')],
-        [sg.Text('[実行ボタンを押して入力。Windowを閉じる（右上×マーククリック）とスタート。] ',font = ('meiryo',10))],
-        [sg.Button('実行', button_color=('red','#808080'),key = '-SUBMIT-')]]
+         [sg.Listbox(manNos,size =(25,len(manNos)),key='-MN-')],
 
-window = sg.Window('勤務表制作APP',layout,size = (600,200))
+         [sg.Text('Text', key = '-text1-')],
+
+         [sg.Button('実行', button_color=('red','#808080'),key = '-SUBMIT-')]]
+
+window = sg.Window('Emily_APP',layout,size = (500,350))
+
 
 
 while True:
-   event,values = window.read()
-   if event == '-SUBMIT-':
+    event,values = window.read()
 
-            num = values['-YM-']#チェックする年月を202211と6桁の数字で入力する。
-            print(num)#6桁の年月
+    if event == sg.WIN_CLOSED:
+        break
 
+    elif event == '-SUBMIT-':
+        window['-text1-'].update(values['-MN-'][0])
+        input_eplyNo = values['-MN-'][0]
 
-
-   if event == sg.WIN_CLOSED:
-         break
 
 window.close()
-nen=num[:4]#頭4桁年数
-num = num[4:]#下2桁月数
-# print(num)
 
-# print(value)
+
+
+# input_eplyNo = values['-MN-'][0]
+
+print(input_eplyNo)#所得したのは、リスト型
+
+eplyNo = re.findall(r'\d+', input_eplyNo)#名前を除去して社員番号のみにして、ログインに使用する。
+
+print(eplyNo[0])#リストの要素を文字列として取得。この場合は、要素１つなので[0]
 
 # selenium 4
 
@@ -72,8 +73,8 @@ time.sleep(3)
 options = webdriver.ChromeOptions()
 
 
-print("========== 機材Teams　ログイン中========== ")
-sg.popup_ok('機材TEAMSへログインします！',title = 'OK？')
+print("========== Emily　ログイン中========== ")
+sg.popup_ok('Emilyへログインします！',title = 'OK？')
 
 
 # service = Service(driver_path)
@@ -104,45 +105,76 @@ driver.get("https://test9.emily.nhk-tech.co.jp/GRANDIT/CM_AC_03_S01.aspx")
 driver.maximize_window()
 
 time.sleep(2)
-
-form = driver.find_element(By.XPATH,'//*[@id="selector_form"]/div/div/div/button')
 #
-# time.sleep(1）
+# form = driver.find_element(By.XPATH,'//*[@id="selector_form"]/div/div/div/button')
+# #
+# # time.sleep(1）
 
 driver.implicitly_wait(2)
 
-form.click()
+# form.click()
 
 
 
-form = driver.find_element(By.XPATH,'//*[@id="username"]')
+form = driver.find_element(By.XPATH,'//*[@id="LoginAccountText"]')
 
-form.send_keys('1010406239')
+form.send_keys(eplyNo)#最初に取得したマンナンバーを入力
 
-form = driver.find_element(By.XPATH,'//*[@id="uid_password"]')
+form = driver.find_element(By.XPATH,'//*[@id="PassText"]')
 
-form.send_keys('*kabu92772462')
+form.send_keys('09-Hdo9QDw ')
 
-form.submit()
 
-time.sleep(1)
+time.sleep(2)
 
-form = driver.find_element(By.XPATH,'//*[@id="btnClose"]')
-
-form.click()
-
-time.sleep(1)
-
-form = driver.find_element(By.XPATH,'//*[@id="accordionSidebar"]/li[6]/a')
+form = driver.find_element(By.XPATH,'//*[@id="LoginButton"]/span')
 
 form.click()
 
+time.sleep(1)
 
-dropdown = driver.find_element(By.ID,'page-top')
+
+#ログインまでは、出来ているこの後は、まだ。
+
+handle_array = driver.window_handles
+
+print("handle_arrayの表示配列最初と次")
+print(handle_array[0])
+print(handle_array[1])
+# print(handle_array[2])
+
+
+driver.switch_to.window(handle_array[1])
+
+
+
+#form = driver.find_element(By.CSS_SELECTOR,'#Form1 > table > tbody > tr > td > table.menu_overall_content.layout_container > tbody > tr > td.menu_right_content > div.hd_bg_4 > tabler')
+
+
+
+#CSS_Selector = driver.find_element(By.CSS_SELECTOR,'#MenuDropDownList')[1].click()
+
+
+form = driver.find_element(By.XPATH,'//*[@id="Form1"]/table/tbody/tr/td/table[2]/tbody/tr/td[2]/div[1]/table').click()
+
+driver.switch_to().frame(form)
+
+driver.implicitly_wait(10)
+
+form_select = Select(form)
+
+form_select.select_by_value('M技_管理')
 
 time.sleep(1)
 
-driver.find_element(By.XPATH,'//*[@id="collapse5"]/div/a[5]').click()
+
+
+
+# dropdown = driver.find_element(By.ID,'page-top')
+
+time.sleep(1)
+
+# driver.find_element(By.XPATH,'//*[@id="collapse5"]/div/a[5]').click()
 # print(driver.page_source)
 
 # print(driver.current_url)
