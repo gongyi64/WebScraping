@@ -134,7 +134,7 @@ form.click()
 time.sleep(1)
 
 
-#ログインまでは、出来ているこの後は、まだ。
+#ログインまでは、出来ているこの後は、まだ。メニュー画面にログインまで。
 
 handle_array = driver.window_handles
 
