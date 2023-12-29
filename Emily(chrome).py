@@ -195,7 +195,7 @@ driver.find_element(By.XPATH,'/html/body').send_keys(Keys.ENTER)#エンターを
 
 
 
-time.sleep(5)
+time.sleep(3)
 
 #M技管理メニュー操作
 
@@ -204,7 +204,7 @@ driver.find_element(By.XPATH,'//*[@id="c_12"]').click()#要員実績をクリッ
 
 driver.find_element(By.XPATH,'//*[@id="Form1"]/table/tbody/tr/td/table[2]/tbody/tr/td[2]/div[3]/table/tbody/tr/td[2]/div/a[3]').click()#225_要員実績入力をクリック
 
-time.sleep(5)
+time.sleep(3)
 
 handle_array = driver.window_handles
 
@@ -251,7 +251,7 @@ driver.switch_to.window(handle_array[1])
 #--------------------------------------------------------------------
 
 #os.kill(driver.service.process.pid,signal.SIGTERM)#ブラウザが閉じるのを止める。開きっぱなしにする。
-time.sleep(5)
+time.sleep(2)
 
 driver.switch_to.frame(1)#iFrameの最初に切り替え。２つあるが、２番目（１）のiFrameに切り替える。
 
