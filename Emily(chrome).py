@@ -255,11 +255,11 @@ time.sleep(2)
 
 driver.switch_to.frame(1)#iFrameの最初に切り替え。２つあるが、２番目（１）のiFrameに切り替える。
 
-kobetsu_No = '2024001184'#今は直接入力。
+kobetsu_No = '2024001176'#今は直接入力。こはぐら5月
 
 form = driver.find_element(By.XPATH,'//*[@id="ProposalNoText"]')
 
-print(form)
+# print(form)
 
 form.send_keys(kobetsu_No)#案件番号を入力
 
@@ -268,20 +268,87 @@ driver.find_element(By.XPATH,'/html/body').send_keys(Keys.ENTER)#エンターを
 #
 driver.find_element(By.XPATH,'//*[@id="TargetMonthBox"]').clear()
 
-driver.find_element(By.XPATH,'//*[@id="TargetMonthBox"]').send_keys('202405')#対象年月を変更2。この場合は、02305に。
+driver.find_element(By.XPATH,'//*[@id="TargetMonthBox"]').send_keys('202405')#対象年月を変更。この場合は、202305に。
 
 driver.find_element(By.XPATH,'/html/body').send_keys(Keys.ENTER)#エンターを押して、次メニューに更新。
 
+time.sleep(3)
 
-form = driver.find_element(By.XPATH,'//*[@id="NewOpeDtlCodeDrop"]')#勤務内容選択　休日
+# os.kill(driver.service.process.pid,signal.SIGTERM)#ブラウザが閉じるのを止める。開きっぱなしにする。
 
-print(form)
+for i in range(3):
 
-# //*[@id="NewDutyCodeDrop"]#担務　担当
+    dropdown1 = driver.find_element(By.XPATH,'//*[@id="NewOpeDtlCodeDrop"]')#勤務内容選択　休日
+
+    select = Select(dropdown1)
+
+    select.select_by_index(len(select.options)-1)
+
+
+
+# dropdown2 = driver.find_element(By.ID,'#NewDutyCodeDrop')#担務　担当
+
+# dropdown2 = driver.find_element(By.XPATH,'//*[@id="NewDutyCodeDrop"]')
 #
-# //*[@id="NewEmpCodeText"]#担当者　マンナンバー
+# print(dropdown2)
+#
+# select = Select(dropdown2)
+#
+# select.select_by_index(1)
+#
+# driver.implicitly_wait(10)
+#
+# driver.find_element(By.XPATH,'/html/body').send_keys(Keys.ENTER)#エンターを押して、次メニューに更新。
+
+# select.select_by_index(len(select.options)-2)
+# select.select_by_visible_text('担当')
+
+    time.sleep(1)
+
+    driver.find_element(By.XPATH,'/html/body').send_keys(Keys.ENTER)#エンターを押して、次メニューに更新。
+#
+#
+    driver.find_element(By.XPATH,'//*[@id="NewEmpCodeText"]').send_keys(eplyNo[0])##担当者　マンナンバー
+
+    driver.find_element(By.XPATH,'/html/body').send_keys(Keys.ENTER)#エンターを押して、次メニューに更新。
+
+    time.sleep(1)
+
+    driver.find_element(By.XPATH,'//*[@id="NewDisplayOrderText"]').send_keys('i+1')#順
+
+    driver.find_element(By.XPATH,'/html/body').send_keys(Keys.ENTER)#エンターを押して、次メニューに更新。
+
+    time.sleep(3)
+
+#driver.find_element(By.XPATH,'//*[@id="NewWorkDateBox"]"]').send_keys('2024/05/'{i+1})#実施年月日
+
+    driver.find_element(By.CSS_SELECTOR,'#NewWorkDateBox').send_keys('2024/05/'{0:02d}.format(i))#実施年月日
 
 
+    time.sleep(3)
+
+    dropdown2 = driver.find_element(By.XPATH,'//*[@id="NewDutyCodeDrop"]')#担務入力なぜか先に入力すると入らないので、最後に。
+
+    print(dropdown2)
+
+    select = Select(dropdown2)
+
+    select.select_by_index(1)
+
+    driver.implicitly_wait(10)
+
+    driver.find_element(By.XPATH,'//*[@id="RegistButton"]/span').click()#登録ボタン
+
+
+time.sleep(3)
+
+
+
+
+
+
+
+#登録ボタン
 
 
 
