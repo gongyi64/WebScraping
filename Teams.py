@@ -1,10 +1,15 @@
 # pySimpleGUI Version---NHK勤務表自動ダウンロードソフト　202311
 #TEAMSへ自動ログインして、所望の年月のNHK勤務表をダウンロードし、xlsxファイル人変換する。
 
-
-import sys
-
 import PySimpleGUI as sg
+
+
+# # selenium 4
+# from selenium import webdriver
+# from selenium.webdriver.chrome.service import Service as ChromeService
+# from webdriver_manager.chrome import ChromeDriverManager
+#
+# driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))
 
 # value = sg.popup_get_file('TEAMSで勤務表をダウンロードします。')#使用するダウンロード済みの勤務表元ファイルを選択
 
@@ -36,7 +41,7 @@ while True:
 
 window.close()
 nen=num[:4]#頭4桁年数
-num = num[4:]#下2桁月数
+tsuki = num[4:]#下2桁月数
 # print(num)
 
 # print(value)
@@ -167,7 +172,7 @@ years_select.select_by_value(nen)
 months = driver.find_element(By.CSS_SELECTOR,"#FormData > div.control.cfx > select:nth-child(10)")
 months_select = Select(months)
 # months.send_keys("11月")
-months_select.select_by_value(num)
+months_select.select_by_value(tsuki)
 
 
 
@@ -196,7 +201,7 @@ files = os.listdir(dir_path)
 
 print(files)#ダウンロードフォルダへ格納させたファイル名取得。このファイルで必要なものを抽出して所望のファルダへ移動させる。日付の後が大きいものが最新。
 
-files_in = [s for s in files if '202311' in s]#出力した月の中で最新のもの
+files_in = [s for s in files if '202401' in s]#出力した月の中で最新のもの
 
 print(files_in)
 
@@ -220,7 +225,7 @@ print(output_time)
 
 oldpath = fr"C:\Users\406239\OneDrive - (株)NHKテクノロジーズ\デスクトップ\ドキュメント\Downloads\{newest_file}"
 
-newpath = fr"C:\Users\406239\OneDrive - (株)NHKテクノロジーズ\デスクトップ\★勤務確認などのダウンロードデータ★\NHK勤務表出力ファイル\monschedule_202312_{output_time}.xls"
+newpath = fr"C:\Users\406239\OneDrive - (株)NHKテクノロジーズ\デスクトップ\★勤務確認などのダウンロードデータ★\NHK勤務表出力ファイル\monschedule_{num}_{output_time}.xls"
 
 
 print(os.path.exists(oldpath))
@@ -233,11 +238,11 @@ print(os.path.exists(newpath))
 
 import xlwings as xw
 
-path = fr'C:\Users\406239\OneDrive - (株)NHKテクノロジーズ\デスクトップ\★勤務確認などのダウンロードデータ★\NHK勤務表出力ファイル\monschedule_202312_{output_time}.xls'
+path = fr'C:\Users\406239\OneDrive - (株)NHKテクノロジーズ\デスクトップ\★勤務確認などのダウンロードデータ★\NHK勤務表出力ファイル\monschedule_{num}_{output_time}.xls'
 
 wb = xw.Book(path)
 
-path = fr'C:\Users\406239\OneDrive - (株)NHKテクノロジーズ\デスクトップ\★勤務確認などのダウンロードデータ★\NHK勤務表出力ファイル\monschedule_202312_{output_time}.xlsx'
+path = fr'C:\Users\406239\OneDrive - (株)NHKテクノロジーズ\デスクトップ\★勤務確認などのダウンロードデータ★\NHK勤務表出力ファイル\monschedule_{num}_{output_time}.xlsx'
 
 wb.save(path)
 
