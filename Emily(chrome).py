@@ -322,7 +322,7 @@ for i in range(1,3):
 
 #driver.find_element(By.XPATH,'//*[@id="NewWorkDateBox"]"]').send_keys('2024/05/'{i+1})#実施年月日
 
-    driver.find_element(By.CSS_SELECTOR,'#NewWorkDateBox').send_keys('2024/05/'+{0:02d}.format(i))#実施年月日
+    driver.find_element(By.CSS_SELECTOR,'#NewWorkDateBox').send_keys('2024/05/'+str(i).zfill(2))#実施年月日
 
 
     time.sleep(3)
