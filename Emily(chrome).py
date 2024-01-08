@@ -276,7 +276,7 @@ time.sleep(3)
 
 # os.kill(driver.service.process.pid,signal.SIGTERM)#ブラウザが閉じるのを止める。開きっぱなしにする。
 
-for i in range(3):
+for i in range(1,3):
 
     dropdown1 = driver.find_element(By.XPATH,'//*[@id="NewOpeDtlCodeDrop"]')#勤務内容選択　休日
 
@@ -314,7 +314,7 @@ for i in range(3):
 
     time.sleep(1)
 
-    driver.find_element(By.XPATH,'//*[@id="NewDisplayOrderText"]').send_keys('i+1')#順
+    driver.find_element(By.XPATH,'//*[@id="NewDisplayOrderText"]').send_keys('i')#順
 
     driver.find_element(By.XPATH,'/html/body').send_keys(Keys.ENTER)#エンターを押して、次メニューに更新。
 
@@ -322,7 +322,7 @@ for i in range(3):
 
 #driver.find_element(By.XPATH,'//*[@id="NewWorkDateBox"]"]').send_keys('2024/05/'{i+1})#実施年月日
 
-    driver.find_element(By.CSS_SELECTOR,'#NewWorkDateBox').send_keys('2024/05/'{0:02d}.format(i))#実施年月日
+    driver.find_element(By.CSS_SELECTOR,'#NewWorkDateBox').send_keys('2024/05/'+{0:02d}.format(i))#実施年月日
 
 
     time.sleep(3)
