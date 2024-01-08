@@ -67,7 +67,7 @@ from selenium.webdriver.common.action_chains import ActionChains
 
 import pyexcel as p
 import glob
-
+import calendar
 from selenium.webdriver.support.ui import Select
 
 from selenium.webdriver.support.ui import WebDriverWait
@@ -257,6 +257,8 @@ driver.switch_to.frame(1)#iFrameの最初に切り替え。２つあるが、２
 
 kobetsu_No = '2024001176'#今は直接入力。こはぐら5月
 
+taishou_mon = 202405
+
 form = driver.find_element(By.XPATH,'//*[@id="ProposalNoText"]')
 
 # print(form)
@@ -268,7 +270,7 @@ driver.find_element(By.XPATH,'/html/body').send_keys(Keys.ENTER)#エンターを
 #
 driver.find_element(By.XPATH,'//*[@id="TargetMonthBox"]').clear()
 
-driver.find_element(By.XPATH,'//*[@id="TargetMonthBox"]').send_keys('202405')#対象年月を変更。この場合は、202305に。
+driver.find_element(By.XPATH,'//*[@id="TargetMonthBox"]').send_keys(taishou_mon)#対象年月を変更。この場合は、202305に。
 
 driver.find_element(By.XPATH,'/html/body').send_keys(Keys.ENTER)#エンターを押して、次メニューに更新。
 
@@ -276,7 +278,17 @@ time.sleep(3)
 
 # os.kill(driver.service.process.pid,signal.SIGTERM)#ブラウザが閉じるのを止める。開きっぱなしにする。
 
-for i in range(1,3):
+taishou_mon = str(taishou_mon)#スライス処理のためSTR化
+taishou_year = taishou_mon[:4]#年のみ取り出し
+taishou_month = taishou_mon[-2:]#月のみ取り出し
+taishou_year = int(taishou_year)#calendarモジュール使用のため、INT化
+taishou_month = int(taishou_month)#calendarモジュール使用のため、INT化
+
+nichi = calendar.monthrange(taishou_year,taishou_month)[1]＃対象の月の日数判定
+
+
+
+for i in range(1,nichi+1):
 
     dropdown1 = driver.find_element(By.XPATH,'//*[@id="NewOpeDtlCodeDrop"]')#勤務内容選択　休日
 
