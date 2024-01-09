@@ -284,7 +284,7 @@ taishou_month = taishou_mon[-2:]#月のみ取り出し
 taishou_year = int(taishou_year)#calendarモジュール使用のため、INT化
 taishou_month = int(taishou_month)#calendarモジュール使用のため、INT化
 
-nichi = calendar.monthrange(taishou_year,taishou_month)[1]＃対象の月の日数判定
+nichi = calendar.monthrange(taishou_year,taishou_month)[1]#対象の月の日数判定
 
 
 
@@ -326,7 +326,7 @@ for i in range(1,nichi+1):
 
     time.sleep(1)
 
-    driver.find_element(By.XPATH,'//*[@id="NewDisplayOrderText"]').send_keys('i')#順
+    driver.find_element(By.XPATH,'//*[@id="NewDisplayOrderText"]').send_keys(i)#順
 
     driver.find_element(By.XPATH,'/html/body').send_keys(Keys.ENTER)#エンターを押して、次メニューに更新。
 
