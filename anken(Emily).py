@@ -88,7 +88,7 @@ options = webdriver.ChromeOptions()
 
 
 print("========== Emily　ログイン中========== ")
-sg.popup_ok('Emilyへログインします！',title = 'OK？')
+sg.popup_ok('Emilyへログインします！',title = 'LOGIN')
 
 
 # service = Service(driver_path)
@@ -335,13 +335,16 @@ time.sleep(5)
 # os.kill(driver.service.process.pid,signal.SIGTERM)#ブラウザが閉じるのを止める。開きっぱなしにする。
 
 
-# dropdown = driver.find_element(By.XPATH, '//*[@id="AcceptFormDtl1List"]')  # 受注形態詳細１　沖縄事業所入力　リスト22番目
-#
-# select = Select(dropdown)
-#
-# select.select_by_index(22)#沖縄事業所をドロップダウンで選択→プロジェクト入力で自動入力されるのでそのまま
-#
-# driver.implicitly_wait(5)
+dropdown = driver.find_element(By.XPATH, '//*[@id="AcceptFormDtl1List"]')  # 受注形態詳細１　沖縄事業所入力　リスト22番目
+
+select = Select(dropdown)
+
+select.select_by_index(22)#沖縄事業所をドロップダウンで選択→プロジェクト入力で自動入力されるのでそのまま
+
+
+driver.find_element(By.XPATH,'/html/body').send_keys(Keys.ENTER)#エンターを押して、次メニューに更新。
+
+driver.implicitly_wait(5)
 
 
 dropdown2 = driver.find_element(By.CSS_SELECTOR, '#AcceptFormDtl2List')  # N/A入力
@@ -350,6 +353,8 @@ select = Select(dropdown2)
 
 select.select_by_index(1)
 
+driver.find_element(By.XPATH,'/html/body').send_keys(Keys.ENTER)#エンターを押して、次メニューに更新。
+
 driver.implicitly_wait(10)
 
 dropdown = driver.find_element(By.XPATH, '//*[@id="StationInoutTypeList"]')  # 福岡　NHK局内選択
@@ -357,6 +362,8 @@ dropdown = driver.find_element(By.XPATH, '//*[@id="StationInoutTypeList"]')  # �
 select = Select(dropdown)
 
 select.select_by_index(13)
+
+driver.find_element(By.XPATH,'/html/body').send_keys(Keys.ENTER)#エンターを押して、次メニューに更新。
 
 driver.implicitly_wait(10)
 
@@ -368,217 +375,282 @@ select = Select(dropdown)
 
 select.select_by_index(1)
 
+driver.find_element(By.XPATH,'/html/body').send_keys(Keys.ENTER)#エンターを押して、次メニューに更新。
+
+# os.kill(driver.service.process.pid,signal.SIGTERM)#ブラウザが閉じるのを止める。開きっぱなしにする。
+
 driver.implicitly_wait(10)
 
+driver.find_element(By.XPATH,'//*[@id="TabItem2"]/span').click()
 
-taishou_mon = str(taishou_mon)#スライス処理のためSTR化
-taishou_year = taishou_mon[:4]#年のみ取り出し
-taishou_month = taishou_mon[-2:]#月のみ取り出し
-taishou_year = int(taishou_year)#calendarモジュール使用のため、INT化
-taishou_month = int(taishou_month)#calendarモジュール使用のため、INT化
+time.sleep(3)
 
-nichi = calendar.monthrange(taishou_year,taishou_month)[1]#対象の月の日数判定
+handle_array = driver.window_handles
 
-
-
-for i in range(1,nichi+1):
-
-    dropdown1 = driver.find_element(By.XPATH,'//*[@id="NewOpeDtlCodeDrop"]')#勤務内容選択　休日
-
-    select = Select(dropdown1)
-
-    select.select_by_index(len(select.options)-1)
+print("別ページに切り替えた後のhandle_arrayの表示配列最初と次")#windowshandleは2つ結局かわらす。
+print(handle_array[0])
+print(handle_array[1])
+# print(handle_array[2])
 
 
+driver.switch_to.window(handle_array[1])
 
-# dropdown2 = driver.find_element(By.ID,'#NewDutyCodeDrop')#担務　担当
+driver.switch_to.frame(1)#iFrameの最初に切り替え。２つあるが、2番目（1）のiFrameに切り替える。
 
-# dropdown2 = driver.find_element(By.XPATH,'//*[@id="NewDutyCodeDrop"]')
-#
-# print(dropdown2)
-#
-# select = Select(dropdown2)
-#
-# select.select_by_index(1)
-#
-# driver.implicitly_wait(10)
-#
-# driver.find_element(By.XPATH,'/html/body').send_keys(Keys.ENTER)#エンターを押して、次メニューに更新。
-
-# select.select_by_index(len(select.options)-2)
-# select.select_by_visible_text('担当')
-
-    time.sleep(1)
-
-    driver.find_element(By.XPATH,'/html/body').send_keys(Keys.ENTER)#エンターを押して、次メニューに更新。
-#
-#
-    driver.find_element(By.XPATH,'//*[@id="NewEmpCodeText"]').send_keys(eplyNo[0])##担当者　マンナンバー
-
-    driver.find_element(By.XPATH,'/html/body').send_keys(Keys.ENTER)#エンターを押して、次メニューに更新。
-
-    time.sleep(1)
-
-    driver.find_element(By.XPATH,'//*[@id="NewDisplayOrderText"]').send_keys(i)#順
-
-    driver.find_element(By.XPATH,'/html/body').send_keys(Keys.ENTER)#エンターを押して、次メニューに更新。
-
-    time.sleep(3)
-
-#driver.find_element(By.XPATH,'//*[@id="NewWorkDateBox"]"]').send_keys('2024/05/'{i+1})#実施年月日
-
-    driver.find_element(By.CSS_SELECTOR,'#NewWorkDateBox').send_keys('2024/05/'+str(i).zfill(2))#実施年月日
+driver.find_element(By.XPATH,'//*[@id="SubtitleText"]').send_keys('2024年5月古波蔵')#副題
 
 
-    time.sleep(3)
+driver.find_element(By.XPATH,'/html/body').send_keys(Keys.ENTER)#エンターを押して、次メニューに更新。
 
-    dropdown2 = driver.find_element(By.XPATH,'//*[@id="NewDutyCodeDrop"]')#担務入力なぜか先に入力すると入らないので、最後に。
+time.sleep(2)
 
-    print(dropdown2)
+dropdown =driver.find_element(By.XPATH,'//*[@id="InpOpeDtlList"]')#作業詳細
 
-    select = Select(dropdown2)
+select = Select(dropdown)
 
-    select.select_by_index(1)
-
-    driver.implicitly_wait(10)
-
-    driver.find_element(By.XPATH,'//*[@id="RegistButton"]/span').click()#登録ボタン
-
+select.select_by_index(20)
 
 time.sleep(3)
 
 
 
 
+driver.find_element(By.XPATH,'//*[@id="InpSttTimeText"]').send_keys('00:00')#開始日時　時
+
+time.sleep(1)
+
+driver.find_element(By.XPATH,'//*[@id="InpEndDateText"]').send_keys('2024/05/31')#終了日時　日
 
 
-
-#登録ボタン
-
+driver.find_element(By.XPATH,'//*[@id="InpEndTimeText"]').send_keys('00:00')#終了日時　
 
 
+driver.find_element(By.XPATH,'//*[@id="InpOpeDtlCntText1"]').send_keys('1')#担当　担当者数　１を入力
+
+
+driver.find_element(By.XPATH,'//*[@id="InpSttDateText"]').send_keys('2024/05/01')#開始日時　日
+
+driver.find_element(By.XPATH,'//*[@id="RegistButton"]/span').click()#登録ボタン
 
 
 os.kill(driver.service.process.pid,signal.SIGTERM)#ブラウザが閉じるのを止める。開きっぱなしにする。
 
 
 
+
+
+
+
+
+
+# taishou_mon = str(taishou_mon)#スライス処理のためSTR化
+# taishou_year = taishou_mon[:4]#年のみ取り出し
+# taishou_month = taishou_mon[-2:]#月のみ取り出し
+# taishou_year = int(taishou_year)#calendarモジュール使用のため、INT化
+# taishou_month = int(taishou_month)#calendarモジュール使用のため、INT化
 #
-# print("handle_arrayの表示配列最初と次")
-# print(handle_array[0])
-# print(handle_array[1])
-# # print(handle_array[2])
-#
-# driver.switch_to.window(handle_array[1])
-#
-# time.sleep(5)
-#
-#
-# years = driver.find_element(By.CSS_SELECTOR,"#FormData > div.control.cfx > select:nth-child(8)")
-# years_select = Select(years)
-# # years.send_keys("2023")
-# years_select.select_by_value(nen)
-#
-#
-# months = driver.find_element(By.CSS_SELECTOR,"#FormData > div.control.cfx > select:nth-child(10)")
-# months_select = Select(months)
-# # months.send_keys("11月")
-# months_select.select_by_value(num)
+# nichi = calendar.monthrange(taishou_year,taishou_month)[1]#対象の月の日数判定
 #
 #
 #
-# ##FormData > div.control.cfx > select:nth-child(8)#年のセレクトCSS_Selector
+# for i in range(1,nichi+1):
 #
-# ##FormData > div.control.cfx > select:nth-child(10)#月のセレクトCSS_Selector
+#     dropdown1 = driver.find_element(By.XPATH,'//*[@id="NewOpeDtlCodeDrop"]')#勤務内容選択　休日
 #
+#     select = Select(dropdown1)
 #
-#
-# driver.find_element(By.CSS_SELECTOR,'#excelout').click()
-#
-# # script = 'javascript:void(0);'
-# # form.driver.execute_script(script)
-#
-# print("出力押した")
-#
-# time.sleep(15)
-# driver.find_element(By.CSS_SELECTOR,'#close > a').click()
-# # driver.implicitly_wait(100) #ダウンロードフォルダへ格納　これを別フォルダへ移動させる。
-#
-# dir_path = "C:\\Users\\406239\\OneDrive - (株)NHKテクノロジーズ\\デスクトップ\\ドキュメント\\Downloads"
-#
-# # C:\Users\406239\OneDrive - (株)NHKテクノロジーズ\デスクトップ\ドキュメント\Downloads
-#
-# files = os.listdir(dir_path)
-#
-# print(files)#ダウンロードフォルダへ格納させたファイル名取得。このファイルで必要なものを抽出して所望のファルダへ移動させる。日付の後が大きいものが最新。
-#
-# files_in = [s for s in files if '202311' in s]#出力した月の中で最新のもの
-#
-# print(files_in)
-#
-# newest_file = max(files_in)#最新ファイルの取得#出力した月の中で最新のもの
-#
-# print(newest_file)
-#
-# file_name,ext = os.path.splitext(newest_file)
-# newest_file = str(newest_file)
-# print(file_name)
-# print(ext)
-#
-# dt_now = datetime.datetime.now()
-# output_time = dt_now.strftime('%Y%m%d_%H%M')
-# print(type(output_time))
-# print(output_time)
-#
-# # print('最新の勤務ファイル')
-#
-# #fでformat変数、ｒで\\を\で表記可能。変数は、{}で囲む。文字は、””で囲む。formatで書くと、+は不要なのでカンタン。
-#
-# oldpath = fr"C:\Users\406239\OneDrive - (株)NHKテクノロジーズ\デスクトップ\ドキュメント\Downloads\{newest_file}"
-#
-# newpath = fr"C:\Users\406239\OneDrive - (株)NHKテクノロジーズ\デスクトップ\★勤務確認などのダウンロードデータ★\NHK勤務表出力ファイル\monschedule_202312_{output_time}.xls"
-#
-#
-# print(os.path.exists(oldpath))
-#
-# os.rename(oldpath,newpath)
-#
-# print(os.path.exists(newpath))
-#
-# #xlsを一旦開いてから、xlsxで保存する。openpyexLを使用するため。変換は面倒そうなので、これがカンタン。
-#
-# import xlwings as xw
-#
-# path = fr'C:\Users\406239\OneDrive - (株)NHKテクノロジーズ\デスクトップ\★勤務確認などのダウンロードデータ★\NHK勤務表出力ファイル\monschedule_202312_{output_time}.xls'
-#
-# wb = xw.Book(path)
-#
-# path = fr'C:\Users\406239\OneDrive - (株)NHKテクノロジーズ\デスクトップ\★勤務確認などのダウンロードデータ★\NHK勤務表出力ファイル\monschedule_202312_{output_time}.xlsx'
-#
-# wb.save(path)
-#
-# wb.close()
+#     select.select_by_index(len(select.options)-1)
 #
 #
 #
+# # dropdown2 = driver.find_element(By.ID,'#NewDutyCodeDrop')#担務　担当
 #
-# # xls_path = r"C:\Users\406239\OneDrive - (株)NHKテクノロジーズ\デスクトップ\★勤務確認などのダウンロードデータ★\NHK勤務表出力ファイル"
-#
-# # os.path("xls_path")
-#
-# # def convert_xls_to_xlsx():
-# #     it = glob.glob("*.xls")
-# #     for xls in it:
-# #         xlsx = "{}".format(xls) + "x"
-# #         print(xlsx)
-# #         p.save_book_as(file_name='{}'.format(xls), dest_file_name='{}'.format(xlsx))
+# # dropdown2 = driver.find_element(By.XPATH,'//*[@id="NewDutyCodeDrop"]')
 # #
-# # print(sys.argv[0])
+# # print(dropdown2)
 # #
+# # select = Select(dropdown2)
+# #
+# # select.select_by_index(1)
+# #
+# # driver.implicitly_wait(10)
+# #
+# # driver.find_element(By.XPATH,'/html/body').send_keys(Keys.ENTER)#エンターを押して、次メニューに更新。
+#
+# # select.select_by_index(len(select.options)-2)
+# # select.select_by_visible_text('担当')
+#
+#     time.sleep(1)
+#
+#     driver.find_element(By.XPATH,'/html/body').send_keys(Keys.ENTER)#エンターを押して、次メニューに更新。
+# #
+# #
+#     driver.find_element(By.XPATH,'//*[@id="NewEmpCodeText"]').send_keys(eplyNo[0])##担当者　マンナンバー
+#
+#     driver.find_element(By.XPATH,'/html/body').send_keys(Keys.ENTER)#エンターを押して、次メニューに更新。
+#
+#     time.sleep(1)
+#
+#     driver.find_element(By.XPATH,'//*[@id="NewDisplayOrderText"]').send_keys(i)#順
+#
+#     driver.find_element(By.XPATH,'/html/body').send_keys(Keys.ENTER)#エンターを押して、次メニューに更新。
+#
+#     time.sleep(3)
+#
+# #driver.find_element(By.XPATH,'//*[@id="NewWorkDateBox"]"]').send_keys('2024/05/'{i+1})#実施年月日
+#
+#     driver.find_element(By.CSS_SELECTOR,'#NewWorkDateBox').send_keys('2024/05/'+str(i).zfill(2))#実施年月日
+#
+#
+#     time.sleep(3)
+#
+#     dropdown2 = driver.find_element(By.XPATH,'//*[@id="NewDutyCodeDrop"]')#担務入力なぜか先に入力すると入らないので、最後に。
+#
+#     print(dropdown2)
+#
+#     select = Select(dropdown2)
+#
+#     select.select_by_index(1)
+#
+#     driver.implicitly_wait(10)
+#
+#     driver.find_element(By.XPATH,'//*[@id="RegistButton"]/span').click()#登録ボタン
+#
+#
+# time.sleep(3)
+#
+#
+#
+#
+#
+#
+#
+# #登録ボタン
+#
+#
+#
+#
+#
+# os.kill(driver.service.process.pid,signal.SIGTERM)#ブラウザが閉じるのを止める。開きっぱなしにする。
+#
+#
+#
+# #
+# # print("handle_arrayの表示配列最初と次")
+# # print(handle_array[0])
+# # print(handle_array[1])
+# # # print(handle_array[2])
+# #
+# # driver.switch_to.window(handle_array[1])
+# #
+# # time.sleep(5)
+# #
+# #
+# # years = driver.find_element(By.CSS_SELECTOR,"#FormData > div.control.cfx > select:nth-child(8)")
+# # years_select = Select(years)
+# # # years.send_keys("2023")
+# # years_select.select_by_value(nen)
+# #
+# #
+# # months = driver.find_element(By.CSS_SELECTOR,"#FormData > div.control.cfx > select:nth-child(10)")
+# # months_select = Select(months)
+# # # months.send_keys("11月")
+# # months_select.select_by_value(num)
+# #
+# #
+# #
+# # ##FormData > div.control.cfx > select:nth-child(8)#年のセレクトCSS_Selector
+# #
+# # ##FormData > div.control.cfx > select:nth-child(10)#月のセレクトCSS_Selector
+# #
+# #
+# #
+# # driver.find_element(By.CSS_SELECTOR,'#excelout').click()
+# #
+# # # script = 'javascript:void(0);'
+# # # form.driver.execute_script(script)
+# #
+# # print("出力押した")
+# #
+# # time.sleep(15)
+# # driver.find_element(By.CSS_SELECTOR,'#close > a').click()
+# # # driver.implicitly_wait(100) #ダウンロードフォルダへ格納　これを別フォルダへ移動させる。
+# #
+# # dir_path = "C:\\Users\\406239\\OneDrive - (株)NHKテクノロジーズ\\デスクトップ\\ドキュメント\\Downloads"
+# #
+# # # C:\Users\406239\OneDrive - (株)NHKテクノロジーズ\デスクトップ\ドキュメント\Downloads
+# #
+# # files = os.listdir(dir_path)
+# #
+# # print(files)#ダウンロードフォルダへ格納させたファイル名取得。このファイルで必要なものを抽出して所望のファルダへ移動させる。日付の後が大きいものが最新。
+# #
+# # files_in = [s for s in files if '202311' in s]#出力した月の中で最新のもの
+# #
+# # print(files_in)
+# #
+# # newest_file = max(files_in)#最新ファイルの取得#出力した月の中で最新のもの
+# #
+# # print(newest_file)
+# #
+# # file_name,ext = os.path.splitext(newest_file)
+# # newest_file = str(newest_file)
+# # print(file_name)
+# # print(ext)
+# #
+# # dt_now = datetime.datetime.now()
+# # output_time = dt_now.strftime('%Y%m%d_%H%M')
+# # print(type(output_time))
+# # print(output_time)
+# #
+# # # print('最新の勤務ファイル')
+# #
+# # #fでformat変数、ｒで\\を\で表記可能。変数は、{}で囲む。文字は、””で囲む。formatで書くと、+は不要なのでカンタン。
+# #
+# # oldpath = fr"C:\Users\406239\OneDrive - (株)NHKテクノロジーズ\デスクトップ\ドキュメント\Downloads\{newest_file}"
+# #
+# # newpath = fr"C:\Users\406239\OneDrive - (株)NHKテクノロジーズ\デスクトップ\★勤務確認などのダウンロードデータ★\NHK勤務表出力ファイル\monschedule_202312_{output_time}.xls"
+# #
+# #
+# # print(os.path.exists(oldpath))
+# #
+# # os.rename(oldpath,newpath)
+# #
+# # print(os.path.exists(newpath))
+# #
+# # #xlsを一旦開いてから、xlsxで保存する。openpyexLを使用するため。変換は面倒そうなので、これがカンタン。
+# #
+# # import xlwings as xw
+# #
+# # path = fr'C:\Users\406239\OneDrive - (株)NHKテクノロジーズ\デスクトップ\★勤務確認などのダウンロードデータ★\NHK勤務表出力ファイル\monschedule_202312_{output_time}.xls'
+# #
+# # wb = xw.Book(path)
+# #
+# # path = fr'C:\Users\406239\OneDrive - (株)NHKテクノロジーズ\デスクトップ\★勤務確認などのダウンロードデータ★\NHK勤務表出力ファイル\monschedule_202312_{output_time}.xlsx'
+# #
+# # wb.save(path)
+# #
+# # wb.close()
+# #
+# #
+# #
+# #
+# # # xls_path = r"C:\Users\406239\OneDrive - (株)NHKテクノロジーズ\デスクトップ\★勤務確認などのダウンロードデータ★\NHK勤務表出力ファイル"
+# #
+# # # os.path("xls_path")
+# #
+# # # def convert_xls_to_xlsx():
+# # #     it = glob.glob("*.xls")
+# # #     for xls in it:
+# # #         xlsx = "{}".format(xls) + "x"
+# # #         print(xlsx)
+# # #         p.save_book_as(file_name='{}'.format(xls), dest_file_name='{}'.format(xlsx))
+# # #
+# # # print(sys.argv[0])
+# # #
+# # # print(os.listdir(xls_path))
+# # #
+# # # print(os.path.isdir(xls_path))
+# # #
+# # # convert_xls_to_xlsx()
+# # #
 # # print(os.listdir(xls_path))
-# #
-# # print(os.path.isdir(xls_path))
-# #
-# # convert_xls_to_xlsx()
-# #
-# print(os.listdir(xls_path))
