@@ -223,6 +223,7 @@ driver.switch_to.window(handle_array[1])
 sg.theme('SystemDefault')
 
 layout = [[sg.Text('年月を入力',text_color='#FF0000',font =( 'meiryo,8')),sg.InputText(size = (10,2),key= '-YM-')],
+          [sg.Text('誰の案件？',text_color='#FF0000',font =( 'meiryo,8')),sg.InputText(size = (10,2),key= '-NM-')],
           [sg.Button('入力', button_color=('red', '#808080'), key='-SUBMIT-'),
            sg.Text('入力ボタンを押した後,Windowを閉じてください。', font=('Noto Serif CJK JP', 10))]]
 
@@ -232,7 +233,9 @@ while True:
     event, values = window.read()
     if event == '-SUBMIT-':
         ym = values['-YM-']
+        nm = values['-NM-']
         print(ym)
+        print(nm)
         # num1 = values['-YM-']
         # print(num1)
 
@@ -286,7 +289,7 @@ driver.find_element(By.XPATH,'/html/body').send_keys(Keys.ENTER)
 
 time.sleep(3)
 
-monthday = calendar.monthrange(2024,5)[1]
+monthday = str(calendar.monthrange(2024,5)[1])
 
 print(ym)
 
@@ -296,17 +299,17 @@ print(monthday)
 
 ymd_s = str(ym[:4])+'/'+str(ym[4:])+'/'+'01'
 
-ymd_l = str(ym[:4])+'/'+str(ym[4:])+'/'+'01'
+ymd_l = str(ym[:4])+'/'+str(ym[4:])+'/'+monthday
 
-print = ymd_s
+print(ymd_s)
 
-print = ymd_l
+print(ymd_l)
 
 form = driver.find_element(By.XPATH,'//*[@id="BaseDateText"]')
 
 form.clear()
 
-form.send_keys('2024/05/01')
+form.send_keys(ymd_s)
 
 
 
@@ -424,14 +427,13 @@ handle_array = driver.window_handles
 # print("別ページに切り替えた後のhandle_arrayの表示配列最初と次")#windowshandleは2つ結局かわらす。
 # print(handle_array[0])
 # print(handle_array[1])
-# # print(handle_array[2])
-#
-#
-# driver.switch_to.window(handle_array[1])
+# print(handle_array[2])
+
+driver.switch_to.window(handle_array[1])
 
 driver.switch_to.frame(1)#iFrameの最初に切り替え。２つあるが、2番目（1）のiFrameに切り替える。
 
-driver.find_element(By.XPATH,'//*[@id="SubtitleText"]').send_keys('2024年5月古波蔵')#副題
+driver.find_element(By.XPATH,'//*[@id="SubtitleText"]').send_keys(ym[:4]+'年'+ym[4:]+'月 '+nm)#副題
 
 
 driver.find_element(By.XPATH,'/html/body').send_keys(Keys.ENTER)#エンターを押して、次メニューに更新。
@@ -453,7 +455,7 @@ driver.find_element(By.XPATH,'//*[@id="InpSttTimeText"]').send_keys('00:00')#開
 
 time.sleep(1)
 
-driver.find_element(By.XPATH,'//*[@id="InpEndDateText"]').send_keys('2024/05/31')#終了日時　日
+driver.find_element(By.XPATH,'//*[@id="InpEndDateText"]').send_keys(ymd_l)#終了日時　日
 
 
 driver.find_element(By.XPATH,'//*[@id="InpEndTimeText"]').send_keys('00:00')#終了日時　
@@ -462,7 +464,9 @@ driver.find_element(By.XPATH,'//*[@id="InpEndTimeText"]').send_keys('00:00')#終
 driver.find_element(By.XPATH,'//*[@id="InpOpeDtlCntText1"]').send_keys('1')#担当　担当者数　１を入力
 
 
-driver.find_element(By.XPATH,'//*[@id="InpSttDateText"]').send_keys('2024/05/01')#開始日時　日
+driver.find_element(By.XPATH,'//*[@id="InpSttDateText"]').send_keys(ymd_s)#開始日時　日
+
+time.sleep(3)
 
 driver.find_element(By.XPATH,'//*[@id="RegistButton"]/span').click()#登録ボタン
 
