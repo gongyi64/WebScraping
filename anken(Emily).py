@@ -219,19 +219,39 @@ print(handle_array[1])
 
 driver.switch_to.window(handle_array[1])
 
+
+sg.theme('SystemDefault')
+
+layout = [[sg.Text('年月を入力',text_color='#FF0000',font =( 'meiryo,8')),sg.InputText(size = (10,2),key= '-YM-')],
+          [sg.Button('入力', button_color=('red', '#808080'), key='-SUBMIT-'),
+           sg.Text('入力ボタンを押した後,Windowを閉じてください。', font=('Noto Serif CJK JP', 10))]]
+
+window = sg.Window('基本業務入力APP', layout, size=(500, 150))
+
+while True:
+    event, values = window.read()
+    if event == '-SUBMIT-':
+        ym = values['-YM-']
+        print(ym)
+        # num1 = values['-YM-']
+        # print(num1)
+
+    if event == sg.WIN_CLOSED:
+        break
+
+window.close()
+
+
+
 #案件番号の個別入力ルーチン（テスト後生かす予定）
 #--------------------------------------------------------------------
 
 
-# value = sg.popup_get_file('個別案件入力で作成した個人の案件番号を入力してください。')  # 使用する出力したの勤務チェック用のファイルを選択
-#
+
+
 # sg.theme('SystemDefault')
 #
-# layout = [[sg.Text('Emily・[個人要員案件番号の入力]', font=('Noto Serif CJK JP', 10))],
-#           [sg.Text('個別案件で作成した案件番号を入力', font=('meiryo', 10))],
-#           # [sg.Text('年月を入力',text_color='#FF0000',font =( 'meiryo,8')),sg.InputText(size = (10,2),key= '-YM-')],
-#           [sg.Text('案件番号', text_color='#FF0000', font='meiryo,8'),
-#            sg.Combo(['月前半', '月後半'], size=(10, 2), key='-UPLW-')],
+# layout = [[sg.Text('年月を入力',text_color='#FF0000',font =( 'meiryo,8')),sg.InputText(size = (10,2),key= '-YM-')],
 #           [sg.Button('入力', button_color=('red', '#808080'), key='-SUBMIT-'),
 #            sg.Text('入力ボタンを押した後,Windowを閉じてください。', font=('Noto Serif CJK JP', 10))]]
 #
@@ -240,9 +260,9 @@ driver.switch_to.window(handle_array[1])
 # while True:
 #     event, values = window.read()
 #     if event == '-SUBMIT-':
-#         # num = values['-YM-']
+#         num = values['-SUBMIT-']
 #         # print(num)
-#         num1 = values['-UPLW-']
+#         num1 = values['-SBMIT-']
 #         print(num1)
 #
 #     if event == sg.WIN_CLOSED:
@@ -266,7 +286,21 @@ driver.find_element(By.XPATH,'/html/body').send_keys(Keys.ENTER)
 
 time.sleep(3)
 
+monthday = calendar.monthrange(2024,5)[1]
 
+print(ym)
+
+print(monthday)
+
+# monthday = calendar.monthrange(str(ym[:4]),str(ym[4:]))[1]
+
+ymd_s = str(ym[:4])+'/'+str(ym[4:])+'/'+'01'
+
+ymd_l = str(ym[:4])+'/'+str(ym[4:])+'/'+'01'
+
+print = ymd_s
+
+print = ymd_l
 
 form = driver.find_element(By.XPATH,'//*[@id="BaseDateText"]')
 
@@ -317,7 +351,7 @@ form = driver.find_element(By.XPATH,'//*[@id="ProjCodeText2"]')
 
 # print(form)
 
-form.send_keys(Project2_No)#案件番号を入力
+form.send_keys(Project2_No)#物品費番号を入力
 
 time.sleep(2)
 
@@ -369,7 +403,7 @@ driver.implicitly_wait(10)
 
 dropdown = driver.find_element(By.XPATH, '//*[@id="ResourceList"]')  # リソース未定なし
 
-print(dropdown)
+# print(dropdown)
 
 select = Select(dropdown)
 
@@ -387,13 +421,13 @@ time.sleep(3)
 
 handle_array = driver.window_handles
 
-print("別ページに切り替えた後のhandle_arrayの表示配列最初と次")#windowshandleは2つ結局かわらす。
-print(handle_array[0])
-print(handle_array[1])
-# print(handle_array[2])
-
-
-driver.switch_to.window(handle_array[1])
+# print("別ページに切り替えた後のhandle_arrayの表示配列最初と次")#windowshandleは2つ結局かわらす。
+# print(handle_array[0])
+# print(handle_array[1])
+# # print(handle_array[2])
+#
+#
+# driver.switch_to.window(handle_array[1])
 
 driver.switch_to.frame(1)#iFrameの最初に切り替え。２つあるが、2番目（1）のiFrameに切り替える。
 
