@@ -330,7 +330,6 @@ form.clear()
 form.send_keys(ymd_s)
 
 
-
 driver.find_element(By.XPATH,'/html/body').send_keys(Keys.ENTER)
 
 form = driver.find_element(By.XPATH,'//*[@id="ProgramDeptText"]')
