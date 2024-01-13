@@ -48,10 +48,11 @@ window.close()
 print(input_eplyNo)#所得したのは、リスト型
 
 eplyNo = re.findall(r'\d+', input_eplyNo)#名前を除去して社員番号のみにして、ログインに使用する。
-
+eplyName = re.sub(r"[0-9]+", "", input_eplyNo)
 # eplyNo = eplyNo[:7]
 
 print(eplyNo[0])#リストの要素を文字列として取得。この場合は、要素１つなので[0]
+print(eplyName[0])
 
 #eplypwd = re.findall(r'^[a-zA-Z0-9]{7}$, input_eplyNo)#名前とマンナンバーを除去してPWDのみにして、ログインに使用する。7桁の英数字想定。ｓ+マンナンバーなど。
 
@@ -223,26 +224,43 @@ driver.switch_to.window(handle_array[1])
 sg.theme('SystemDefault')
 
 layout = [[sg.Text('年月を入力',text_color='#FF0000',font =( 'meiryo,8')),sg.InputText(size = (10,2),key= '-YM-')],
-          [sg.Text('誰の案件？',text_color='#FF0000',font =( 'meiryo,8')),sg.InputText(size = (10,2),key= '-NM-')],
+          # [sg.Text('誰の案件？',text_color='#FF0000',font =( 'meiryo,8')),sg.InputText(size = (10,2),key= '-NM-')],
+          [sg.Listbox(manNos,size =(25,len(manNos)),key='-NM-')],
+          [sg.Text('Text', key = '-text1-')],
           [sg.Button('入力', button_color=('red', '#808080'), key='-SUBMIT-'),
            sg.Text('入力ボタンを押した後,Windowを閉じてください。', font=('Noto Serif CJK JP', 10))]]
 
-window = sg.Window('基本業務入力APP', layout, size=(500, 150))
+window = sg.Window('基本業務入力APP', layout, size=(500, 300))
 
 while True:
-    event, values = window.read()
-    if event == '-SUBMIT-':
-        ym = values['-YM-']
-        nm = values['-NM-']
-        print(ym)
-        print(nm)
-        # num1 = values['-YM-']
-        # print(num1)
+    event,values = window.read()
 
     if event == sg.WIN_CLOSED:
         break
 
+    elif event == '-SUBMIT-':
+        ym = values['-YM-']
+        window['-text1-'].update(values['-NM-'][0])
+        input_eplyNo = values['-NM-'][0]
+        eplyName = re.sub(r"[0-9]+", "", input_eplyNo)
+
+
 window.close()
+
+# while True:
+#     event, values = window.read()
+#     if event == '-SUBMIT-':
+#         ym = values['-YM-']
+#         nm = values['-NM-'][0]
+#         print(ym)
+#         print(nm)
+#         # num1 = values['-YM-']
+#         # print(num1)
+#
+#     if event == sg.WIN_CLOSED:
+#         break
+#
+# window.close()
 
 
 
@@ -291,7 +309,7 @@ time.sleep(3)
 
 monthday = str(calendar.monthrange(2024,5)[1])
 
-print(ym)
+# print(ym)
 
 print(monthday)
 
@@ -433,7 +451,7 @@ driver.switch_to.window(handle_array[1])
 
 driver.switch_to.frame(1)#iFrameの最初に切り替え。２つあるが、2番目（1）のiFrameに切り替える。
 
-driver.find_element(By.XPATH,'//*[@id="SubtitleText"]').send_keys(ym[:4]+'年'+ym[4:]+'月 '+nm)#副題
+driver.find_element(By.XPATH,'//*[@id="SubtitleText"]').send_keys(ym[:4]+'年'+ym[4:]+'月 '+eplyName)#副題
 
 
 driver.find_element(By.XPATH,'/html/body').send_keys(Keys.ENTER)#エンターを押して、次メニューに更新。
@@ -468,15 +486,34 @@ driver.find_element(By.XPATH,'//*[@id="InpSttDateText"]').send_keys(ymd_s)#開�
 
 time.sleep(3)
 
-driver.find_element(By.XPATH,'//*[@id="RegistButton"]/span').click()#登録ボタン
+driver.find_element(By.XPATH,'/html/body').send_keys(Keys.ENTER)#エンターを押して、次メニューに更新。
+
+# driver.find_element(By.XPATH,'//*[@id="RegistButton"]/span').click()#登録ボタン
+
+driver.find_element(By.CSS_SELECTOR,'#RegistButton > span').click()
 
 
-os.kill(driver.service.process.pid,signal.SIGTERM)#ブラウザが閉じるのを止める。開きっぱなしにする。
+# os.kill(driver.service.process.pid,signal.SIGTERM)#ブラウザが閉じるのを止める。開きっぱなしにする。
+
+driver.find_element(By.XPATH,'//*[@id="UpdateButton"]/span').click()#更新ボタン
+
+
+handle_array = driver.window_handles
+
+# print("別ページに切り替えた後のhandle_arrayの表示配列最初と次")#windowshandleは2つ結局かわらす。
+print(handle_array[0])
+print(handle_array[1])
+
+driver.switch_to.window(handle_array[1])
 
 
 
+# alert.accept()#???
 
 
+# val value = driver.findElement(By.id("ProposalNotext")).getAttribute("value")#???
+#
+# //*[@id="ProposalNoText"]#案件番号のXPATH　　この中のvalueが案件番号
 
 
 
