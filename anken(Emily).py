@@ -48,7 +48,7 @@ window.close()
 print(input_eplyNo)#所得したのは、リスト型
 
 eplyNo = re.findall(r'\d+', input_eplyNo)#名前を除去して社員番号のみにして、ログインに使用する。
-eplyName = re.sub(r"[0-9]+", "", input_eplyNo)
+eplyName = re.sub(r"[0-9]+", "", input_eplyNo)#社員番号削除して氏名のみに。
 # eplyNo = eplyNo[:7]
 
 print(eplyNo[0])#リストの要素を文字列として取得。この場合は、要素１つなので[0]
@@ -89,7 +89,7 @@ options = webdriver.ChromeOptions()
 
 
 print("========== Emily　ログイン中========== ")
-sg.popup_ok('Emilyへログインします！',title = 'LOGIN')
+sg.popup_ok('Emilyへログイン！',title = 'LOGIN')
 
 
 # service = Service(driver_path)
@@ -230,7 +230,7 @@ layout = [[sg.Text('年月を入力',text_color='#FF0000',font =( 'meiryo,8')),s
           [sg.Button('入力', button_color=('red', '#808080'), key='-SUBMIT-'),
            sg.Text('入力ボタンを押した後,Windowを閉じてください。', font=('Noto Serif CJK JP', 10))]]
 
-window = sg.Window('基本業務入力APP', layout, size=(500, 300))
+window = sg.Window('案件自動作成ツール', layout, size=(500, 300))
 
 while True:
     event,values = window.read()
@@ -242,10 +242,11 @@ while True:
         ym = values['-YM-']
         window['-text1-'].update(values['-NM-'][0])
         input_eplyNo = values['-NM-'][0]
-        eplyName = re.sub(r"[0-9]+", "", input_eplyNo)
+        eplyName = re.sub(r"[0-9]+", "", input_eplyNo)#社員番号と名前から社員番号削除してフルネームのみに。
 
 
 window.close()
+
 
 # while True:
 #     event, values = window.read()
@@ -505,12 +506,24 @@ print(handle_array[1])
 
 driver.switch_to.window(handle_array[1])
 
+alert = driver.switch_to.alert
+print(alert.text)
+alert.accept()
 
+# parent = driver.current_window_handle
+# print(f"This is parent window : {parent}")
+# uselessWindows = driver.window_handles
+# print( f"This has the parent window and also the two popup windows : {uselessWindows}")
+# driver.switch_to.window(uselessWindows[-1])
+# driver.close()
+# driver.switch_to.window(uselessWindows[0])
 
 # alert.accept()#???
 
+driver.switch_to.frame(1)#iFrameの最初に切り替え。２つあるが、2番目（1）のiFrameに切り替える。
+anken_No = driver.find_element(By.XPATH,'//*[@id="ProposalNoText"]').get_attribute("value")
 
-# val value = driver.findElement(By.id("ProposalNotext")).getAttribute("value")#???
+print(anken_No)
 #
 # //*[@id="ProposalNoText"]#案件番号のXPATH　　この中のvalueが案件番号
 
