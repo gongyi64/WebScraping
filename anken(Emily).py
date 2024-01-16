@@ -430,7 +430,7 @@ select.select_by_index(13)
 
 driver.find_element(By.XPATH,'/html/body').send_keys(Keys.ENTER)#エンターを押して
 
-time.sleep(3)
+time.sleep(1)
 
 dropdown = driver.find_element(By.XPATH, '//*[@id="ResourceList"]')  # リソース未定なし
 
@@ -465,13 +465,13 @@ driver.find_element(By.XPATH,'//*[@id="SubtitleText"]').send_keys(ym[:4]+'年'+y
 
 driver.find_element(By.XPATH,'/html/body').send_keys(Keys.ENTER)#エンターを押して、次メニューに更新。
 
-time.sleep(2)
+time.sleep(1)
 
-dropdown =driver.find_element(By.XPATH,'//*[@id="InputTable"]/tbody/tr/td[1]')#作業詳細
+dropdown = driver.find_element(By.XPATH,'//*[@id="InpOpeDtlList"]')#作業詳細
 
 select = Select(dropdown)
 
-select.select_by_index(-1)
+select.select_by_index(28)
 
 time.sleep(2)
 
