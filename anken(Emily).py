@@ -307,6 +307,28 @@ form.send_keys('2006101343')#番組業務番号の入力
 driver.find_element(By.XPATH,'/html/body').send_keys(Keys.ENTER)
 
 time.sleep(3)
+dropdown = driver.find_element(By.XPATH, '//*[@id="MediaBusinessClassCodeList"]')  # 業務実施区分　沖縄　リスト92番目
+
+select = Select(dropdown)
+
+select.select_by_index(92)#沖縄事業所をドロップダウンで選択→変更してよいかと言われるのでアラート解除を下に追加。
+
+handle_array = driver.window_handles
+
+# print("別ページに切り替えた後のhandle_arrayの表示配列最初と次")#windowshandleは2つ結局かわらす。
+# print(handle_array[0])
+# print(handle_array[1])
+driver.find_element(By.XPATH,'/html/body').click()#エンターを押して、次メニューに更新
+
+driver.switch_to.window(handle_array[1])
+
+alert = driver.switch_to.alert
+print(alert.text)
+alert.accept()
+
+driver.find_element(By.XPATH,'/html/body').click()#エンターを押して、次メニューに更新
+
+driver.switch_to.frame(1)#iFrameの最初に切り替え。２つあるが、2番目（1）のiFrameに切り替える。
 
 monthday = str(calendar.monthrange(2024,5)[1])
 
@@ -366,7 +388,7 @@ form.send_keys(Project1_No)#Project1 要員費番号を入力
 
 driver.find_element(By.XPATH,'/html/body').send_keys(Keys.ENTER)
 
-time.sleep(3)
+time.sleep(2)
 
 form = driver.find_element(By.XPATH,'//*[@id="ProjCodeText2"]')
 
@@ -374,11 +396,10 @@ form = driver.find_element(By.XPATH,'//*[@id="ProjCodeText2"]')
 
 form.send_keys(Project2_No)#物品費番号を入力
 
-time.sleep(2)
 
 driver.find_element(By.XPATH,'/html/body').send_keys(Keys.ENTER)#エンターを押して、次メニューに更新。
 #
-time.sleep(5)
+time.sleep(2)
 # driver.find_element(By.XPATH,'//*[@id="TargetMonthBox"]').clear()
 #
 # driver.find_element(By.XPATH,'//*[@id="TargetMonthBox"]').send_keys(taishou_mon)#対象年月を変更。この場合は、202305に。
@@ -389,28 +410,33 @@ time.sleep(5)
 
 # os.kill(driver.service.process.pid,signal.SIGTERM)#ブラウザが閉じるのを止める。開きっぱなしにする。
 
+#driver.find_element(By.CSS_SELECTOR, '#MediaBusinessClassCodeList').clear()
 
-dropdown = driver.find_element(By.XPATH, '//*[@id="AcceptFormDtl1List"]')  # 受注形態詳細１　沖縄事業所入力　リスト22番目
 
-select = Select(dropdown)
+time.sleep(3)
+
+#driver.find_element(By.XPATH,'/html/body').send_keys(Keys.ENTER)#エンターを押して、次メニューに更新。
+driver.find_element(By.XPATH,'/html/body').click()#エンターを押して、次メニューに更新。
+
+
+
+driver.implicitly_wait(2)
+
+#dropdown3 = driver.find_element(By.CSS_SELECTOR, '#AcceptFormDtl1List')  # 受注形態詳細１　沖縄事業所入力　リスト22番目
+dropdown3 = driver.find_element(By.XPATH,'//*[@id="AcceptFormDtl1List"]')
+select = Select(dropdown3)
 
 select.select_by_index(22)#沖縄事業所をドロップダウンで選択→プロジェクト入力で自動入力されるのでそのまま
 
+driver.find_element(By.XPATH,'/html/body').click()#エンターを押して、次メニューに更新。
 
-driver.find_element(By.XPATH,'/html/body').send_keys(Keys.ENTER)#エンターを押して、次メニューに更新。
-
-driver.implicitly_wait(5)
-
-
-dropdown2 = driver.find_element(By.CSS_SELECTOR, '#AcceptFormDtl2List')  # N/A入力
-
-select = Select(dropdown2)
+#dropdown4 = driver.find_element(By.CSS_SELECTOR, '#AcceptFormDtl2List')  # N/A入力
+dropdown4 = driver.find_element(By.XPATH,'//*[@id="AcceptFormDtl2List"]')
+select = Select(dropdown4)
 
 select.select_by_index(1)
 
-driver.find_element(By.XPATH,'/html/body').send_keys(Keys.ENTER)#エンターを押して、次メニューに更新。
-
-driver.implicitly_wait(10)
+driver.find_element(By.XPATH,'/html/body').click()#エンターを押して、次メニューに更新。
 
 dropdown = driver.find_element(By.XPATH, '//*[@id="StationInoutTypeList"]')  # 福岡　NHK局内選択
 
@@ -418,34 +444,49 @@ select = Select(dropdown)
 
 select.select_by_index(13)
 
-driver.find_element(By.XPATH,'/html/body').send_keys(Keys.ENTER)#エンターを押して、次メニューに更新。
 
-driver.implicitly_wait(10)
+
+
+
+
+
+driver.find_element(By.XPATH,'/html/body').send_keys(Keys.ENTER)#エンターを押して
+
+time.sleep(3)
 
 dropdown = driver.find_element(By.XPATH, '//*[@id="ResourceList"]')  # リソース未定なし
-
-# print(dropdown)
 
 select = Select(dropdown)
 
 select.select_by_index(1)
 
-driver.find_element(By.XPATH,'/html/body').send_keys(Keys.ENTER)#エンターを押して、次メニューに更新。
+
+driver.find_element(By.XPATH,'/html/body').click()#エンターを押して、次メニューに更新。
+
+# driver.switch_to.window(handle_array[1])
 
 # os.kill(driver.service.process.pid,signal.SIGTERM)#ブラウザが閉じるのを止める。開きっぱなしにする。
 
-driver.implicitly_wait(10)
+#driver.execute_script('if(document.readyState==&quot;complete&quot;){changeTabSelector1Visibility(1);};')
+
+#driver.execute_script('return __customControl.handler.buttonRootElementClickHandler(this);')
+
+
+# driver.implicitly_wait(1)
+# driver.switch_to.frame(0)
+
 
 driver.find_element(By.XPATH,'//*[@id="TabItem2"]/span').click()
+#driver.find_element(By.CSS_SELECTOR,'#TabItem2 > span').click()
 
 time.sleep(3)
 
 handle_array = driver.window_handles
 
-# print("別ページに切り替えた後のhandle_arrayの表示配列最初と次")#windowshandleは2つ結局かわらす。
-# print(handle_array[0])
-# print(handle_array[1])
-# print(handle_array[2])
+print("別ページに切り替えた後のhandle_arrayの表示配列最初と次")#windowshandleは2つ結局かわらす。
+print(handle_array[0])
+print(handle_array[1])
+
 
 driver.switch_to.window(handle_array[1])
 
@@ -458,13 +499,13 @@ driver.find_element(By.XPATH,'/html/body').send_keys(Keys.ENTER)#エンターを
 
 time.sleep(2)
 
-dropdown =driver.find_element(By.XPATH,'//*[@id="InpOpeDtlList"]')#作業詳細
+dropdown =driver.find_element(By.XPATH,'//*[@id="InputTable"]/tbody/tr/td[1]')#作業詳細
 
 select = Select(dropdown)
 
-select.select_by_index(20)
+select.select_by_index(-1)
 
-time.sleep(3)
+time.sleep(2)
 
 
 
