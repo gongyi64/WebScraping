@@ -109,11 +109,6 @@ driver = webdriver.Chrome(service=ChromeService(driver_path))
 options.add_experimental_option("debuggerAddress", "127.0.0.1:9333")
 # driver = webdriver.Chrome(executable_path=driver_path, options=options)
 
-
-
-# driver = webdriver.Chrome(service,options=options)
-
-
 # ページのタイトルを表示する
 
 driver.get("https://test9.emily.nhk-tech.co.jp/GRANDIT/CM_AC_03_S01.aspx")
@@ -121,14 +116,8 @@ driver.get("https://test9.emily.nhk-tech.co.jp/GRANDIT/CM_AC_03_S01.aspx")
 driver.maximize_window()
 
 time.sleep(2)
-#
-# form = driver.find_element(By.XPATH,'//*[@id="selector_form"]/div/div/div/button')
-# #
-# # time.sleep(1）
 
 driver.implicitly_wait(2)
-
-# form.click()
 
 
 
@@ -182,8 +171,6 @@ time.sleep(2)
 #
 driver.switch_to.frame(0)#iFrameの最初に切り替え。１つしかないが、classが毎回変わるので、1番目（０）のiFrameに切り替えるということにした。
 
-
-# but = driver.find_elements(By.CLASS_NAME,'hd_bg_4')#あった
 
 dropdown = driver.find_element(By.CSS_SELECTOR,'#MenuDropDownList')
 print('釦を取得できたらあり')
@@ -400,17 +387,8 @@ form.send_keys(Project2_No)#物品費番号を入力
 driver.find_element(By.XPATH,'/html/body').send_keys(Keys.ENTER)#エンターを押して、次メニューに更新。
 #
 time.sleep(2)
-# driver.find_element(By.XPATH,'//*[@id="TargetMonthBox"]').clear()
-#
-# driver.find_element(By.XPATH,'//*[@id="TargetMonthBox"]').send_keys(taishou_mon)#対象年月を変更。この場合は、202305に。
-#
-# driver.find_element(By.XPATH,'/html/body').send_keys(Keys.ENTER)#エンターを押して、次メニューに更新。
-#
-# time.sleep(3)
 
 # os.kill(driver.service.process.pid,signal.SIGTERM)#ブラウザが閉じるのを止める。開きっぱなしにする。
-
-#driver.find_element(By.CSS_SELECTOR, '#MediaBusinessClassCodeList').clear()
 
 
 time.sleep(3)
@@ -463,17 +441,7 @@ select.select_by_index(1)
 
 driver.find_element(By.XPATH,'/html/body').click()#エンターを押して、次メニューに更新。
 
-# driver.switch_to.window(handle_array[1])
-
 # os.kill(driver.service.process.pid,signal.SIGTERM)#ブラウザが閉じるのを止める。開きっぱなしにする。
-
-#driver.execute_script('if(document.readyState==&quot;complete&quot;){changeTabSelector1Visibility(1);};')
-
-#driver.execute_script('return __customControl.handler.buttonRootElementClickHandler(this);')
-
-
-# driver.implicitly_wait(1)
-# driver.switch_to.frame(0)
 
 
 driver.find_element(By.XPATH,'//*[@id="TabItem2"]/span').click()
