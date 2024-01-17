@@ -16,7 +16,7 @@ sg.theme('Python')
 
 layout =[[sg.Text('[NT_Emily_自動操作ソフト]',font = ('Noto Serif CJK JP',14))],
 
-         [sg.Text('[Emilyに別ブラウザでログインしたいときに、、、。] ',font = ('meiryo',10))],
+         [sg.Text('[Emilyに別ブラウザでログインしたいときに.誰でログインしますか？] ',font = ('meiryo',10))],
 
          [sg.Listbox(manNos,size =(25,len(manNos)),key='-MN-')],
 
@@ -210,7 +210,7 @@ driver.switch_to.window(handle_array[1])
 
 sg.theme('SystemDefault')
 
-layout = [[sg.Text('年月を入力',text_color='#FF0000',font =( 'meiryo,8')),sg.InputText(size = (10,2),key= '-YM-')],
+layout = [[sg.Text('案件作成年月を入力',text_color='#FF0000',font =( 'meiryo,6')),sg.InputText(size = (10,2),key= '-YM-')],
           # [sg.Text('誰の案件？',text_color='#FF0000',font =( 'meiryo,8')),sg.InputText(size = (10,2),key= '-NM-')],
           [sg.Listbox(manNos,size =(25,len(manNos)),key='-NM-')],
           [sg.Text('Text', key = '-text1-')],
@@ -317,13 +317,19 @@ driver.find_element(By.XPATH,'/html/body').click()#エンターを押して、�
 
 driver.switch_to.frame(1)#iFrameの最初に切り替え。２つあるが、2番目（1）のiFrameに切り替える。
 
-monthday = str(calendar.monthrange(2024,5)[1])
+monthday = str(calendar.monthrange(2024,6)[1])
+
+print(str(ym[4:]))
+
+print(str(ym[:4]))
 
 # print(ym)
 
+# monthday = calendar.monthrange(int(str(ym[:4])),int(str(ym[4:])))[1]
+
 print(monthday)
 
-# monthday = calendar.monthrange(str(ym[:4]),str(ym[4:]))[1]
+
 
 ymd_s = str(ym[:4])+'/'+str(ym[4:])+'/'+'01'
 
@@ -476,33 +482,54 @@ select.select_by_index(28)
 time.sleep(2)
 
 
+form = driver.find_element(By.XPATH,'//*[@id="InpSttDateText"]')#開始日時　日
 
+form.send_keys(ymd_s)
+
+#driver.find_element(By.XPATH,'/html/body').click()#エンターを押して、次メニューに更新。
 
 driver.find_element(By.XPATH,'//*[@id="InpSttTimeText"]').send_keys('00:00')#開始日時　時
 
-time.sleep(1)
 
-driver.find_element(By.XPATH,'//*[@id="InpEndDateText"]').send_keys(ymd_l)#終了日時　日
+#driver.find_element(By.XPATH,'/html/body').click()#エンターを押して、次メニューに更新。
+
+
+
+form = driver.find_element(By.XPATH,'//*[@id="InpEndDateText"]')#終了日時　日
+
+form.send_keys(ymd_l)
+
+#driver.find_element(By.XPATH,'/html/body').click()#エンターを押して、次メニューに更新。
 
 
 driver.find_element(By.XPATH,'//*[@id="InpEndTimeText"]').send_keys('00:00')#終了日時　
 
+#driver.find_element(By.XPATH,'/html/body').click()#エンターを押して、次メニューに更新。
 
-driver.find_element(By.XPATH,'//*[@id="InpOpeDtlCntText1"]').send_keys('1')#担当　担当者数　１を入力
+# alert = driver.switch_to.alert
+# print(alert.text)
+# alert.accept()
+
+driver.find_element(By.XPATH,'//*[@id="InpSttDateText"]').send_keys(ymd_s)#開始日時
+
+time.sleep(1)
+driver.find_element(By.XPATH,'//*[@id="InpOpeDtlCntText1"]').clear()#担当　担当者数　１を入力
+
+driver.find_element(By.XPATH,'//*[@id="InpOpeDtlCntText1"]').send_keys(1)#担当　担当者数　１を入力
+
+driver.find_element(By.XPATH,'/html/body').click()#エンターを押して、次メニューに更新。
 
 
-driver.find_element(By.XPATH,'//*[@id="InpSttDateText"]').send_keys(ymd_s)#開始日時　日
+time.sleep(1)
 
-time.sleep(3)
-
-driver.find_element(By.XPATH,'/html/body').send_keys(Keys.ENTER)#エンターを押して、次メニューに更新。
+#driver.find_element(By.XPATH,'/html/body').send_keys(Keys.ENTER)#エンターを押して、次メニューに更新。
 
 # driver.find_element(By.XPATH,'//*[@id="RegistButton"]/span').click()#登録ボタン
 
 driver.find_element(By.CSS_SELECTOR,'#RegistButton > span').click()
 
 
-# os.kill(driver.service.process.pid,signal.SIGTERM)#ブラウザが閉じるのを止める。開きっぱなしにする。
+#os.kill(driver.service.process.pid,signal.SIGTERM)#ブラウザが閉じるのを止める。開きっぱなしにする。
 
 driver.find_element(By.XPATH,'//*[@id="UpdateButton"]/span').click()#更新ボタン
 
@@ -528,11 +555,13 @@ print(anken_No)
 #
 # //*[@id="ProposalNoText"]#案件番号のXPATH　　この中のvalueが案件番号
 
-anken_data = [{'name':str(ym)+eplyName,'anken_No':str(anken_No)}]
+anken_data = {'name':str(ym)+eplyName,'anken_No':str(anken_No)}
 #
 # anken_data.append(ym+eplyName,anken_No)
 #
 print(anken_data)
+
+driver.find_element(By.XPATH,'//*[@id="CloseButton"]/span').click()#閉じる釦
 
 sg.popup_ok(str(ym)+eplyName+'の案件番号'+anken_No,title = '案件番号')
 #
@@ -541,4 +570,37 @@ sg.popup_ok(str(ym)+eplyName+'の案件番号'+anken_No,title = '案件番号')
 #         line = f'{item['name']:<10}}{item['anken_No']:010d}\n
 #         file.write(line)
 
-# t
+import pandas as pd
+import datetime
+#
+# # temp_dic = {"KEY1":1,"KEY2":2,"KEY3":3,"KEY4":4,"KEY5":5}
+#
+def main():
+    # 初期化
+    excel = make_excel(anken_data)
+    # 行の追加(temp_dicの各Valueは更新しておくこと)
+    excel.add_inf(anken_data)
+    # エクセルの保存
+    now = datetime.datetime.now()
+    file_name = 'c:/Users/406239/OneDrive - (株)NHKテクノロジーズ/デスクトップ/★勤務確認などのダウンロードデータ★/検証中/anken_excel_{}.xlsx'.format(now.strftime('%Y%m%d'))
+    excel.save_file(file_name,str(ym)+eplyName)
+
+class make_excel:
+    # エクセルヘッダ記入
+    def __init__( self , init_dic) :
+        key_list = init_dic.keys()
+        self.df = pd.DataFrame(columns=key_list)
+    # 行追加
+    def add_inf ( self , add_dict ) :
+        self.df = self.df.append( add_dict , ignore_index=True)
+        return
+    # ファイル保存
+    def save_file( self , file_name , title ):
+        self.df.to_excel(file_name, sheet_name=title)
+        return
+
+if __name__ == "__main__":
+    main()
+
+ # with pd.ExcelWriter('c:/Users/406239/OneDrive - (株)NHKテクノロジーズ/デスクトップ/★勤務確認などのダウンロードデータ★/検証中/{}_smart_kinmu.xlsx'.format(num), engine='openpyxl', mode='a', if_sheet_exists='replace') as writer:
+ #            df_org.to_excel(writer, sheet_name='{}_{}'.format(num, name))
