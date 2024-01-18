@@ -243,7 +243,7 @@ driver.switch_to.frame(1)#iFrameの最初に切り替え。２つあるが、2�
 
 form = driver.find_element(By.XPATH,'//*[@id="ProposalNoText"]')
 
-form.send_keys('2024001571')#削除する案件番号の入力
+form.send_keys('2024001381')#削除する案件番号の入力
 
 driver.find_element(By.XPATH,'/html/body').send_keys(Keys.ENTER)
 
