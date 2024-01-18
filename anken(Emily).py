@@ -5,6 +5,7 @@
 
 import PySimpleGUI as sg
 import re
+import pandas as pd
 
 manNos = ('827861 相庭直史','406239 白川公一','380672 三角和浩','378035 岩田貴夫','805519 仲本祥子','880079 砂川航輝','806185 辻ひかる','880334   山城実咲','880518 古波蔵晃久','410993 黒岩英次','710463 山城徳松')
 
@@ -119,6 +120,30 @@ time.sleep(2)
 
 driver.implicitly_wait(2)
 
+#=====================================================================pwdを外ファイルからゲットルーチン
+
+
+file_name = 'c:/Users/406239/OneDrive - (株)NHKテクノロジーズ/デスクトップ/★勤務確認などのダウンロードデータ★/Emily_Files/Emily_Pass.xlsx'
+
+
+df = pd.read_excel(file_name)
+
+print(eplyNo[0])
+
+eplyNo = int(eplyNo[0])
+print (df[df['社員番号'] == eplyNo])
+
+
+df_login = df[df['社員番号'] == eplyNo]
+
+
+pwd = df_login.iat[0,2]
+
+print(pwd)
+
+
+#=====================================================================
+
 
 
 form = driver.find_element(By.XPATH,'//*[@id="LoginAccountText"]')
@@ -127,7 +152,8 @@ form.send_keys(eplyNo)#最初に取得したマンナンバーを入力
 
 form = driver.find_element(By.XPATH,'//*[@id="PassText"]')
 
-form.send_keys('09-Hdo9QDw ')
+# form.send_keys('09-Hdo9QDw ')
+form.send_keys(pwd)
 
 
 time.sleep(2)
@@ -235,6 +261,7 @@ while True:
 window.close()
 
 
+
 # while True:
 #     event, values = window.read()
 #     if event == '-SUBMIT-':
@@ -331,9 +358,9 @@ print(monthday)
 
 
 
-ymd_s = ym[:4]+'/'+ym[4:]+'/'+'01'
+ymd_s = ym[:4]+'/'+ym[4:]+'/'+'01'#月の最初の日付　0000/00/00の書式で
 
-ymd_l = ym[:4]+'/'+ym[4:]+'/'+str(monthday)
+ymd_l = ym[:4]+'/'+ym[4:]+'/'+str(monthday)#月の最終日の日付け　　0000/00/00の書式で
 
 print(ymd_s)
 
@@ -352,12 +379,12 @@ form = driver.find_element(By.XPATH,'//*[@id="ProgramDeptText"]')
 
 form.clear()
 
-time.sleep(3)
+time.sleep(2)
 
 driver.find_element(By.XPATH,'//*[@id="ProgramDeptText"]').send_keys('557030')#実施担当部門沖縄　557030の入力。初期値は発注の福岡553010になっているため
 driver.find_element(By.XPATH,'/html/body').send_keys(Keys.ENTER)
 
-time.sleep(3)
+time.sleep(2)
 
 
 # form = driver.find_element(By.XPATH,'//*[@id="ProgramBusinessCodeText"]')
@@ -371,7 +398,7 @@ Project1_No = 'M3P0000095-0H'#要員費
 
 Project2_No = 'M3P0000095-0I'#諸経費
 
-taishou_mon = 202405
+# taishou_mon = 202405
 
 form = driver.find_element(By.XPATH,'//*[@id="ProjCodeText1"]')
 
@@ -396,8 +423,6 @@ time.sleep(2)
 
 # os.kill(driver.service.process.pid,signal.SIGTERM)#ブラウザが閉じるのを止める。開きっぱなしにする。
 
-
-time.sleep(3)
 
 #driver.find_element(By.XPATH,'/html/body').send_keys(Keys.ENTER)#エンターを押して、次メニューに更新。
 driver.find_element(By.XPATH,'/html/body').click()#エンターを押して、次メニューに更新。
@@ -453,7 +478,7 @@ driver.find_element(By.XPATH,'/html/body').click()#エンターを押して、�
 driver.find_element(By.XPATH,'//*[@id="TabItem2"]/span').click()
 #driver.find_element(By.CSS_SELECTOR,'#TabItem2 > span').click()
 
-time.sleep(3)
+time.sleep(2)
 
 handle_array = driver.window_handles
 
