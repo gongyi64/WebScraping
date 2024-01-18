@@ -24,7 +24,7 @@ layout =[[sg.Text('[NT_Emily_自動操作ソフト]',font = ('Noto Serif CJK JP'
 
          [sg.Button('実行', button_color=('red','#808080'),key = '-SUBMIT-')]]
 
-window = sg.Window('Emily_APP',layout,size = (750,350))
+window = sg.Window('Emily_APP',layout,size = (500,350))
 
 
 
@@ -215,9 +215,9 @@ layout = [[sg.Text('案件作成年月を入力',text_color='#FF0000',font =( 'm
           [sg.Listbox(manNos,size =(25,len(manNos)),key='-NM-')],
           [sg.Text('Text', key = '-text1-')],
           [sg.Button('入力', button_color=('red', '#808080'), key='-SUBMIT-'),
-           sg.Text('入力ボタンを押した後,Windowを閉じてください。', font=('Noto Serif CJK JP', 10))]]
+           sg.Text('入力ボタンを押した後,Windowを閉じてください。\nここから手動操作したいとき（新規案件作成以外）は、\n何も入力せずにそのままWindowを閉じてください。', font=('Noto Serif CJK JP', 10))]]
 
-window = sg.Window('案件自動作成ツール', layout, size=(500, 300))
+window = sg.Window('案件自動作成ツール', layout, size=(500, 500))
 
 while True:
     event,values = window.read()
@@ -319,21 +319,21 @@ driver.switch_to.frame(1)#iFrameの最初に切り替え。２つあるが、2�
 
 monthday = str(calendar.monthrange(2024,6)[1])
 
-print(str(ym[4:]))
+ym = str(ym)
 
-print(str(ym[:4]))
+
 
 # print(ym)
 
-# monthday = calendar.monthrange(int(str(ym[:4])),int(str(ym[4:])))[1]
+monthday = calendar.monthrange(int((ym[:4])),int((ym[4:])))[1]
 
 print(monthday)
 
 
 
-ymd_s = str(ym[:4])+'/'+str(ym[4:])+'/'+'01'
+ymd_s = ym[:4]+'/'+ym[4:]+'/'+'01'
 
-ymd_l = str(ym[:4])+'/'+str(ym[4:])+'/'+monthday
+ymd_l = ym[:4]+'/'+ym[4:]+'/'+str(monthday)
 
 print(ymd_s)
 
@@ -513,7 +513,7 @@ driver.find_element(By.XPATH,'//*[@id="InpEndTimeText"]').send_keys('00:00')#終
 driver.find_element(By.XPATH,'//*[@id="InpSttDateText"]').send_keys(ymd_s)#開始日時
 
 time.sleep(1)
-driver.find_element(By.XPATH,'//*[@id="InpOpeDtlCntText1"]').clear()#担当　担当者数　１を入力
+driver.find_element(By.XPATH,'//*[@id="InpOpeDtlCntText1"]').clear()#担当　担当者数　をクリア
 
 driver.find_element(By.XPATH,'//*[@id="InpOpeDtlCntText1"]').send_keys(1)#担当　担当者数　１を入力
 
@@ -549,7 +549,8 @@ alert.accept()
 
 
 driver.switch_to.frame(1)#iFrameの最初に切り替え。２つあるが、2番目（1）のiFrameに切り替える。
-anken_No = driver.find_element(By.XPATH,'//*[@id="ProposalNoText"]').get_attribute("value")
+
+anken_No = driver.find_element(By.XPATH,'//*[@id="ProposalNoText"]').get_attribute("value")#作成された案件番号を取得
 
 print(anken_No)
 #
@@ -561,9 +562,9 @@ anken_data = {'name':str(ym)+eplyName,'anken_No':str(anken_No)}
 #
 print(anken_data)
 
-driver.find_element(By.XPATH,'//*[@id="CloseButton"]/span').click()#閉じる釦
+driver.find_element(By.XPATH,'//*[@id="CloseButton"]/span').click()#閉じる釦（これをやらないとずっと更新中となり、案件削除できなくなるので注意）
 
-sg.popup_ok(str(ym)+eplyName+'の案件番号'+anken_No,title = '案件番号')
+sg.popup_ok(str(ym)+eplyName+'の案件番号'+anken_No,title = '案件番号')#ポップアップで案件番号表示。（案件番号は、一応取得済みなので見るだけ）
 #
 # with open ('anken_data_list','w') as file:
 #     for item in anken_data:
