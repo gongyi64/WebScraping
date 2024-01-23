@@ -6,6 +6,7 @@
 import PySimpleGUI as sg
 import re
 import pandas as pd
+import openpyxl
 
 manNos = ('827861 相庭直史','406239 白川公一','380672 三角和浩','378035 岩田貴夫','805519 仲本祥子','880079 砂川航輝','806185 辻ひかる','880334   山城実咲','880518 古波蔵晃久','410993 黒岩英次','710463 山城徳松')
 
@@ -90,7 +91,7 @@ options = webdriver.ChromeOptions()
 
 
 print("========== Emily　ログイン中========== ")
-sg.popup_ok('Emilyへログイン！',title = 'LOGIN')
+sg.popup_ok('Emilyへ'+str({})+'でログインします'.format(eplyName[0]),title = 'LOGIN')
 
 
 # service = Service(driver_path)
@@ -592,43 +593,102 @@ print(anken_data)
 driver.find_element(By.XPATH,'//*[@id="CloseButton"]/span').click()#閉じる釦（これをやらないとずっと更新中となり、案件削除できなくなるので注意）
 
 sg.popup_ok(str(ym)+eplyName+'の案件番号'+anken_No,title = '案件番号')#ポップアップで案件番号表示。（案件番号は、一応取得済みなので見るだけ）
+
+
+# if ym == 202404:
+bk = pd.ExcelFile(r'c:/Users/406239/OneDrive - (株)NHKテクノロジーズ/デスクトップ/★勤務確認などのダウンロードデータ★/Emily_Files/Emily_anken.xlsx')
+
+
+wb = openpyxl.load_workbook('c:/Users/406239/OneDrive - (株)NHKテクノロジーズ/デスクトップ/★勤務確認などのダウンロードデータ★/Emily_Files/Emily_anken.xlsx')
+
+target_name =  str(ym)+'案件番号'
+
+
+check = False
+
+for ws in wb.worksheets:
+    if ws.title == target_name:
+        check = True
+
+if check == True:
+    print(target_name + 'あるよ')
+    df = pd.read_excel(bk, sheet_name=str(ym) + '案件番号', dtype=str, index_col=[0])
+
+    df = pd.DataFrame(df)
+    print(df)
+    anken_data = {'name': str(ym) + eplyName, 'anken_No': str(anken_No)}
+    print(anken_data)
+    df_anken = pd.DataFrame(anken_data, index=[0])
+    print(df_anken)
+    df_new = pd.concat([df, df_anken])
+    print(df_new)
+    with pd.ExcelWriter(
+            'c:/Users/406239/OneDrive - (株)NHKテクノロジーズ/デスクトップ/★勤務確認などのダウンロードデータ★/Emily_Files/Emily_anken.xlsx',
+            engine='openpyxl', mode='a', if_sheet_exists='replace') as writer:
+        df_new.to_excel(writer, sheet_name=str(ym) + '案件番号', index=[0])
+    # df_new.to_excel('c:/Users/406239/OneDrive - (株)NHKテクノロジーズ/デスクトップ/★勤務確認などのダウンロードデータ★/Emily_Files/Emily_anken.xlsx',sheet_name = str(ym)+'案件番号')
+else:
+    print(target_name + 'ないよ')
+    # wb = openpyxl.load_workbook('c:/Users/406239/OneDrive - (株)NHKテクノロジーズ/デスクトップ/★勤務確認などのダウンロードデータ★/Emily_Files/Emily_anken.xlsx')
+    # wb.create_sheet(index=1,title=str(ym)+'案件番号')
+    # wb.save('c:/Users/406239/OneDrive - (株)NHKテクノロジーズ/デスクトップ/★勤務確認などのダウンロードデータ★/Emily_Files/Emily_anken.xlsx')
+    # dic_anken = {'name':'社員名','anken_No':'0000000000'}
+    # print(dic_anken)
+
+    # wb = pd.ExcelFile(r'c:/Users/406239/OneDrive - (株)NHKテクノロジーズ/デスクトップ/★勤務確認などのダウンロードデータ★/Emily_Files/Emily_anken.xlsx')
+
+    # df = pd.DataFrame(df)
+    # print(df)
+    anken_data = {'name': str(ym) + eplyName, 'anken_No': str(anken_No)}
+    print(anken_data)
+    df_anken = pd.DataFrame(anken_data, index=[0])
+    print(df_anken)
+    # df_new = pd.concat([df,df_anken])
+    # print(df_new)
+    with pd.ExcelWriter(
+            'c:/Users/406239/OneDrive - (株)NHKテクノロジーズ/デスクトップ/★勤務確認などのダウンロードデータ★/Emily_Files/Emily_anken.xlsx',
+            engine='openpyxl', mode='a', if_sheet_exists='replace') as writer:
+        df_anken.to_excel(writer, sheet_name=str(ym) + '案件番号', index=[0])
+
+    # df_new.to_excel('c:/Users/406239/OneDrive - (株)NHKテクノロジーズ/デスクトップ/★勤務確認などのダウンロードデータ★/Emily_Files/Emily_anken.xlsx',sheet_name = str(ym)+'案件番号')
+
 #
 # with open ('anken_data_list','w') as file:
 #     for item in anken_data:
 #         line = f'{item['name']:<10}}{item['anken_No']:010d}\n
 #         file.write(line)
 
-import pandas as pd
-import datetime
+# import pandas as pd
+# import datetime
+# #
+# # # temp_dic = {"KEY1":1,"KEY2":2,"KEY3":3,"KEY4":4,"KEY5":5}
+# #
+# def main():
+#     # 初期化
+#     excel = make_excel(anken_data)
+#     # 行の追加(temp_dicの各Valueは更新しておくこと)
+#     excel.add_inf(anken_data)
+#     # エクセルの保存
+#     now = datetime.datetime.now()
+#     file_name = 'c:/Users/406239/OneDrive - (株)NHKテクノロジーズ/デスクトップ/★勤務確認などのダウンロードデータ★/検証中/anken_excel_{}.xlsx'.format(now.strftime('%Y%m%d'))
+#     excel.save_file(file_name,str(ym)+eplyName)
 #
-# # temp_dic = {"KEY1":1,"KEY2":2,"KEY3":3,"KEY4":4,"KEY5":5}
+# class make_excel:
+#     # エクセルヘッダ記入
+#     def __init__( self , init_dic) :
+#         key_list = init_dic.keys()
+#         self.df = pd.DataFrame(columns=key_list)
+#     # 行追加
+#     def add_inf ( self , add_dict ) :
+#         self.df = self.df.append( add_dict , ignore_index=True)
+#         return
+#     # ファイル保存
+#     def save_file( self , file_name , title ):
+#         self.df.to_excel(file_name, sheet_name=title)
+#         return
 #
-def main():
-    # 初期化
-    excel = make_excel(anken_data)
-    # 行の追加(temp_dicの各Valueは更新しておくこと)
-    excel.add_inf(anken_data)
-    # エクセルの保存
-    now = datetime.datetime.now()
-    file_name = 'c:/Users/406239/OneDrive - (株)NHKテクノロジーズ/デスクトップ/★勤務確認などのダウンロードデータ★/検証中/anken_excel_{}.xlsx'.format(now.strftime('%Y%m%d'))
-    excel.save_file(file_name,str(ym)+eplyName)
-
-class make_excel:
-    # エクセルヘッダ記入
-    def __init__( self , init_dic) :
-        key_list = init_dic.keys()
-        self.df = pd.DataFrame(columns=key_list)
-    # 行追加
-    def add_inf ( self , add_dict ) :
-        self.df = self.df.append( add_dict , ignore_index=True)
-        return
-    # ファイル保存
-    def save_file( self , file_name , title ):
-        self.df.to_excel(file_name, sheet_name=title)
-        return
-
-if __name__ == "__main__":
-    main()
-
- # with pd.ExcelWriter('c:/Users/406239/OneDrive - (株)NHKテクノロジーズ/デスクトップ/★勤務確認などのダウンロードデータ★/検証中/{}_smart_kinmu.xlsx'.format(num), engine='openpyxl', mode='a', if_sheet_exists='replace') as writer:
+# if __name__ == "__main__":
+#     main()
+#
+#  # with pd.ExcelWriter('c:/Users/406239/OneDrive - (株)NHKテクノロジーズ/デスクトップ/★勤務確認などのダウンロードデータ★/検証中/{}_smart_kinmu.xlsx'.format(num), engine='openpyxl', mode='a', if_sheet_exists='replace') as writer:
  #            df_org.to_excel(writer, sheet_name='{}_{}'.format(num, name))
