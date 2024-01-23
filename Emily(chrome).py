@@ -1,10 +1,11 @@
 # pySimpleGUI Version---Emily 自動ログインツール　202312
-#Emilyへ自動ログインして、各自のメニューにアクセスする。要員実績を自動で入力する（全部休日で埋める）
+#Emilyへ自動ログインして、各自のメニューにアクセスする。要員実績を自動で入力する（全部休日で埋める）ログインは、各自マンナンバーで。
 
 
 import PySimpleGUI as sg
 import pandas as pd
 import re
+import openpyxl
 
 manNos = ('827861 相庭直史','406239 白川公一','380672 三角和浩','378035 岩田貴夫','805519 仲本祥子','880079 砂川航輝','806185 辻ひかる','880334   山城実咲','880518 古波蔵晃久','410993 黒岩英次','710463 山城徳松')
 
@@ -16,7 +17,7 @@ sg.theme('Python')
 
 layout =[[sg.Text('[NT_Emily_自動操作ソフト]',font = ('Noto Serif CJK JP',14))],
 
-         [sg.Text('[Emilyに別ブラウザでログインしたいときに、、、。] ',font = ('meiryo',10))],
+         [sg.Text('[Emilyで要員実績の箱を自動作成。要員作成する各自Noでログインしてください。] ',font = ('meiryo',10))],
 
          [sg.Listbox(manNos,size =(25,len(manNos)),key='-MN-')],
 
@@ -48,6 +49,7 @@ window.close()
 print(input_eplyNo)#所得したのは、リスト型
 
 eplyNo = re.findall(r'\d+', input_eplyNo)#名前を除去して社員番号のみにして、ログインに使用する。
+eplyName = re.sub(r"[0-9]+", "", input_eplyNo)#社員番号削除して氏名のみに。
 
 # eplyNo = eplyNo[:7]
 
@@ -128,7 +130,7 @@ time.sleep(2)
 driver.implicitly_wait(2)
 
 # form.click()
-#=====================================================================pwdを外ファイルからゲットルーチンここから。20230118実装
+#====================pwdを外ファイルからゲットルーチンここから。20230118実装
 
 #Emily_Pass.xlsxがパスワード保管ファイル
 
@@ -151,7 +153,7 @@ pwd = df_login.iat[0,2]#そのパスワードのみを抽出
 
 print(pwd)
 
-
+#====================================================================
 
 form = driver.find_element(By.XPATH,'//*[@id="LoginAccountText"]')
 
@@ -242,34 +244,72 @@ driver.switch_to.window(handle_array[1])
 #案件番号の個別入力ルーチン（テスト後生かす予定）
 #--------------------------------------------------------------------
 
+sg.theme('SystemDefault')
 
-# value = sg.popup_get_file('個別案件入力で作成した個人の案件番号を入力してください。')  # 使用する出力したの勤務チェック用のファイルを選択
-#
-# sg.theme('SystemDefault')
-#
-# layout = [[sg.Text('Emily・[個人要員案件番号の入力]', font=('Noto Serif CJK JP', 10))],
-#           [sg.Text('個別案件で作成した案件番号を入力', font=('meiryo', 10))],
-#           # [sg.Text('年月を入力',text_color='#FF0000',font =( 'meiryo,8')),sg.InputText(size = (10,2),key= '-YM-')],
-#           [sg.Text('案件番号', text_color='#FF0000', font='meiryo,8'),
-#            sg.Combo(['月前半', '月後半'], size=(10, 2), key='-UPLW-')],
-#           [sg.Button('入力', button_color=('red', '#808080'), key='-SUBMIT-'),
-#            sg.Text('入力ボタンを押した後,Windowを閉じてください。', font=('Noto Serif CJK JP', 10))]]
-#
-# window = sg.Window('基本業務入力APP', layout, size=(500, 150))
-#
-# while True:
-#     event, values = window.read()
-#     if event == '-SUBMIT-':
-#         # num = values['-YM-']
-#         # print(num)
-#         num1 = values['-UPLW-']
-#         print(num1)
-#
-#     if event == sg.WIN_CLOSED:
-#         break
-#
-# window.close()
+layout = [[sg.Text('要員実績を入力する年月を入れてください。年+月6桁',text_color='#FF0000',font =( 'meiryo,6')),sg.InputText(size = (10,2),key= '-YM-')],
+          # [sg.Text('誰の案件？',text_color='#FF0000',font =( 'meiryo,8')),sg.InputText(size = (10,2),key= '-NM-')],
+          # [sg.Listbox(manNos,size =(25,len(manNos)),key='-NM-')],
+          [sg.Text('Text', key = '-text1-')],
+          [sg.Button('入力', button_color=('red', '#808080'), key='-SUBMIT-'),
+           sg.Text('入力ボタンを押した後,Windowを閉じてください。\n入力した年月でログインした人の要員実績の箱が自動作成されます。', font=('Noto Serif CJK JP', 10))]]
 
+window = sg.Window('要員実績箱作成ツール', layout, size=(500, 100))
+
+while True:
+    event,values = window.read()
+
+    if event == sg.WIN_CLOSED:
+        break
+
+    elif event == '-SUBMIT-':
+        ym = values['-YM-']
+        window['-text1-'].update(values['-YM-'])
+        # input_eplyNo = values['-NM-'][0]
+        # eplyName = re.sub(r"[0-9]+", "", input_eplyNo)#社員番号と名前から社員番号削除してフルネームのみに。
+
+
+window.close()
+
+#==========================案件番号取得ルーチン　20230123実装===============
+
+file_name = pd.ExcelFile( r'c:/Users/406239/OneDrive - (株)NHKテクノロジーズ/デスクトップ/★勤務確認などのダウンロードデータ★/Emily_Files/Emily_anken.xlsx')
+
+wb = openpyxl.load_workbook('c:/Users/406239/OneDrive - (株)NHKテクノロジーズ/デスクトップ/★勤務確認などのダウンロードデータ★/Emily_Files/Emily_anken.xlsx')
+
+target_name = str(ym) + '案件番号'
+
+print(file_name)
+print(wb)
+
+check = False
+
+for ws in wb.worksheets:  # Emily_anken/xlsxに、所望のシートが存在するか判定。
+    if ws.title == target_name:
+        check = True
+
+if check == True:
+    print(target_name + 'は、存在します。')
+    sg.popup_ok('入力した年月の案件番号sheetは存在するので引き続き要員実績を作成します。')  # あれば、読みだしてｄｆに。
+
+    df = pd.read_excel(file_name, sheet_name=ym + '案件番号', dtype=str)
+
+    print(eplyName)
+
+    print(df[df['name'] == str(ym) + eplyName])  # ログインする人の番号（年月+氏名）が含まれるdfを抽出
+
+    if df[df['name'] == str(ym) + eplyName].empty:
+        sg.popup_ok(eplyName + 'さんの案件番号は存在しませんので、作成してください')
+    else:
+
+        df_anken = df[df['name'] == str(ym) + eplyName]
+
+        kobetsu_No = df_anken.iat[0, 2]  # その案件番号のみを抽出
+        print(kobetsu_No)
+
+else:
+    print(target_name + 'は、存在しません。')  # なければ、中断。
+
+    sg.popup_ok('入力した年月の案件番号は存在しないので、処理を中断します。\n作成してください。')
 
 #--------------------------------------------------------------------
 
@@ -278,9 +318,9 @@ time.sleep(2)
 
 driver.switch_to.frame(1)#iFrameの最初に切り替え。２つあるが、２番目（１）のiFrameに切り替える。
 
-kobetsu_No = '2024001528'#今は直接入力。なかもと5月
+# kobetsu_No = '2024001528'#今は直接入力。なかもと5月
 
-taishou_mon = 202405
+taishou_mon = ym
 
 form = driver.find_element(By.XPATH,'//*[@id="ProposalNoText"]')
 
@@ -293,7 +333,7 @@ driver.find_element(By.XPATH,'/html/body').send_keys(Keys.ENTER)#エンターを
 #
 driver.find_element(By.XPATH,'//*[@id="TargetMonthBox"]').clear()
 
-driver.find_element(By.XPATH,'//*[@id="TargetMonthBox"]').send_keys(taishou_mon)#対象年月を変更。この場合は、202305に。
+driver.find_element(By.XPATH,'//*[@id="TargetMonthBox"]').send_keys(taishou_mon)#対象年月を変更。
 
 driver.find_element(By.XPATH,'/html/body').send_keys(Keys.ENTER)#エンターを押して、次メニューに更新。
 
@@ -301,7 +341,7 @@ time.sleep(3)
 
 # os.kill(driver.service.process.pid,signal.SIGTERM)#ブラウザが閉じるのを止める。開きっぱなしにする。
 
-taishou_mon = str(taishou_mon)#スライス処理のためSTR化
+taishou_mon = str(ym)#スライス処理のためSTR化
 taishou_year = taishou_mon[:4]#年のみ取り出し
 taishou_month = taishou_mon[-2:]#月のみ取り出し
 taishou_year = int(taishou_year)#calendarモジュール使用のため、INT化
@@ -341,9 +381,10 @@ for i in range(1,nichi+1):
     time.sleep(1)
 
     driver.find_element(By.XPATH,'/html/body').send_keys(Keys.ENTER)#エンターを押して、次メニューに更新。
+# #   print(eplyNo[0])
+#     print(dtype(eplyNo[0]))
 #
-#
-    driver.find_element(By.XPATH,'//*[@id="NewEmpCodeText"]').send_keys(str(eplyNo[0]))##担当者　マンナンバー
+    driver.find_element(By.XPATH,'//*[@id="NewEmpCodeText"]').send_keys(str(eplyNo))##担当者　マンナンバー
 
     driver.find_element(By.XPATH,'/html/body').send_keys(Keys.ENTER)#エンターを押して、次メニューに更新。
 
@@ -357,7 +398,7 @@ for i in range(1,nichi+1):
 
 #driver.find_element(By.XPATH,'//*[@id="NewWorkDateBox"]"]').send_keys('2024/05/'{i+1})#実施年月日
 
-    driver.find_element(By.CSS_SELECTOR,'#NewWorkDateBox').send_keys('2024/05/'+str(i).zfill(2))#実施年月日
+    driver.find_element(By.CSS_SELECTOR,'#NewWorkDateBox').send_keys(str(taishou_year)+'/'+str(taishou_month)+'/'+str(i).zfill(2))#実施年月日
 
 
     time.sleep(3)
