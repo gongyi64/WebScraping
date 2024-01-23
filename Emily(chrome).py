@@ -1,8 +1,9 @@
 # pySimpleGUI Version---Emily 自動ログインツール　202312
-#Emilyへ自動ログインして、各自のメニューにアクセスする。。
+#Emilyへ自動ログインして、各自のメニューにアクセスする。要員実績を自動で入力する（全部休日で埋める）
 
 
 import PySimpleGUI as sg
+import pandas as pd
 import re
 
 manNos = ('827861 相庭直史','406239 白川公一','380672 三角和浩','378035 岩田貴夫','805519 仲本祥子','880079 砂川航輝','806185 辻ひかる','880334   山城実咲','880518 古波蔵晃久','410993 黒岩英次','710463 山城徳松')
@@ -127,6 +128,28 @@ time.sleep(2)
 driver.implicitly_wait(2)
 
 # form.click()
+#=====================================================================pwdを外ファイルからゲットルーチンここから。20230118実装
+
+#Emily_Pass.xlsxがパスワード保管ファイル
+
+file_name = 'c:/Users/406239/OneDrive - (株)NHKテクノロジーズ/デスクトップ/★勤務確認などのダウンロードデータ★/Emily_Files/Emily_Pass.xlsx'
+
+
+df = pd.read_excel(file_name)
+
+print(eplyNo[0])
+
+eplyNo = int(eplyNo[0])#eplyNoは、リストなので、0番目を抽出し、intに変更。strだとエラー。
+
+print (df[df['社員番号'] == eplyNo])#ログインする人の番号が含まれるdfを抽出
+
+
+df_login = df[df['社員番号'] == eplyNo]
+
+
+pwd = df_login.iat[0,2]#そのパスワードのみを抽出
+
+print(pwd)
 
 
 
@@ -136,7 +159,7 @@ form.send_keys(eplyNo)#最初に取得したマンナンバーを入力
 
 form = driver.find_element(By.XPATH,'//*[@id="PassText"]')
 
-form.send_keys('09-Hdo9QDw ')
+form.send_keys(pwd)
 
 
 time.sleep(2)
@@ -255,7 +278,7 @@ time.sleep(2)
 
 driver.switch_to.frame(1)#iFrameの最初に切り替え。２つあるが、２番目（１）のiFrameに切り替える。
 
-kobetsu_No = '2024001176'#今は直接入力。こはぐら5月
+kobetsu_No = '2024001528'#今は直接入力。なかもと5月
 
 taishou_mon = 202405
 
@@ -320,7 +343,7 @@ for i in range(1,nichi+1):
     driver.find_element(By.XPATH,'/html/body').send_keys(Keys.ENTER)#エンターを押して、次メニューに更新。
 #
 #
-    driver.find_element(By.XPATH,'//*[@id="NewEmpCodeText"]').send_keys(eplyNo[0])##担当者　マンナンバー
+    driver.find_element(By.XPATH,'//*[@id="NewEmpCodeText"]').send_keys(str(eplyNo[0]))##担当者　マンナンバー
 
     driver.find_element(By.XPATH,'/html/body').send_keys(Keys.ENTER)#エンターを押して、次メニューに更新。
 
