@@ -63,9 +63,12 @@ from selenium.webdriver.support.ui import Select
 from selenium.webdriver.common.by import By
 
 time.sleep(3)
-#from webdriver_manager.chrome import ChromeDriverManager
+from webdriver_manager.chrome import ChromeDriverManager
 
-#driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))
+# driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))
+# driver = webdriver.Chrome(ChromeDriverManager().install())
+#
+# driver.get('https://google.com')
 
 #最新のドライバーだとエラーが出るのでその対応策。https://qiita.com/hs2023/questions/ffab105c5692692624ab
 
@@ -85,11 +88,11 @@ sg.popup_ok('機材TEAMSへログインします！',title = 'OK？')
 
 driver_path = "C:\\Users\\406239\\PycharmProjects\\pythonProject1\\chromedriver_binary\\chromedriver.exe"
 
-#2023_11_09 chromdriver　118→119　更新
+#2023_11_09 chromdriver　118→119　更新 2024\01\15 chromedriver　119→121更新
 
 driver = webdriver.Chrome(service=ChromeService(driver_path))
-
-options.add_experimental_option("debuggerAddress", "127.0.0.1:9333")
+#
+# options.add_experimental_option("debuggerAddress", "127.0.0.1:9333")
 # driver = webdriver.Chrome(executable_path=driver_path, options=options)
 
 
