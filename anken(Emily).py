@@ -91,7 +91,7 @@ options = webdriver.ChromeOptions()
 
 
 print("========== Emily　ログイン中========== ")
-sg.popup_ok('Emilyへ'+str({})+'でログインします'.format(eplyName[0]),title = 'LOGIN')
+sg.popup_ok('Emilyへ{}でログインします'.format(eplyName[0]),title = 'LOGIN')
 
 
 # service = Service(driver_path)
@@ -641,7 +641,7 @@ else:
     # print(df)
     anken_data = {'name': str(ym) + eplyName, 'anken_No': str(anken_No)}
     print(anken_data)
-    df_anken = pd.DataFrame(anken_data, index=[0])
+    df_anken = pd.DataFrame(anken_data, index=[str(0)])
     print(df_anken)
     # df_new = pd.concat([df,df_anken])
     # print(df_new)
@@ -651,6 +651,50 @@ else:
         df_anken.to_excel(writer, sheet_name=str(ym) + '案件番号', index=[0])
 
     # df_new.to_excel('c:/Users/406239/OneDrive - (株)NHKテクノロジーズ/デスクトップ/★勤務確認などのダウンロードデータ★/Emily_Files/Emily_anken.xlsx',sheet_name = str(ym)+'案件番号')
+
+
+#====================エクセルファイルのセル幅自動調整===============================
+
+
+
+'''
+    sheet_width.py
+    purpose: make new xlsx and set width automatically
+'''
+
+import openpyxl as xl
+
+
+# set input file name
+inputfile = 'c:/Users/406239/OneDrive - (株)NHKテクノロジーズ/デスクトップ/★勤務確認などのダウンロードデータ★/Emily_Files/Emily_anken.xlsx'
+
+# read input xlsx
+wb1 = xl.load_workbook(filename=inputfile)
+
+print(wb1.sheetnames)
+s=len(wb1.sheetnames)
+
+for s in range(s):
+    ws1 = wb1.worksheets[s]#[]内がワークシートの選択。ワークシート数を取得して、その数だけfor文でまわすとOKだと思う。
+
+# set column width
+    for col in ws1.columns:
+        max_length = 0
+        column = col[0].column
+
+        for cell in col:
+            if len(str(cell.value)) > max_length:
+                max_length = len(str(cell.value))
+
+        adjusted_width = (max_length + 2) * 1.2
+        ws1.column_dimensions[col[0].column_letter].width = adjusted_width#column_dimension[column]ではダメ、左のように書き直し。openpyxl３以降では、intではだめで文字列。
+
+# save xlsx file
+    wb1.save(inputfile)
+
+
+#====================================================
+
 
 #
 # with open ('anken_data_list','w') as file:
