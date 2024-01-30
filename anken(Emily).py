@@ -54,8 +54,11 @@ eplyName = re.sub(r"[0-9]+", "", input_eplyNo)#社員番号削除して氏名の
 # eplyNo = eplyNo[:7]
 
 print(eplyNo[0])#リストの要素を文字列として取得。この場合は、要素１つなので[0]
-print(eplyName[0])
+print(eplyName)
 
+# login_name = str(eplyName[0])
+#
+# print(login_name)
 #eplypwd = re.findall(r'^[a-zA-Z0-9]{7}$, input_eplyNo)#名前とマンナンバーを除去してPWDのみにして、ログインに使用する。7桁の英数字想定。ｓ+マンナンバーなど。
 
 # selenium 4
@@ -91,7 +94,7 @@ options = webdriver.ChromeOptions()
 
 
 print("========== Emily　ログイン中========== ")
-sg.popup_ok('Emilyへ{}でログインします'.format(eplyName[0]),title = 'LOGIN')
+sg.popup_ok(f'Emilyへ{eplyName}でログインします',title = 'LOGIN')
 
 
 # service = Service(driver_path)
