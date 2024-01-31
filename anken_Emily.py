@@ -228,7 +228,7 @@ driver.find_element(By.XPATH,'//*[@id="Form1"]/table/tbody/tr/td/table[2]/tbody/
 time.sleep(2)
 
 
-while True:
+while True:#無限ループ。複数の人の案件作成したいときに、繰り返し。
 
     sg.theme('SystemDefault')
 
@@ -256,7 +256,7 @@ while True:
 
     window.close()
 
-    driver.find_element(By.XPATH,'/html/body').send_keys(Keys.ENTER)#エンターを押して、次メニューに更新。
+    driver.find_element(By.XPATH,'/html/body').send_keys(Keys.ENTER)#エンターを押して、次メニューに更新。個別案件入力選択状態で戻るのでこれをやらないとうまく遷移しない。
 
     driver.implicitly_wait(3)
 
