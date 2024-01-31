@@ -69,15 +69,11 @@ import os
 import time
 import datetime
 import sys
-import signal
 from selenium.webdriver.common.action_chains import ActionChains
 
-import pyexcel as p
-import glob
 import calendar
 from selenium.webdriver.support.ui import Select
 
-from selenium.webdriver.support.ui import WebDriverWait
 
 from selenium.webdriver.common.by import By
 
@@ -268,52 +264,6 @@ window.close()
 
 
 
-# while True:
-#     event, values = window.read()
-#     if event == '-SUBMIT-':
-#         ym = values['-YM-']
-#         nm = values['-NM-'][0]
-#         print(ym)
-#         print(nm)
-#         # num1 = values['-YM-']
-#         # print(num1)
-#
-#     if event == sg.WIN_CLOSED:
-#         break
-#
-# window.close()
-
-
-
-#案件番号の個別入力ルーチン（テスト後生かす予定）
-#--------------------------------------------------------------------
-
-
-
-
-# sg.theme('SystemDefault')
-#
-# layout = [[sg.Text('年月を入力',text_color='#FF0000',font =( 'meiryo,8')),sg.InputText(size = (10,2),key= '-YM-')],
-#           [sg.Button('入力', button_color=('red', '#808080'), key='-SUBMIT-'),
-#            sg.Text('入力ボタンを押した後,Windowを閉じてください。', font=('Noto Serif CJK JP', 10))]]
-#
-# window = sg.Window('基本業務入力APP', layout, size=(500, 150))
-#
-# while True:
-#     event, values = window.read()
-#     if event == '-SUBMIT-':
-#         num = values['-SUBMIT-']
-#         # print(num)
-#         num1 = values['-SBMIT-']
-#         print(num1)
-#
-#     if event == sg.WIN_CLOSED:
-#         break
-#
-# window.close()
-
-
-#--------------------------------------------------------------------
 
 #os.kill(driver.service.process.pid,signal.SIGTERM)#ブラウザが閉じるのを止める。開きっぱなしにする。
 time.sleep(2)
@@ -403,8 +353,6 @@ time.sleep(2)
 Project1_No = 'M3P0000095-0H'#要員費
 
 Project2_No = 'M3P0000095-0I'#諸経費
-
-# taishou_mon = 202405
 
 form = driver.find_element(By.XPATH,'//*[@id="ProjCodeText1"]')
 
@@ -595,7 +543,7 @@ print(anken_data)
 
 driver.find_element(By.XPATH,'//*[@id="CloseButton"]/span').click()#閉じる釦（これをやらないとずっと更新中となり、案件削除できなくなるので注意）
 
-sg.popup_ok(str(ym)+eplyName+'の案件番号'+anken_No,title = '案件番号')#ポップアップで案件番号表示。（案件番号は、一応取得済みなので見るだけ）
+# sg.popup_ok(str(ym)+eplyName+'の案件番号'+anken_No,title = '案件番号')#ポップアップで案件番号表示。（案件番号は、一応取得済みなので見るだけ）
 
 
 # if ym == 202404:
@@ -632,16 +580,8 @@ if check == True:
     # df_new.to_excel('c:/Users/406239/OneDrive - (株)NHKテクノロジーズ/デスクトップ/★勤務確認などのダウンロードデータ★/Emily_Files/Emily_anken.xlsx',sheet_name = str(ym)+'案件番号')
 else:
     print(target_name + 'ないよ')
-    # wb = openpyxl.load_workbook('c:/Users/406239/OneDrive - (株)NHKテクノロジーズ/デスクトップ/★勤務確認などのダウンロードデータ★/Emily_Files/Emily_anken.xlsx')
-    # wb.create_sheet(index=1,title=str(ym)+'案件番号')
-    # wb.save('c:/Users/406239/OneDrive - (株)NHKテクノロジーズ/デスクトップ/★勤務確認などのダウンロードデータ★/Emily_Files/Emily_anken.xlsx')
-    # dic_anken = {'name':'社員名','anken_No':'0000000000'}
-    # print(dic_anken)
 
-    # wb = pd.ExcelFile(r'c:/Users/406239/OneDrive - (株)NHKテクノロジーズ/デスクトップ/★勤務確認などのダウンロードデータ★/Emily_Files/Emily_anken.xlsx')
 
-    # df = pd.DataFrame(df)
-    # print(df)
     anken_data = {'name': str(ym) + eplyName, 'anken_No': str(anken_No)}
     print(anken_data)
     df_anken = pd.DataFrame(anken_data, index=[str(0)])
@@ -698,44 +638,5 @@ for s in range(s):
 
 #====================================================
 
+sg.popup_ok(str(ym)+eplyName+'の案件番号'+anken_No,title = '案件番号')#ポップアップで案件番号表示。（案件番号は、一応取得済みなので見るだけ）
 
-#
-# with open ('anken_data_list','w') as file:
-#     for item in anken_data:
-#         line = f'{item['name']:<10}}{item['anken_No']:010d}\n
-#         file.write(line)
-
-# import pandas as pd
-# import datetime
-# #
-# # # temp_dic = {"KEY1":1,"KEY2":2,"KEY3":3,"KEY4":4,"KEY5":5}
-# #
-# def main():
-#     # 初期化
-#     excel = make_excel(anken_data)
-#     # 行の追加(temp_dicの各Valueは更新しておくこと)
-#     excel.add_inf(anken_data)
-#     # エクセルの保存
-#     now = datetime.datetime.now()
-#     file_name = 'c:/Users/406239/OneDrive - (株)NHKテクノロジーズ/デスクトップ/★勤務確認などのダウンロードデータ★/検証中/anken_excel_{}.xlsx'.format(now.strftime('%Y%m%d'))
-#     excel.save_file(file_name,str(ym)+eplyName)
-#
-# class make_excel:
-#     # エクセルヘッダ記入
-#     def __init__( self , init_dic) :
-#         key_list = init_dic.keys()
-#         self.df = pd.DataFrame(columns=key_list)
-#     # 行追加
-#     def add_inf ( self , add_dict ) :
-#         self.df = self.df.append( add_dict , ignore_index=True)
-#         return
-#     # ファイル保存
-#     def save_file( self , file_name , title ):
-#         self.df.to_excel(file_name, sheet_name=title)
-#         return
-#
-# if __name__ == "__main__":
-#     main()
-#
-#  # with pd.ExcelWriter('c:/Users/406239/OneDrive - (株)NHKテクノロジーズ/デスクトップ/★勤務確認などのダウンロードデータ★/検証中/{}_smart_kinmu.xlsx'.format(num), engine='openpyxl', mode='a', if_sheet_exists='replace') as writer:
- #            df_org.to_excel(writer, sheet_name='{}_{}'.format(num, name))
