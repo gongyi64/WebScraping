@@ -208,7 +208,7 @@ select = Select(dropdown)
 
 select.select_by_index(1)
 
-# driver.find_element(By.XPATH,'/html/body').send_keys(Keys.ENTER)#エンターを押して、次メニューに更新。
+
 
 
 
@@ -220,6 +220,12 @@ driver.find_element(By.XPATH, '/html/body').send_keys(Keys.ENTER)  # エンタ�
 
 time.sleep(3)
 
+driver.find_element(By.XPATH, '//*[@id="c_11"]').click()  # 個別案件/要員をクリック
+time.sleep(2)
+
+driver.find_element(By.XPATH,'//*[@id="Form1"]/table/tbody/tr/td/table[2]/tbody/tr/td[2]/div[3]/table/tbody/tr/td[1]/div/a[2]').click()  # 182_個別案件入力をクリック
+# driver.find_element(By.XPATH,'//*[@id="Form1"]/table/tbody/tr/td/table[2]/tbody/tr/td[2]/div[3]/table/tbody/tr/td[1]/div/a[2]').click()
+time.sleep(2)
 
 
 while True:
@@ -250,13 +256,11 @@ while True:
 
     window.close()
 
-    driver.find_element(By.XPATH, '//*[@id="c_11"]').click()  # 個別案件/要員をクリック
+    driver.find_element(By.XPATH,'/html/body').send_keys(Keys.ENTER)#エンターを押して、次メニューに更新。
 
-    time.sleep(2)
+    driver.implicitly_wait(3)
 
-    driver.find_element(By.XPATH,'//*[@id="Form1"]/table/tbody/tr/td/table[2]/tbody/tr/td[2]/div[3]/table/tbody/tr/td[1]/div/a[2]').click()  # 182_個別案件入力をクリック
 
-    time.sleep(2)
 
 
 
