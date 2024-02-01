@@ -107,17 +107,15 @@ df_login = df[df['社員番号'] == eplyNo]
 
 pwd = df_login.iat[0,2]#そのパスワードのみを抽出
 
+
 print(pwd)
 
 # selenium 4
 
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service as ChromeService
-import os
+
 import time
-import datetime
-import sys
-from selenium.webdriver.common.action_chains import ActionChains
 
 import calendar
 from selenium.webdriver.support.ui import Select
@@ -147,8 +145,8 @@ sg.popup_ok(f'Emilyへ{eplyName}でログインします',title = 'LOGIN')
 
 # 起動時にオプションをつける。（ポート指定により、起動済みのブラウザのドライバーを取得）
 # driver_path = "C:\\Users\\406239\\AppData\\Local\\Programs\\Python\\Python39\\chromedriver_binary\\chromedriver.exe"
-
-driver_path = "C:\\Users\\406239\\PycharmProjects\\pythonProject1\\chromedriver_binary\\chromedriver.exe"
+driver_path = sg.popup_get_file('使用する最新chromedriverファイルを選択してください。')  # 使用するchromeのドライバーファイルを選択
+#driver_path = "C:\\Users\\406239\\PycharmProjects\\pythonProject1\\chromedriver_binary\\chromedriver.exe"
 
 #2023_11_09 chromdriver　118→119　更新
 

@@ -248,7 +248,7 @@ print(len(list(eplyNo_name_dict.keys())))
 
 # for i in range(len(list(eplyNo_name_dict.keys()))):
 
-for i in range(0,8):#三角さんでチェック最終的には、rangeは上行で。今は白川。
+for i in range(0,8):#全員分（出向、スタッフ除く）の勤務取得ルーチン。
 
     input_eplyNo = list(eplyNo_name_dict.keys())[i]
 
@@ -459,7 +459,7 @@ for i in range(0,8):#三角さんでチェック最終的には、rangeは上行
 
         df_org.reset_index(drop=True,inplace=True)
 
-        df_org = df_org.drop([0])#2行名削除
+        df_org = df_org.drop([0])#1行目（カラムにした行）削除
 
 
         print('data 加工後')
@@ -565,7 +565,7 @@ for i in range(0,8):#三角さんでチェック最終的には、rangeは上行
 
 
 
-# df[0].replace('\n','',regex = True)
+
 
 
 
