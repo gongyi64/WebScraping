@@ -8,11 +8,39 @@ import re
 import pandas as pd
 import openpyxl
 
-manNos = ('827861 相庭直史','406239 白川公一','380672 三角和浩','378035 岩田貴夫','805519 仲本祥子','880079 砂川航輝','806185 辻ひかる','880334   山城実咲','880518 古波蔵晃久','410993 黒岩英次','710463 山城徳松')
+file_name = 'c:/Users/406239/OneDrive - (株)NHKテクノロジーズ/デスクトップ/★勤務確認などのダウンロードデータ★/Emily_Files/Emily_Pass.xlsx'#Emily_Pass.xlsxが、マンナンバー、氏名、パスワード保管ファイル
+df = pd.read_excel(file_name,sheet_name = 'Pass')#sheet_name ＝　Pass　に、pwd　を保存している。
+manNos = []
+for i in range(len(df['氏名'])):
+    manNos.append(str(df['社員番号'][i])+' '+df['氏名'][i])
+
+print(manNos)
+
+#外部ファイルからの読み込み無しの場合、下のリストを使用。
+
+#manNos = ('827861 相庭直史','406239 白川公一','380672 三角和浩','378035 岩田貴夫','805519 仲本祥子','880079 砂川航輝','806185 辻ひかる','880334   山城実咲','880518 古波蔵晃久','410993 黒岩英次','710463 山城徳松')
 
 #manNos = ('827861 相庭直史　ap827861','406239 白川公一　ap406239','380672 三角和浩　ap380672','378035 岩田貴夫　ap378035','805519 仲本祥子   ap805519','880079 砂川航輝　ap880079','806185 辻ひかる　ap806185','880334   山城実咲 ap880334','880518 古波蔵晃久 ap880518','410993 黒岩英次   ap410993','710463 山城徳松   ap710463')
 
 #manNos = ('827861','406239','380672','378035','805519','880079','806185','880334','880518','410993','710463')
+
+df1 = pd.read_excel(file_name,sheet_name = '沖縄プロジェクト')#各種データの読み込み
+
+gyoumu_No = df1[df1['明細'] == '沖縄番組業務番号']
+
+Gyoumu_No = gyoumu_No.iat[0,1]
+
+PJ_Youin = df1[df1['明細'] == '子プロジェクト（要員費）']
+
+Project1_No = PJ_Youin.iat[0,1]
+
+PJ_Shokeihi = df1[df1['明細'] == '子プロジェクト（諸経費）']
+
+Project2_No = PJ_Shokeihi.iat[0,1]
+
+Bumon = df1[df1['明細'] == '実施担当部門番号（沖縄）']
+
+Bumon_No = Bumon.iat[0,1]
 
 sg.theme('Python')
 
@@ -60,6 +88,24 @@ print(eplyName)
 #
 # print(login_name)
 #eplypwd = re.findall(r'^[a-zA-Z0-9]{7}$, input_eplyNo)#名前とマンナンバーを除去してPWDのみにして、ログインに使用する。7桁の英数字想定。ｓ+マンナンバーなど。
+
+#=====================================================================pwdを外ファイルからゲットルーチンここから。20230118実装
+
+
+
+print(eplyNo[0])
+
+eplyNo = int(eplyNo[0])#eplyNoは、リストなので、0番目を抽出し、intに変更。strだとエラー。
+
+print (df[df['社員番号'] == eplyNo])#ログインする人の番号が含まれるdfを抽出
+
+
+df_login = df[df['社員番号'] == eplyNo]
+
+
+pwd = df_login.iat[0,2]#そのパスワードのみを抽出
+
+print(pwd)
 
 # selenium 4
 
@@ -120,28 +166,7 @@ time.sleep(2)
 
 driver.implicitly_wait(2)
 
-#=====================================================================pwdを外ファイルからゲットルーチンここから。20230118実装
 
-#Emily_Pass.xlsxがパスワード保管ファイル
-
-file_name = 'c:/Users/406239/OneDrive - (株)NHKテクノロジーズ/デスクトップ/★勤務確認などのダウンロードデータ★/Emily_Files/Emily_Pass.xlsx'
-
-
-df = pd.read_excel(file_name)
-
-print(eplyNo[0])
-
-eplyNo = int(eplyNo[0])#eplyNoは、リストなので、0番目を抽出し、intに変更。strだとエラー。
-
-print (df[df['社員番号'] == eplyNo])#ログインする人の番号が含まれるdfを抽出
-
-
-df_login = df[df['社員番号'] == eplyNo]
-
-
-pwd = df_login.iat[0,2]#そのパスワードのみを抽出
-
-print(pwd)
 
 
 #=====================================================================ここからEmilyログイン
@@ -281,7 +306,9 @@ while True:#無限ループ。複数の人の案件作成したいときに、�
 
     form = driver.find_element(By.XPATH,'//*[@id="ProgramBusinessCodeText"]')
 
-    form.send_keys('2006101343')#番組業務番号の入力
+    form.send_keys(Gyoumu_No)#番組業務番号の入力
+
+    # form.send_keys('2006101343')  # 番組業務番号の入力
 
     driver.find_element(By.XPATH,'/html/body').send_keys(Keys.ENTER)
 
@@ -346,7 +373,7 @@ while True:#無限ループ。複数の人の案件作成したいときに、�
 
     time.sleep(2)
 
-    driver.find_element(By.XPATH,'//*[@id="ProgramDeptText"]').send_keys('557030')#実施担当部門沖縄　557030の入力。初期値は発注の福岡553010になっているため
+    driver.find_element(By.XPATH,'//*[@id="ProgramDeptText"]').send_keys(Bumon_No)#実施担当部門沖縄　557030の入力。初期値は発注の福岡553010になっているため
     driver.find_element(By.XPATH,'/html/body').send_keys(Keys.ENTER)
 
     time.sleep(2)
@@ -359,9 +386,9 @@ while True:#無限ループ。複数の人の案件作成したいときに、�
     # driver.find_element(By.XPATH,'/html/body').send_keys(Keys.ENTER)
 
 
-    Project1_No = 'M3P0000095-0H'#要員費
-
-    Project2_No = 'M3P0000095-0I'#諸経費
+    # Project1_No = 'M3P0000095-0H'#要員費
+    #
+    # Project2_No = 'M3P0000095-0I'#諸経費
 
     form = driver.find_element(By.XPATH,'//*[@id="ProjCodeText1"]')
 
