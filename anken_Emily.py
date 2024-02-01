@@ -8,6 +8,8 @@ import re
 import pandas as pd
 import openpyxl
 
+# file_name = sg.popup_get_file('読み込みに使用するファイルを選択してください。')  # 使用する出力したの勤務チェック用のファイルを選択
+
 file_name = 'c:/Users/406239/OneDrive - (株)NHKテクノロジーズ/デスクトップ/★勤務確認などのダウンロードデータ★/Emily_Files/Emily_Pass.xlsx'#Emily_Pass.xlsxが、マンナンバー、氏名、パスワード保管ファイル
 df = pd.read_excel(file_name,sheet_name = 'Pass')#sheet_name ＝　Pass　に、pwd　を保存している。
 manNos = []
