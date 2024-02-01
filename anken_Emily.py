@@ -8,9 +8,9 @@ import re
 import pandas as pd
 import openpyxl
 
-# file_name = sg.popup_get_file('読み込みに使用するファイルを選択してください。')  # 使用する出力したの勤務チェック用のファイルを選択
+file_name = sg.popup_get_file('社員番号、氏名、パスワードの読み込みに使用するファイルを選択してください。')  # 使用する出力したの勤務チェック用のファイルを選択
 
-file_name = 'c:/Users/406239/OneDrive - (株)NHKテクノロジーズ/デスクトップ/★勤務確認などのダウンロードデータ★/Emily_Files/Emily_Pass.xlsx'#Emily_Pass.xlsxが、マンナンバー、氏名、パスワード保管ファイル
+#file_name = 'c:/Users/406239/OneDrive - (株)NHKテクノロジーズ/デスクトップ/★勤務確認などのダウンロードデータ★/Emily_Files/Emily_Pass.xlsx'#Emily_Pass.xlsxが、マンナンバー、氏名、パスワード保管ファイル
 df = pd.read_excel(file_name,sheet_name = 'Pass')#sheet_name ＝　Pass　に、pwd　を保存している。
 manNos = []
 for i in range(len(df['氏名'])):
@@ -26,9 +26,9 @@ print(manNos)
 
 #manNos = ('827861','406239','380672','378035','805519','880079','806185','880334','880518','410993','710463')
 
-df1 = pd.read_excel(file_name,sheet_name = '沖縄プロジェクト')#各種データの読み込み
+df1 = pd.read_excel(file_name,sheet_name = 'プロジェクト')#各種データの読み込み
 
-gyoumu_No = df1[df1['明細'] == '沖縄番組業務番号']
+gyoumu_No = df1[df1['明細'] == '番組業務番号']
 
 Gyoumu_No = gyoumu_No.iat[0,1]
 
@@ -40,7 +40,7 @@ PJ_Shokeihi = df1[df1['明細'] == '子プロジェクト（諸経費）']
 
 Project2_No = PJ_Shokeihi.iat[0,1]
 
-Bumon = df1[df1['明細'] == '実施担当部門番号（沖縄）']
+Bumon = df1[df1['明細'] == '実施担当部門番号']
 
 Bumon_No = Bumon.iat[0,1]
 
@@ -48,7 +48,7 @@ sg.theme('Python')
 
 layout =[[sg.Text('[NT_Emily_自動操作ソフト]',font = ('Noto Serif CJK JP',14))],
 
-         [sg.Text('[Emilyに別ブラウザでログインしたいときに.誰でログインしますか？] ',font = ('meiryo',10))],
+         [sg.Text('[Emilyに誰でログインしますか？] ',font = ('meiryo',10))],
 
          [sg.Listbox(manNos,size =(25,len(manNos)),key='-MN-')],
 
@@ -254,6 +254,7 @@ driver.find_element(By.XPATH,'//*[@id="Form1"]/table/tbody/tr/td/table[2]/tbody/
 # driver.find_element(By.XPATH,'//*[@id="Form1"]/table/tbody/tr/td/table[2]/tbody/tr/td[2]/div[3]/table/tbody/tr/td[1]/div/a[2]').click()
 time.sleep(2)
 
+anken_file_name = sg.popup_get_file('案件番号の書き出し読み出しに使用するファイルを選択してください。')  # 案件番号を保存、読みだすExcelファイルを選択
 
 while True:#無限ループ。複数の人の案件作成したいときに、繰り返し。
 
@@ -584,11 +585,16 @@ while True:#無限ループ。複数の人の案件作成したいときに、�
     # sg.popup_ok(str(ym)+eplyName+'の案件番号'+anken_No,title = '案件番号')#ポップアップで案件番号表示。（案件番号は、一応取得済みなので見るだけ）
 
 
+
     # if ym == 202404:
-    bk = pd.ExcelFile(r'c:/Users/406239/OneDrive - (株)NHKテクノロジーズ/デスクトップ/★勤務確認などのダウンロードデータ★/Emily_Files/Emily_anken.xlsx')
+    # bk = pd.ExcelFile(r'c:/Users/406239/OneDrive - (株)NHKテクノロジーズ/デスクトップ/★勤務確認などのダウンロードデータ★/Emily_Files/Emily_anken.xlsx')
+
+    bk = pd.ExcelFile(anken_file_name)
 
 
-    wb = openpyxl.load_workbook('c:/Users/406239/OneDrive - (株)NHKテクノロジーズ/デスクトップ/★勤務確認などのダウンロードデータ★/Emily_Files/Emily_anken.xlsx')
+    # wb = openpyxl.load_workbook('c:/Users/406239/OneDrive - (株)NHKテクノロジーズ/デスクトップ/★勤務確認などのダウンロードデータ★/Emily_Files/Emily_anken.xlsx')
+
+    wb = openpyxl.load_workbook(anken_file_name)
 
     target_name =  str(ym)+'案件番号'
 
@@ -611,9 +617,10 @@ while True:#無限ループ。複数の人の案件作成したいときに、�
         print(df_anken)
         df_new = pd.concat([df, df_anken])
         print(df_new)
-        with pd.ExcelWriter(
-                'c:/Users/406239/OneDrive - (株)NHKテクノロジーズ/デスクトップ/★勤務確認などのダウンロードデータ★/Emily_Files/Emily_anken.xlsx',
-                engine='openpyxl', mode='a', if_sheet_exists='replace') as writer:
+        # with pd.ExcelWriter(
+        #         'c:/Users/406239/OneDrive - (株)NHKテクノロジーズ/デスクトップ/★勤務確認などのダウンロードデータ★/Emily_Files/Emily_anken.xlsx',
+        #         engine='openpyxl', mode='a', if_sheet_exists='replace') as writer:
+        with pd.ExcelWriter(anken_file_name,engine='openpyxl', mode='a', if_sheet_exists='replace') as writer:
             df_new.to_excel(writer, sheet_name=str(ym) + '案件番号', index=[0])
         # df_new.to_excel('c:/Users/406239/OneDrive - (株)NHKテクノロジーズ/デスクトップ/★勤務確認などのダウンロードデータ★/Emily_Files/Emily_anken.xlsx',sheet_name = str(ym)+'案件番号')
     else:
@@ -626,9 +633,10 @@ while True:#無限ループ。複数の人の案件作成したいときに、�
         print(df_anken)
         # df_new = pd.concat([df,df_anken])
         # print(df_new)
-        with pd.ExcelWriter(
-                'c:/Users/406239/OneDrive - (株)NHKテクノロジーズ/デスクトップ/★勤務確認などのダウンロードデータ★/Emily_Files/Emily_anken.xlsx',
-                engine='openpyxl', mode='a', if_sheet_exists='replace') as writer:
+        # with pd.ExcelWriter(
+        #         'c:/Users/406239/OneDrive - (株)NHKテクノロジーズ/デスクトップ/★勤務確認などのダウンロードデータ★/Emily_Files/Emily_anken.xlsx',
+        #         engine='openpyxl', mode='a', if_sheet_exists='replace') as writer:
+        with pd.ExcelWriter(anken_file_name,engine='openpyxl', mode='a', if_sheet_exists='replace') as writer:
             df_anken.to_excel(writer, sheet_name=str(ym) + '案件番号', index=[0])
 
         # df_new.to_excel('c:/Users/406239/OneDrive - (株)NHKテクノロジーズ/デスクトップ/★勤務確認などのダウンロードデータ★/Emily_Files/Emily_anken.xlsx',sheet_name = str(ym)+'案件番号')
@@ -647,7 +655,9 @@ while True:#無限ループ。複数の人の案件作成したいときに、�
 
 
     # set input file name
-    inputfile = 'c:/Users/406239/OneDrive - (株)NHKテクノロジーズ/デスクトップ/★勤務確認などのダウンロードデータ★/Emily_Files/Emily_anken.xlsx'
+    # inputfile = 'c:/Users/406239/OneDrive - (株)NHKテクノロジーズ/デスクトップ/★勤務確認などのダウンロードデータ★/Emily_Files/Emily_anken.xlsx'
+
+    inputfile = anken_file_name
 
     # read input xlsx
     wb1 = xl.load_workbook(filename=inputfile)
