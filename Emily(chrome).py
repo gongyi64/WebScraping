@@ -7,7 +7,16 @@ import pandas as pd
 import re
 import openpyxl
 
-manNos = ('827861 相庭直史','406239 白川公一','380672 三角和浩','378035 岩田貴夫','805519 仲本祥子','880079 砂川航輝','806185 辻ひかる','880334   山城実咲','880518 古波蔵晃久','410993 黒岩英次','710463 山城徳松')
+file_name = sg.popup_get_file('社員番号、氏名、パスワードの読み込みに使用するファイルを選択してください。')  # 使用する出力したの勤務チェック用のファイルを選択
+
+df = pd.read_excel(file_name,sheet_name = 'Pass')#sheet_name ＝　Pass　に、pwd　を保存している。
+manNos = []
+for i in range(len(df['氏名'])):
+    manNos.append(str(df['社員番号'][i])+' '+df['氏名'][i])
+
+print(manNos)
+
+#manNos = ('827861 相庭直史','406239 白川公一','380672 三角和浩','378035 岩田貴夫','805519 仲本祥子','880079 砂川航輝','806185 辻ひかる','880334   山城実咲','880518 古波蔵晃久','410993 黒岩英次','710463 山城徳松')
 
 #manNos = ('827861 相庭直史　ap827861','406239 白川公一　ap406239','380672 三角和浩　ap380672','378035 岩田貴夫　ap378035','805519 仲本祥子   ap805519','880079 砂川航輝　ap880079','806185 辻ひかる　ap806185','880334   山城実咲 ap880334','880518 古波蔵晃久 ap880518','410993 黒岩英次   ap410993','710463 山城徳松   ap710463')
 
@@ -97,7 +106,9 @@ sg.popup_ok('Emilyへログインします！',title = 'OK？')
 # 起動時にオプションをつける。（ポート指定により、起動済みのブラウザのドライバーを取得）
 # driver_path = "C:\\Users\\406239\\AppData\\Local\\Programs\\Python\\Python39\\chromedriver_binary\\chromedriver.exe"
 
-driver_path = "C:\\Users\\406239\\PycharmProjects\\pythonProject1\\chromedriver_binary\\chromedriver.exe"
+# driver_path = "C:\\Users\\406239\\PycharmProjects\\pythonProject1\\chromedriver_binary\\chromedriver.exe"
+
+driver_path = sg.popup_get_file('使用する最新chromedriverファイルを選択してください。')  # 使用するchromeのドライバーファイルを選択
 
 #2023_11_09 chromdriver　118→119　更新
 
@@ -131,7 +142,7 @@ driver.implicitly_wait(2)
 
 #Emily_Pass.xlsxがパスワード保管ファイル
 
-file_name = 'c:/Users/406239/OneDrive - (株)NHKテクノロジーズ/デスクトップ/★勤務確認などのダウンロードデータ★/Emily_Files/Emily_Pass.xlsx'
+# file_name = 'c:/Users/406239/OneDrive - (株)NHKテクノロジーズ/デスクトップ/★勤務確認などのダウンロードデータ★/Emily_Files/Emily_Pass.xlsx'
 
 
 df = pd.read_excel(file_name)
@@ -238,6 +249,8 @@ print(handle_array[1])
 
 driver.switch_to.window(handle_array[1])
 
+anken_file_name = sg.popup_get_file('案件番号の書き出し読み出しに使用するファイルを選択してください。')  # 案件番号を保存、読みだすExcelファイルを選択
+
 #------------案件番号取得用年月入力=====================
 
 sg.theme('SystemDefault')
@@ -268,9 +281,13 @@ window.close()
 
 #==========================案件番号取得ルーチン　20230123実装===============
 
-file_name = pd.ExcelFile( r'c:/Users/406239/OneDrive - (株)NHKテクノロジーズ/デスクトップ/★勤務確認などのダウンロードデータ★/Emily_Files/Emily_anken.xlsx')
+# file_name = pd.ExcelFile( r'c:/Users/406239/OneDrive - (株)NHKテクノロジーズ/デスクトップ/★勤務確認などのダウンロードデータ★/Emily_Files/Emily_anken.xlsx')
 
-wb = openpyxl.load_workbook('c:/Users/406239/OneDrive - (株)NHKテクノロジーズ/デスクトップ/★勤務確認などのダウンロードデータ★/Emily_Files/Emily_anken.xlsx')
+file_name = pd.ExcelFile(anken_file_name)
+
+# wb = openpyxl.load_workbook('c:/Users/406239/OneDrive - (株)NHKテクノロジーズ/デスクトップ/★勤務確認などのダウンロードデータ★/Emily_Files/Emily_anken.xlsx')
+
+wb = openpyxl.load_workbook(anken_file_name)
 
 target_name = str(ym) + '案件番号'
 
