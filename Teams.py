@@ -86,9 +86,12 @@ sg.popup_ok('機材TEAMSへログインします！',title = 'OK？')
 # 起動時にオプションをつける。（ポート指定により、起動済みのブラウザのドライバーを取得）
 # driver_path = "C:\\Users\\406239\\AppData\\Local\\Programs\\Python\\Python39\\chromedriver_binary\\chromedriver.exe"
 
-driver_path = "C:\\Users\\406239\\PycharmProjects\\pythonProject1\\chromedriver_binary\\chromedriver.exe"
 
-#2023_11_09 chromdriver　118→119　更新 2024\01\15 chromedriver　119→121更新
+driver_path = sg.popup_get_file('使用する最新chromedriverファイルを選択してください。')  # 使用するchromeのドライバーファイルを選択
+
+# driver_path = "C:\\Users\\406239\\PycharmProjects\\pythonProject1\\chromedriver_binary\\chromedriver.exe"
+
+#2023_11_09 chromdriver　118→119　更新 2024\01\15 chromedriver　119→121更新20240204 外部ファイルから取得に変更
 
 driver = webdriver.Chrome(service=ChromeService(driver_path))
 #
@@ -204,7 +207,7 @@ files = os.listdir(dir_path)
 
 print(files)#ダウンロードフォルダへ格納させたファイル名取得。このファイルで必要なものを抽出して所望のファルダへ移動させる。日付の後が大きいものが最新。
 
-files_in = [s for s in files if '202401' in s]#出力した月の中で最新のもの
+files_in = [s for s in files if num in s]#出力した月の中で最新のもの
 
 print(files_in)
 
