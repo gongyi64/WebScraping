@@ -10,8 +10,9 @@ import PySimpleGUI as sg
 import re
 import pandas as pd
 import openpyxl
-
-file_name = sg.popup_get_file('社員番号、氏名、パスワードの読み込みに使用するファイルを選択してください。')  # 使用する出力したの勤務チェック用のファイルを選択
+from selenium.webdriver.support.wait import WebDriverWait
+from selenium.common import NoSuchElementException, ElementNotInteractableException
+file_name = sg.popup_get_file('社員番号、氏名、パスワードの読み込みに使用するファイルを選択してください。',title ='社員番号とパスワードファイルの選択')  # 使用する出力したの勤務チェック用のファイルを選択
 
 #file_name = 'c:/Users/406239/OneDrive - (株)NHKテクノロジーズ/デスクトップ/★勤務確認などのダウンロードデータ★/Emily_Files/Emily_Pass.xlsx'#Emily_Pass.xlsxが、マンナンバー、氏名、パスワード保管ファイル
 df = pd.read_excel(file_name,sheet_name = 'Pass')#sheet_name ＝　Pass　に、pwd　を保存している。
@@ -121,6 +122,8 @@ import time
 import calendar
 from selenium.webdriver.support.ui import Select
 
+import os
+import signal
 
 from selenium.webdriver.common.by import By
 
@@ -146,7 +149,7 @@ sg.popup_ok(f'Emilyへ{eplyName}でログインします',title = 'LOGIN')
 
 # 起動時にオプションをつける。（ポート指定により、起動済みのブラウザのドライバーを取得）
 # driver_path = "C:\\Users\\406239\\AppData\\Local\\Programs\\Python\\Python39\\chromedriver_binary\\chromedriver.exe"
-driver_path = sg.popup_get_file('使用する最新chromedriverファイルを選択してください。')  # 使用するchromeのドライバーファイルを選択
+driver_path = sg.popup_get_file('使用するgoogle chromeのVerに合ったchromedriverファイルを選択してください。',title = 'chromedriverの選択')  # 使用するchromeのドライバーファイルを選択
 #driver_path = "C:\\Users\\406239\\PycharmProjects\\pythonProject1\\chromedriver_binary\\chromedriver.exe"
 
 #2023_11_09 chromdriver　118→119　更新
@@ -279,6 +282,7 @@ while True:#無限ループ。複数の人の案件作成したいときに、�
             window['-text1-'].update(values['-NM-'][0])
             input_eplyNo = values['-NM-'][0]
             eplyName = re.sub(r"[0-9]+", "", input_eplyNo)#社員番号と名前から社員番号削除してフルネームのみに。
+            eplyNo = re.findall(r'\d+', input_eplyNo)#社員番号と名前から名前削除して社員番号のみに。
             window.close()
 
     window.close()
@@ -287,7 +291,8 @@ while True:#無限ループ。複数の人の案件作成したいときに、�
 
     driver.implicitly_wait(3)
 
-
+    print('案件を作成する人のマンナンバー')
+    print(eplyNo)
 
 
 
@@ -338,7 +343,7 @@ while True:#無限ループ。複数の人の案件作成したいときに、�
 
     driver.switch_to.frame(1)#iFrameの最初に切り替え。２つあるが、2番目（1）のiFrameに切り替える。
 
-    monthday = str(calendar.monthrange(2024,6)[1])
+    # monthday = str(calendar.monthrange(2024,6)[1])
 
     ym = str(ym)
 
@@ -579,9 +584,84 @@ while True:#無限ループ。複数の人の案件作成したいときに、�
     #
     print(anken_data)
 
+    driver.find_element(By.XPATH, '//*[@id="TabItem1"]/span').click()#前タブに戻す。
+
+    time.sleep(2)
+
+    driver.find_element(By.XPATH, '//*[@id="TabItem2"]/span').click()#元タブに戻す。要員割り当て釦を有効化
+
+    time.sleep(2)
+
+    handle_array = driver.window_handles
+    #
+    # # print("別ページに切り替えた後のhandle_arrayの表示配列最初と次")#windowshandleは2つ結局かわらす。
+    # print(handle_array[0])
+    # print(handle_array[1])
+    #
+    #
+    driver.switch_to.window(handle_array[1])
+
+    driver.switch_to.frame(1)  # iFrameの最初に切り替え。２つあるが、2番目（1）のiFrameに切り替える。
+
+    driver.find_element(By.XPATH,'//*[@id="PersonnelAssignmentButton"]/span').click()#要員割り当てをクリック
+    # PersonnelAssignmentButton > span#CSSSelector
+
+    time.sleep(5)
+
+
+#要員割り当てページに遷移
+
+
+    # os.kill(driver.service.process.pid,signal.SIGTERM)#ブラウザが閉じるのを止める。開きっぱなしにする。
+
+    # ===========================================================================================================
+    # ここから、要員配置ルーチン
+    handle_array = driver.window_handles
+
+    print("要員割り当てページに切り替えた後のhandle_arrayの表示配列最初と次")#windowshandleは2つ結局かわらす。
+    print(handle_array[0])
+    print(handle_array[1])
+
+
+    driver.switch_to.window(handle_array[1])
+
+    driver.switch_to.frame(2)  # iFrameの最初に切り替え。２つあるが、2番目（1）のiFrameに切り替える。
+
+    time.sleep(1)
+
+    # wait = WebDriverWait(driver, timeout=2)
+    # wait.until(lambda d : revealed.is_displayed())
+
+    # driver.find_element(By.XPATH,'//*[@id="DataGrid1__ctl2"]/td[2]').click()#休日の欄をクリック。
+    driver.find_element(By.XPATH,'//*[@id="DataGrid1__ctl2"]/td[2]/table/tbody/tr/td').click()
+
+    time.sleep(2)
+
+    # driver.find_element(By.XPATH, '//*[@id="DataGrid1__ctl2"]/td[2]').click()#要員の欄をクリック
+
+    driver.find_element(By.XPATH, '//*[@id="DataGrid1__ctl2_EditEmpCodeText"]').send_keys(eplyNo)  # 要員に社員番号入力作る社員番号に変更する.eplyNoは、ログイン後、案件作成の番号に書き換えているので注意。
+
+    driver.find_element(By.XPATH,'/html/body').click()#エンターを押して、次メニューに更新。
+
+    time.sleep(1)
+
+    driver.find_element(By.XPATH, '//*[@id="DataGrid1__ctl2_EditUpdateDtlButton"]/span').click()  # 小さい更新を押す。
+
+    time.sleep(1)
+
+    driver.find_element(By.XPATH, '//*[@id="UpdateButton"]/span').click()  # さらに全体の更新を押す。
+
+    alert = driver.switch_to.alert#更新しますか？アラートの解除
+    print(alert.text)
+    alert.accept()
+    time.sleep(1)
+    # ===========================================================================================================
+
     driver.find_element(By.XPATH,'//*[@id="CloseButton"]/span').click()#閉じる釦（これをやらないとずっと更新中となり、案件削除できなくなるので注意）
 
     # sg.popup_ok(str(ym)+eplyName+'の案件番号'+anken_No,title = '案件番号')#ポップアップで案件番号表示。（案件番号は、一応取得済みなので見るだけ）
+
+    # os.kill(driver.service.process.pid,signal.SIGTERM)#ブラウザが閉じるのを止める。開きっぱなしにする。
 
 
 
