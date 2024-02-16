@@ -48,6 +48,10 @@ Bumon = df1[df1['明細'] == '実施担当部門番号']
 
 Bumon_No = Bumon.iat[0,1]
 
+kyoku = df1[df1['明細'] == '実施局']
+
+kyokumei = kyoku.iat[0,1]
+
 sg.theme('Python')
 
 layout =[[sg.Text('[NT_Emily_自動操作ソフト]',font = ('Noto Serif CJK JP',14))],
@@ -251,14 +255,23 @@ time.sleep(3)
 
 driver.find_element(By.XPATH, '//*[@id="c_11"]').click()  # 個別案件/要員をクリック
 time.sleep(2)
-
+#
 driver.find_element(By.XPATH,'//*[@id="Form1"]/table/tbody/tr/td/table[2]/tbody/tr/td[2]/div[3]/table/tbody/tr/td[1]/div/a[2]').click()  # 182_個別案件入力をクリック
 # driver.find_element(By.XPATH,'//*[@id="Form1"]/table/tbody/tr/td/table[2]/tbody/tr/td[2]/div[3]/table/tbody/tr/td[1]/div/a[2]').click()
-time.sleep(2)
+time.sleep(2)#下のループに入れた20240216
 
 anken_file_name = sg.popup_get_file('案件番号の書き出し読み出しに使用するファイルを選択してください。')  # 案件番号を保存、読みだすExcelファイルを選択
 
 while True:#無限ループ。複数の人の案件作成したいときに、繰り返し。
+    driver.find_element(By.XPATH, '/html/body').send_keys(Keys.ENTER)  # エンターを押して、次メニューに更新。
+
+    # driver.find_element(By.XPATH, '//*[@id="c_11"]').click()  # 個別案件/要員をクリック
+    #
+    # time.sleep(2)
+    # # driver.switch_to.frame(1)
+    # # driver.find_element(By.XPATH, '//*[@id="Form1"]/table/tbody/tr/td/table[2]/tbody/tr/td[2]/div[3]/table/tbody/tr/td[1]/div/a[2]').click()  # 182_個別案件入力をクリック
+    # # driver.find_element(By.XPATH,'//*[@id="Form1"]/table/tbody/tr/td/table[2]/tbody/tr/td[2]/div[3]/table/tbody/tr/td[1]/div/a[2]').click()
+    # time.sleep(2)
 
     sg.theme('SystemDefault')
 
@@ -635,7 +648,7 @@ while True:#無限ループ。複数の人の案件作成したいときに、�
     # driver.find_element(By.XPATH,'//*[@id="DataGrid1__ctl2"]/td[2]').click()#休日の欄をクリック。
     driver.find_element(By.XPATH,'//*[@id="DataGrid1__ctl2"]/td[2]/table/tbody/tr/td').click()
 
-    time.sleep(2)
+    time.sleep(1)
 
     # driver.find_element(By.XPATH, '//*[@id="DataGrid1__ctl2"]/td[2]').click()#要員の欄をクリック
 
@@ -659,11 +672,29 @@ while True:#無限ループ。複数の人の案件作成したいときに、�
 
     driver.find_element(By.XPATH,'//*[@id="CloseButton"]/span').click()#閉じる釦（これをやらないとずっと更新中となり、案件削除できなくなるので注意）
 
+    handle_array = driver.window_handles
+
+    print("元のページに戻った後のhandle_arrayの表示配列最初と次")  # windowshandleは2つ結局かわらす。
+    print(handle_array[0])
+    print(handle_array[1])
+
+    driver.switch_to.window(handle_array[1])
+
     # sg.popup_ok(str(ym)+eplyName+'の案件番号'+anken_No,title = '案件番号')#ポップアップで案件番号表示。（案件番号は、一応取得済みなので見るだけ）
+
+    time.sleep(1)
+    driver.maximize_window()
 
     # os.kill(driver.service.process.pid,signal.SIGTERM)#ブラウザが閉じるのを止める。開きっぱなしにする。
 
+    driver.switch_to.frame(1)
 
+   # driver.find_element(By.ID, 'F12Button').click()  # 閉じて改めて、個別案件作成F1
+    #driver.find_element(By.XPATH, '//*[@id="F12Button"]').click()  # 閉じて改めて、個別案件作成F12？
+    driver.find_element(By.XPATH,'//*[@id="CloseButton"]/span').click()
+    # driver.find_element(By.TAG_NAME,'body').send_keys(Keys.F12)
+
+    time.sleep(2)
 
     # if ym == 202404:
     # bk = pd.ExcelFile(r'c:/Users/406239/OneDrive - (株)NHKテクノロジーズ/デスクトップ/★勤務確認などのダウンロードデータ★/Emily_Files/Emily_anken.xlsx')
@@ -763,7 +794,7 @@ while True:#無限ループ。複数の人の案件作成したいときに、�
         wb1.save(inputfile)
 
 
-#====================================================以上案径作成プログラム
+#====================================================以上案件作成プログラム
 
     sg.theme('SystemDefault')
     layout = [[sg.Text('続けて別の人の案件作成しますか？', text_color='#FF0000', font=('meiryo,6'))],
