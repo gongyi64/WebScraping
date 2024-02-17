@@ -53,6 +53,33 @@ kyoku = df1[df1['明細'] == '実施局']
 
 kyokumei = kyoku.iat[0,1]
 
+#=========================================================================
+
+kyokumei_dict = {'熊本':86,'長崎':87,'鹿児島':88,'宮崎':89,'大分':90,'佐賀':91,'沖縄':92}#業務実施局のプルダウン入力の順番
+jigyou_dict = {'熊本':16,'長崎':17,'鹿児島':18,'宮崎':19,'大分':20,'佐賀':21,'沖縄':22}#事業所の入力のプルダウン入力の順番
+
+if kyokumei in kyokumei_dict:
+    kyoku_pulldown_No  = kyokumei_dict[kyokumei]
+else:
+    print('その局には対応していません。')
+    kyoku_pulldown_No = 0
+    sg.popup_ok('その局には対応していません。福岡・北九州以外の九州各局のみです。',title = 'エラー')#ポップアップでエラー表示。
+
+if kyokumei in jigyou_dict:
+    jigyou_pulldown_No  = jigyou_dict[kyokumei]
+else:
+    print('その局には対応していません。')
+    jigyou_pulldown_No = 0
+    sg.popup_ok('その局には対応していません。福岡・北九州以外の九州各局のみです。', title='エラー')  # ポップアップでエラー表示。
+
+
+
+
+
+
+
+#=========================================================================
+
 sg.theme('Python')
 
 layout = [[sg.Text('[NT_Emily_自動操作(案件自動作成）ツール]', font=('Noto Serif CJK JP', 14))],
@@ -342,7 +369,10 @@ while True:#無限ループ。複数の人の案件作成したいときに、�
 
     select = Select(dropdown)
 
-    select.select_by_index(92)#沖縄事業所をドロップダウンで選択→変更してよいかと言われるのでアラート解除を下に追加。
+
+    # select.select_by_index(92)#沖縄事業所をドロップダウンで選択→変更してよいかと言われるのでアラート解除を下に追加。
+
+    select.select_by_index(kyoku_pulldown_No)  # 取り込んだファイルから局名判定し、その事業所をフルダウンかラ選択。業務実施区分
 
     handle_array = driver.window_handles
 
@@ -450,7 +480,9 @@ while True:#無限ループ。複数の人の案件作成したいときに、�
     dropdown3 = driver.find_element(By.XPATH,'//*[@id="AcceptFormDtl1List"]')
     select = Select(dropdown3)
 
-    select.select_by_index(22)#沖縄事業所をドロップダウンで選択→プロジェクト入力で自動入力されるのでそのまま
+    # select.select_by_index(22)#沖縄事業所をドロップダウンで選択→プロジェクト入力で自動入力されるのでそのまま
+
+    select.select_by_index(jigyou_pulldown_No)  # 取り込んだファイルから局名判定した場所をプルダウンからセレクト【受注形態詳細１】
 
     driver.find_element(By.XPATH,'/html/body').click()#エンターを押して、次メニューに更新。
 
@@ -518,6 +550,8 @@ while True:#無限ループ。複数の人の案件作成したいときに、�
     select = Select(dropdown)
 
     select.select_by_index(28)
+
+    # select.select_by_value('休日')
 
     time.sleep(2)
 
