@@ -1,7 +1,7 @@
-# pySimpleGUI Version---Emily 自動ログインツール　202401
-#Emilyへ自動ログインして、各自のメニューにアクセスする。案件制作を自動で。Ver.
+# pySimpleGUI Version---Emily 自動ログイン案件作成ツール　202402
+#Emilyへ自動ログインして、各自のメニューにアクセスする。案件制作を自動で。Ver.案件作成後、その案件に要員も割り当てる。
 #社員番号、氏名、パスワードを収納しているファイル　　Emily＿Pass
-#作成した案件番号を月のシートごとに収納するファイル　anken_emily.xlsx
+#作成した案件番号を月のシートごとに収納するファイル　anken_emily.xlsx要員実績入力作成も、この案件を読みだして作成。
 #chromedoriverの場所が微妙なので、上と同じフォルダに配置して、それを選択させるように変更。20240201
 
 
@@ -12,6 +12,7 @@ import pandas as pd
 import openpyxl
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.common import NoSuchElementException, ElementNotInteractableException
+sg.theme('SandyBeach')
 file_name = sg.popup_get_file('社員番号、氏名、パスワードの読み込みに使用するファイルを選択してください。',title ='社員番号とパスワードファイルの選択')  # 使用する出力したの勤務チェック用のファイルを選択
 
 #file_name = 'c:/Users/406239/OneDrive - (株)NHKテクノロジーズ/デスクトップ/★勤務確認などのダウンロードデータ★/Emily_Files/Emily_Pass.xlsx'#Emily_Pass.xlsxが、マンナンバー、氏名、パスワード保管ファイル
@@ -54,30 +55,33 @@ kyokumei = kyoku.iat[0,1]
 
 sg.theme('Python')
 
-layout =[[sg.Text('[NT_Emily_自動操作ソフト]',font = ('Noto Serif CJK JP',14))],
+layout = [[sg.Text('[NT_Emily_自動操作(案件自動作成）ツール]', font=('Noto Serif CJK JP', 14))],
 
-         [sg.Text('[Emilyに誰でログインしますか？] ',font = ('meiryo',10))],
+          [sg.Text('[Emilyに誰でログインしますか？下のリストより選択して\n入力ボタンを押してください。] ', font=('meiryo', 10))],
 
-         [sg.Listbox(manNos,size =(25,len(manNos)),key='-MN-')],
+          [sg.Listbox(manNos, size=(25, len(manNos)), key='-MN-')],
 
-         [sg.Text('Text', key = '-text1-')],
+          [sg.Button('入力', button_color=('yellow', '#808080'), key='-INPUT-'), sg.Text('【選択氏名】',text_color = 'white', key='-text1-'),
+           sg.Text('氏名確認後、ログイン開始!')],
 
-         [sg.Button('実行', button_color=('red','#808080'),key = '-SUBMIT-')]]
+          [sg.Button('ログイン開始', button_color=('red', '#808080'), key='-SUBMIT-')]]
 
 window = sg.Window('Emily_APP',layout,size = (500,350))
 
-
-
 while True:
-    event,values = window.read()
+    event, values = window.read()
 
     if event == sg.WIN_CLOSED:
         break
 
-    elif event == '-SUBMIT-':
+    elif event == '-INPUT-':
+
         window['-text1-'].update(values['-MN-'][0])
+
+    elif event == '-SUBMIT-':
         input_eplyNo = values['-MN-'][0]
 
+        window.close()
 
 window.close()
 
@@ -153,7 +157,7 @@ sg.popup_ok(f'Emilyへ{eplyName}でログインします',title = 'LOGIN')
 
 # 起動時にオプションをつける。（ポート指定により、起動済みのブラウザのドライバーを取得）
 # driver_path = "C:\\Users\\406239\\AppData\\Local\\Programs\\Python\\Python39\\chromedriver_binary\\chromedriver.exe"
-driver_path = sg.popup_get_file('使用するgoogle chromeのVerに合ったchromedriverファイルを選択してください。',title = 'chromedriverの選択')  # 使用するchromeのドライバーファイルを選択
+driver_path = sg.popup_get_file('使用するGoogle chromeブラウザのバージョンに合ったファイル(chromedriver.exe)を選択してください。',title = 'chromedriverの選択')  # 使用するchromeのドライバーファイルを選択
 #driver_path = "C:\\Users\\406239\\PycharmProjects\\pythonProject1\\chromedriver_binary\\chromedriver.exe"
 
 #2023_11_09 chromdriver　118→119　更新
@@ -260,7 +264,7 @@ driver.find_element(By.XPATH,'//*[@id="Form1"]/table/tbody/tr/td/table[2]/tbody/
 # driver.find_element(By.XPATH,'//*[@id="Form1"]/table/tbody/tr/td/table[2]/tbody/tr/td[2]/div[3]/table/tbody/tr/td[1]/div/a[2]').click()
 time.sleep(2)#下のループに入れた20240216
 
-anken_file_name = sg.popup_get_file('案件番号の書き出し読み出しに使用するファイルを選択してください。')  # 案件番号を保存、読みだすExcelファイルを選択
+anken_file_name = sg.popup_get_file('案件番号の書き出し・読み出しに使用するExcelファイル(.xlsx)を選択してください。')  # 案件番号を保存、読みだすExcelファイルを選択
 
 while True:#無限ループ。複数の人の案件作成したいときに、繰り返し。
     driver.find_element(By.XPATH, '/html/body').send_keys(Keys.ENTER)  # エンターを押して、次メニューに更新。
@@ -278,21 +282,22 @@ while True:#無限ループ。複数の人の案件作成したいときに、�
     layout = [[sg.Text('案件作成年月を入力',text_color='#FF0000',font =( 'meiryo,6')),sg.InputText(size = (10,2),key= '-YM-')],
           # [sg.Text('誰の案件？',text_color='#FF0000',font =( 'meiryo,8')),sg.InputText(size = (10,2),key= '-NM-')],
               [sg.Listbox(manNos,size =(25,len(manNos)),key='-NM-')],
-              [sg.Text('Text', key = '-text1-')],
-              [sg.Button('入力', button_color=('red', '#808080'), key='-SUBMIT-'),
-               sg.Text('入力ボタンを押した後,Windowを閉じてください。\nここから手動操作したいとき（新規案件作成以外）は、\n何も入力せずにそのままWindowを閉じてください。', font=('Noto Serif CJK JP', 10))]]
+              [sg.Button('入力', button_color=('yellow', '#808080'), key='-INPUT-'),sg.Text('案件作成氏名', key = '-text1-')],
+              [sg.Button('案件作成開始', button_color=('red', '#808080'), key='-SUBMIT-'),
+               sg.Text('年月を入力し、案件作成対象の氏名を選択して、\n案件作成開始ボタンを押すと\nその人の案件を作成します。\nここから手動操作したいとき（新規案件作成以外）は、\n何も入力せずにそのままWindowを閉じてください。\nその後から手動で操作できます。', font=('Noto Serif CJK JP', 10))]]
 
-    window = sg.Window('案件自動作成ツール', layout, size=(500, 500))
+    window = sg.Window('案件作成する年月・社員の選択', layout, size=(500, 500))
 
     while True:
         event,values = window.read()
 
         if event == sg.WIN_CLOSED:
             break
-
+        elif event == '-INPUT-':
+            window['-text1-'].update(values['-NM-'][0])
         elif event == '-SUBMIT-':
             ym = values['-YM-']
-            window['-text1-'].update(values['-NM-'][0])
+            # window['-text1-'].update(values['-NM-'][0])
             input_eplyNo = values['-NM-'][0]
             eplyName = re.sub(r"[0-9]+", "", input_eplyNo)#社員番号と名前から社員番号削除してフルネームのみに。
             eplyNo = re.findall(r'\d+', input_eplyNo)#社員番号と名前から名前削除して社員番号のみに。
@@ -800,7 +805,7 @@ while True:#無限ループ。複数の人の案件作成したいときに、�
     layout = [[sg.Text('続けて別の人の案件作成しますか？', text_color='#FF0000', font=('meiryo,6'))],
               [sg.Button('はい', button_color=('red', '#808080'), key='-YES-'),
                sg.Button('いいえ', button_color=('blue', '#808080'), key='-NO-'),
-               sg.Text('処理中断したいときは、Windowを閉じてください。', font=('Noto Serif CJK JP', 10))]]
+               sg.Text('処理中断したいときは、いいえを押すか、Windowを閉じてください。\nログインしたまま、引き続き手動操作ができます。', font=('Noto Serif CJK JP', 10))]]
     window = sg.Window('案件自動作成ツール', layout, size=(600, 150))
     event, values = window.read()
     if event == '-YES-':
