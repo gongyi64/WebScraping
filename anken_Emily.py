@@ -53,24 +53,26 @@ kyoku = df1[df1['明細'] == '実施局']
 
 kyokumei = kyoku.iat[0,1]
 
-#=========================================================================
+jigyousho = kyokumei+'事業所'
 
-kyokumei_dict = {'熊本':86,'長崎':87,'鹿児島':88,'宮崎':89,'大分':90,'佐賀':91,'沖縄':92}#業務実施局のプルダウン入力の順番
-jigyou_dict = {'熊本':16,'長崎':17,'鹿児島':18,'宮崎':19,'大分':20,'佐賀':21,'沖縄':22}#事業所の入力のプルダウン入力の順番
+#=========================================================================index入力する際のdeict読み込みルーチン（使用しない）
 
-if kyokumei in kyokumei_dict:
-    kyoku_pulldown_No  = kyokumei_dict[kyokumei]
-else:
-    print('その局には対応していません。')
-    kyoku_pulldown_No = 0
-    sg.popup_ok('その局には対応していません。福岡・北九州以外の九州各局のみです。',title = 'エラー')#ポップアップでエラー表示。
-
-if kyokumei in jigyou_dict:
-    jigyou_pulldown_No  = jigyou_dict[kyokumei]
-else:
-    print('その局には対応していません。')
-    jigyou_pulldown_No = 0
-    sg.popup_ok('その局には対応していません。福岡・北九州以外の九州各局のみです。', title='エラー')  # ポップアップでエラー表示。
+# kyokumei_dict = {'熊本':86,'長崎':87,'鹿児島':88,'宮崎':89,'大分':90,'佐賀':91,'沖縄':92}#業務実施局のプルダウン入力の順番
+# jigyou_dict = {'熊本':16,'長崎':17,'鹿児島':18,'宮崎':19,'大分':20,'佐賀':21,'沖縄':22}#事業所の入力のプルダウン入力の順番
+#
+# if kyokumei in kyokumei_dict:
+#     kyoku_pulldown_No  = kyokumei_dict[kyokumei]
+# else:
+#     print('その局には対応していません。')
+#     kyoku_pulldown_No = 0
+#     sg.popup_ok('その局には対応していません。福岡・北九州以外の九州各局のみです。',title = 'エラー')#ポップアップでエラー表示。
+#
+# if kyokumei in jigyou_dict:
+#     jigyou_pulldown_No  = jigyou_dict[kyokumei]
+# else:
+#     print('その局には対応していません。')
+#     jigyou_pulldown_No = 0
+#     sg.popup_ok('その局には対応していません。福岡・北九州以外の九州各局のみです。', title='エラー')  # ポップアップでエラー表示。
 
 
 
@@ -184,6 +186,7 @@ sg.popup_ok(f'Emilyへ{eplyName}でログインします',title = 'LOGIN')
 
 # 起動時にオプションをつける。（ポート指定により、起動済みのブラウザのドライバーを取得）
 # driver_path = "C:\\Users\\406239\\AppData\\Local\\Programs\\Python\\Python39\\chromedriver_binary\\chromedriver.exe"
+sg.theme('SandyBeach')
 driver_path = sg.popup_get_file('使用するGoogle chromeブラウザのバージョンに合ったファイル(chromedriver.exe)を選択してください。',title = 'chromedriverの選択')  # 使用するchromeのドライバーファイルを選択
 #driver_path = "C:\\Users\\406239\\PycharmProjects\\pythonProject1\\chromedriver_binary\\chromedriver.exe"
 
@@ -270,7 +273,9 @@ print(dropdown)
 
 select = Select(dropdown)
 
-select.select_by_index(1)
+# select.select_by_index(1)
+
+select.select_by_visible_text('M技_管理')
 
 
 
@@ -304,14 +309,15 @@ while True:#無限ループ。複数の人の案件作成したいときに、�
     # # driver.find_element(By.XPATH,'//*[@id="Form1"]/table/tbody/tr/td/table[2]/tbody/tr/td[2]/div[3]/table/tbody/tr/td[1]/div/a[2]').click()
     # time.sleep(2)
 
-    sg.theme('SystemDefault')
+    sg.theme('Python')
 
-    layout = [[sg.Text('案件作成年月を入力',text_color='#FF0000',font =( 'meiryo,6')),sg.InputText(size = (10,2),key= '-YM-')],
+    layout = [[sg.Text('案件作成年月を入力(6桁数字；例；202404)',text_color='#FF0000',font =( 'meiryo,6')),sg.InputText(size = (10,2),key= '-YM-')],
           # [sg.Text('誰の案件？',text_color='#FF0000',font =( 'meiryo,8')),sg.InputText(size = (10,2),key= '-NM-')],
               [sg.Listbox(manNos,size =(25,len(manNos)),key='-NM-')],
-              [sg.Button('入力', button_color=('yellow', '#808080'), key='-INPUT-'),sg.Text('案件作成氏名', key = '-text1-')],
+              [sg.Button('入力', button_color=('yellow', '#808080'), key='-INPUT-'),sg.Text('【案件年月】', text_color = 'white',key = '-text1-'),
+               sg.Text('【案件作成氏名】',text_color = 'white', key = '-text2-')],
               [sg.Button('案件作成開始', button_color=('red', '#808080'), key='-SUBMIT-'),
-               sg.Text('年月を入力し、案件作成対象の氏名を選択して、\n案件作成開始ボタンを押すと\nその人の案件を作成します。\nここから手動操作したいとき（新規案件作成以外）は、\n何も入力せずにそのままWindowを閉じてください。\nその後から手動で操作できます。', font=('Noto Serif CJK JP', 10))]]
+               sg.Text('年月を入力し、案件作成対象の氏名を選択。\n入力ボタンを押し、入力する年月氏名の確認。\nその後、案件作成開始ボタンを押すと\nその人の案件を作成開始します。\nここから手動操作したいとき（新規案件作成以外）は、\n何も入力せずにそのままWindowを閉じてください。\nその後から手動で操作できます。', font=('Noto Serif CJK JP', 10))]]
 
     window = sg.Window('案件作成する年月・社員の選択', layout, size=(500, 500))
 
@@ -321,7 +327,8 @@ while True:#無限ループ。複数の人の案件作成したいときに、�
         if event == sg.WIN_CLOSED:
             break
         elif event == '-INPUT-':
-            window['-text1-'].update(values['-NM-'][0])
+            window['-text1-'].update(values['-YM-'][:4]+'年'+values['-YM-'][4:]+'月')
+            window['-text2-'].update(values['-NM-'][0])
         elif event == '-SUBMIT-':
             ym = values['-YM-']
             # window['-text1-'].update(values['-NM-'][0])
@@ -372,7 +379,9 @@ while True:#無限ループ。複数の人の案件作成したいときに、�
 
     # select.select_by_index(92)#沖縄事業所をドロップダウンで選択→変更してよいかと言われるのでアラート解除を下に追加。
 
-    select.select_by_index(kyoku_pulldown_No)  # 取り込んだファイルから局名判定し、その事業所をフルダウンかラ選択。業務実施区分
+    # select.select_by_index(kyoku_pulldown_No)  # 取り込んだファイルから局名判定し、その事業所をフルダウンかラ選択。業務実施区分
+
+    select.select_by_visible_text(kyokumei)
 
     handle_array = driver.window_handles
 
@@ -482,7 +491,29 @@ while True:#無限ループ。複数の人の案件作成したいときに、�
 
     # select.select_by_index(22)#沖縄事業所をドロップダウンで選択→プロジェクト入力で自動入力されるのでそのまま
 
-    select.select_by_index(jigyou_pulldown_No)  # 取り込んだファイルから局名判定した場所をプルダウンからセレクト【受注形態詳細１】
+    # select.select_by_index(jigyou_pulldown_No)  # 取り込んだファイルから局名判定した場所をプルダウンからセレクト【受注形態詳細１】
+
+    #==================================福岡・北九州のみ事業所でないので、以下で対応予定================================
+
+    if kyokumei == '北九州':
+        select.select_by_visible_text('運行送出業務')
+        # jigyousho = kyokumei + '分室'
+
+    elif kyokumei != '北九州' and kyokumei == '福岡':
+
+        sg.popup_ok('福岡には、対応していません。',
+                    title='エラー')  # ポップアップでエラー表示。
+
+
+    else:
+        select.select_by_visible_text(jigyousho)
+
+        # jigyousho = kyokumei + '事業所'
+
+
+
+
+    # select.select_by_visible_text(jigyousho)
 
     driver.find_element(By.XPATH,'/html/body').click()#エンターを押して、次メニューに更新。
 
@@ -490,15 +521,19 @@ while True:#無限ループ。複数の人の案件作成したいときに、�
     dropdown4 = driver.find_element(By.XPATH,'//*[@id="AcceptFormDtl2List"]')
     select = Select(dropdown4)
 
-    select.select_by_index(1)
+    # select.select_by_index(1)
+
+    select.select_by_visible_text('N/A')
 
     driver.find_element(By.XPATH,'/html/body').click()#エンターを押して、次メニューに更新。
 
-    dropdown = driver.find_element(By.XPATH, '//*[@id="StationInoutTypeList"]')  # 福岡　NHK局内選択
+    dropdown = driver.find_element(By.XPATH, '//*[@id="StationInoutTypeList"]')  # (福岡)NHK局内選択
 
     select = Select(dropdown)
 
-    select.select_by_index(13)
+    # select.select_by_index(13)
+
+    select.select_by_visible_text('（福岡）ＮＨＫ局内')
 
 
 
@@ -514,7 +549,9 @@ while True:#無限ループ。複数の人の案件作成したいときに、�
 
     select = Select(dropdown)
 
-    select.select_by_index(1)
+    # select.select_by_index(1)
+
+    select.select_by_visible_text('(ﾘｿｰｽ未定/なし)')
 
 
     driver.find_element(By.XPATH,'/html/body').click()#エンターを押して、次メニューに更新。
@@ -549,9 +586,9 @@ while True:#無限ループ。複数の人の案件作成したいときに、�
 
     select = Select(dropdown)
 
-    select.select_by_index(28)
+    # select.select_by_index(28)
 
-    # select.select_by_value('休日')
+    select.select_by_visible_text('休日')
 
     time.sleep(2)
 
@@ -832,6 +869,7 @@ while True:#無限ループ。複数の人の案件作成したいときに、�
     # save xlsx file
         wb1.save(inputfile)
 
+    sg.popup_ok(str(ym)[:4]+'年'+str(ym)[4:]+'月'+eplyName+'の案件番号'+anken_No,title = '作成した案件番号')#ポップアップで案件番号表示。（案件番号は、一応取得済みなので見るだけ）
 
 #====================================================以上案件作成プログラム
 
@@ -858,5 +896,5 @@ while True:#無限ループ。複数の人の案件作成したいときに、�
 
     window.close()
 
-#sg.popup_ok(str(ym)+eplyName+'の案件番号'+anken_No,title = '案件番号')#ポップアップで案件番号表示。（案件番号は、一応取得済みなので見るだけ）
+
 
