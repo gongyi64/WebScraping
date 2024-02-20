@@ -222,7 +222,7 @@ print(dropdown)
 
 select = Select(dropdown)
 
-select.select_by_index(1)
+select.select_by_visible_text('M技_管理')
 
 driver.find_element(By.XPATH,'/html/body').send_keys(Keys.ENTER)#エンターを押して、次メニューに更新。
 
@@ -370,7 +370,8 @@ for i in range(1,nichi+1):
 
     select = Select(dropdown1)
 
-    select.select_by_index(len(select.options)-1)
+    # select.select_by_index(len(select.options)-1
+    select.select_by_visible_text('休日')
 
 
 
@@ -404,7 +405,8 @@ for i in range(1,nichi+1):
 
     select = Select(dropdown2)
 
-    select.select_by_index(1)
+    # select.select_by_index(1)
+    select.select_by_visible_text('担当')
 
     driver.implicitly_wait(10)
 
