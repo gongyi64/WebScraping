@@ -7,7 +7,9 @@ import pandas as pd
 import re
 import openpyxl
 
-file_name = sg.popup_get_file('社員番号、氏名、パスワードの読み込みに使用するファイルを選択してください。')  # 使用する出力したの勤務チェック用のファイルを選択
+sg.theme('SandyBeach')
+
+file_name = sg.popup_get_file('社員番号、氏名、パスワードの読み込みに使用するファイルを選択してください。',title = 'Emily_Pass.xlsxの選択')  # 使用する出力したの勤務チェック用のファイルを選択
 
 df = pd.read_excel(file_name,sheet_name = 'Pass')#sheet_name ＝　Pass　に、pwd　を保存している。
 manNos = []
@@ -30,7 +32,8 @@ layout =[[sg.Text('[NT_Emily_自動操作ソフト]',font = ('Noto Serif CJK JP'
 
          [sg.Listbox(manNos,size =(25,len(manNos)),key='-MN-')],
 
-         [sg.Text('Text', key = '-text1-')],
+         [sg.Button('入力', button_color=('blue','#808080'),key = '-INPUT-'),sg.Text('【ログインする社員名】', key = '-text1-')],
+
 
          [sg.Button('実行', button_color=('red','#808080'),key = '-SUBMIT-')]]
 
@@ -43,11 +46,13 @@ while True:
 
     if event == sg.WIN_CLOSED:
         break
+    elif event == '-INPUT-':
+        window['-text1-'].update(values['-MN-'][0])
 
     elif event == '-SUBMIT-':
-        window['-text1-'].update(values['-MN-'][0])
-        input_eplyNo = values['-MN-'][0]
 
+        input_eplyNo = values['-MN-'][0]
+        window.close()
 
 window.close()
 
@@ -107,9 +112,8 @@ sg.popup_ok('Emilyへログインします！',title = 'OK？')
 # driver_path = "C:\\Users\\406239\\AppData\\Local\\Programs\\Python\\Python39\\chromedriver_binary\\chromedriver.exe"
 
 # driver_path = "C:\\Users\\406239\\PycharmProjects\\pythonProject1\\chromedriver_binary\\chromedriver.exe"
-
-driver_path = sg.popup_get_file('使用する最新chromedriverファイルを選択してください。')  # 使用するchromeのドライバーファイルを選択
-
+sg.theme('SandyBeach')
+driver_path = sg.popup_get_file('使用する最新chromedriverファイルを選択してください。',title = 'chromedriverファイルの選択')  # 使用するchromeのドライバーファイルを選
 #2023_11_09 chromdriver　118→119　更新
 
 driver = webdriver.Chrome(service=ChromeService(driver_path))
@@ -126,6 +130,8 @@ options.add_experimental_option("debuggerAddress", "127.0.0.1:9333")
 # ページのタイトルを表示する
 
 driver.get("https://test9.emily.nhk-tech.co.jp/GRANDIT/CM_AC_03_S01.aspx")
+
+# driver.get("https://product.emily.nhk-tech.co.jp/GRANDIT/")
 
 driver.maximize_window()
 
@@ -253,7 +259,7 @@ anken_file_name = sg.popup_get_file('案件番号の書き出し読み出しに�
 
 #------------案件番号取得用年月入力=====================
 
-sg.theme('SystemDefault')
+sg.theme('Python')
 
 layout = [[sg.Text('要員実績を入力する年月を入れてください。年+月6桁',text_color='#FF0000',font =( 'meiryo,6')),sg.InputText(size = (10,2),key= '-YM-')],
           # [sg.Text('誰の案件？',text_color='#FF0000',font =( 'meiryo,8')),sg.InputText(size = (10,2),key= '-NM-')],
@@ -275,7 +281,7 @@ while True:
         window['-text1-'].update(values['-YM-'])
         # input_eplyNo = values['-NM-'][0]
         # eplyName = re.sub(r"[0-9]+", "", input_eplyNo)#社員番号と名前から社員番号削除してフルネームのみに。
-
+        window.close()
 
 window.close()
 
