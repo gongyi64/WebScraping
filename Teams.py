@@ -4,16 +4,6 @@
 import PySimpleGUI as sg
 
 
-# # selenium 4
-# from selenium import webdriver
-# from selenium.webdriver.chrome.service import Service as ChromeService
-# from webdriver_manager.chrome import ChromeDriverManager
-#
-# driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))
-
-# value = sg.popup_get_file('TEAMSで勤務表をダウンロードします。')#使用するダウンロード済みの勤務表元ファイルを選択
-
-
 sg.theme('Python')
 
 layout =[[sg.Text('[NT勤務自動ダウンロード]',font = ('Noto Serif CJK JP',14))],
@@ -53,22 +43,19 @@ from selenium.webdriver.chrome.service import Service as ChromeService
 import os
 import time
 import datetime
-import sys
 
-import pyexcel as p
-import glob
 
 from selenium.webdriver.support.ui import Select
 
 from selenium.webdriver.common.by import By
 
 time.sleep(3)
-from webdriver_manager.chrome import ChromeDriverManager
+
 
 # driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))
 # driver = webdriver.Chrome(ChromeDriverManager().install())
 #
-# driver.get('https://google.com')
+
 
 #最新のドライバーだとエラーが出るのでその対応策。https://qiita.com/hs2023/questions/ffab105c5692692624ab
 
@@ -77,14 +64,6 @@ options = webdriver.ChromeOptions()
 
 print("========== 機材Teams　ログイン中========== ")
 sg.popup_ok('機材TEAMSへログインします！',title = 'OK？')
-
-
-# service = Service(driver_path)
-# service = Service(executable_path=driver_path)# 2) executable_pathを指定
-# driver = webdriver.Chrome(service=service)# 3) serviceを渡す
-
-# 起動時にオプションをつける。（ポート指定により、起動済みのブラウザのドライバーを取得）
-# driver_path = "C:\\Users\\406239\\AppData\\Local\\Programs\\Python\\Python39\\chromedriver_binary\\chromedriver.exe"
 
 
 driver_path = sg.popup_get_file('使用する最新chromedriverファイルを選択してください。')  # 使用するchromeのドライバーファイルを選択
@@ -198,8 +177,9 @@ print("出力押した")
 time.sleep(15)
 driver.find_element(By.CSS_SELECTOR,'#close > a').click()
 # driver.implicitly_wait(100) #ダウンロードフォルダへ格納　これを別フォルダへ移動させる。
-
 dir_path = "C:\\Users\\406239\\OneDrive - (株)NHKテクノロジーズ\\デスクトップ\\ドキュメント\\Downloads"
+
+# dir_path = 'C:\\Downloads'
 
 # C:\Users\406239\OneDrive - (株)NHKテクノロジーズ\デスクトップ\ドキュメント\Downloads
 
@@ -207,12 +187,16 @@ files = os.listdir(dir_path)
 
 print(files)#ダウンロードフォルダへ格納させたファイル名取得。このファイルで必要なものを抽出して所望のファルダへ移動させる。日付の後が大きいものが最新。
 
-files_in = [s for s in files if num in s]#出力した月の中で最新のもの
+day = datetime.date.today()
+today = str(day)[:4]+str(day)[5:7]
 
+files_in = [s for s in files if today in s]#出力した月の中で最新のもの
+
+print('ファイル名表示')
 print(files_in)
 
 newest_file = max(files_in)#最新ファイルの取得#出力した月の中で最新のもの
-
+print('最新ファイル名表示')
 print(newest_file)
 
 file_name,ext = os.path.splitext(newest_file)
@@ -254,26 +238,18 @@ wb.save(path)
 
 wb.close()
 
+#========================================ExcelのPDF化=========================
+
+# from spire.xls import *
+# from spire.xls.common import *
+#
+# workbook = Workbook()
+# workbook.LoadFromFile(path)
+#
+# workbook.SaveToFile("output/ExcelをPDFに変換.pdf", FileFormat.PDF)
+# workbook.Dispose()
+
+#===================================================================================
 
 
 
-# xls_path = r"C:\Users\406239\OneDrive - (株)NHKテクノロジーズ\デスクトップ\★勤務確認などのダウンロードデータ★\NHK勤務表出力ファイル"
-
-# os.path("xls_path")
-
-# def convert_xls_to_xlsx():
-#     it = glob.glob("*.xls")
-#     for xls in it:
-#         xlsx = "{}".format(xls) + "x"
-#         print(xlsx)
-#         p.save_book_as(file_name='{}'.format(xls), dest_file_name='{}'.format(xlsx))
-#
-# print(sys.argv[0])
-#
-# print(os.listdir(xls_path))
-#
-# print(os.path.isdir(xls_path))
-#
-# convert_xls_to_xlsx()
-#
-# print(os.listdir(xls_path))
