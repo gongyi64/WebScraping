@@ -21,7 +21,7 @@ from selenium.webdriver.support.wait import WebDriverWait
 from selenium.common import NoSuchElementException, ElementNotInteractableException
 
 sg.theme('python')
-layout = [[sg.Text('EMILY入力補助ツール統合版', text_color='#FF0000', font=('meiryo,6'))],
+layout = [[sg.Text('EMILY入力補助ツール統合版', text_color='red',background_color='yellow', font=('meiryo,12'))],
           # [sg.Text('誰の案件？',text_color='#FF0000',font =( 'meiryo,8')),sg.InputText(size = (10,2),key= '-NM-')],
           [sg.Button('ログイン', key='-LOGIN-'),
            sg.Text('押すとEmilyにログインして手動操作できます。', text_color='white', key='-text1-')],
@@ -29,9 +29,9 @@ layout = [[sg.Text('EMILY入力補助ツール統合版', text_color='#FF0000', 
            sg.Text('ログインから案件作成まで自動', text_color='white', key='-text2-')],
 
           [sg.Button('要員実績箱作成ツール', button_color=('red', '#808080'), key='-YOUIN-'),
-           sg.Text('案件作成後の要員実績入力テンプレートの作成', text_color='white', key='-text3-')],
-          [sg.Text('ログイン；　　　　　　　ログインして手動で入力する。\n\n案件作成ツール：　　選択した人でログインし、作成したい月の案件を作成する。\n　　　　　　　　　　　　　それと同時に、案件番号を保存する。',font=('Noto Serif CJK JP', 10))],
-          [sg.Text('要員実績入力ツール；案件作成後、その案件での要員実績の入力用箱を作成する。\n　　　　　　　　　　　　　全日を【休日】でテンプレートを作成し、\n　　　　　　　　　　　　　このテンプレートを手動で訂正し要員実績を作成する。',font=('Noto Serif CJK JP', 10))]]
+           sg.Text('案件作成後の要員実績の作成(準備中）', text_color='red', key='-text3-')],
+          [sg.Text('ログイン；　　　　　　　ログインして手動で入力する。\n\n案件作成ツール：　　選択した人でログインし、作成したい月の案件を作成する。\n　　　　　　　　　　　　　それと同時に、案件番号を保存し、要員配置を行う。',font=('Noto Serif CJK JP', 10))],
+          [sg.Text('要員実績入力ツール；案件作成後、その案件での要員実績を勤務表から作成する。\n　　　　　　　　　　　　　(現在準備中。押しても動作しません。）',font=('Noto Serif CJK JP', 10))]]
 window = sg.Window('Emily入力補助ツール', layout, size=(500, 500))
 
 
@@ -687,6 +687,13 @@ while True:
 
             # os.kill(driver.service.process.pid,signal.SIGTERM)#ブラウザが閉じるのを止める。開きっぱなしにする。
 
+            # driver.find_element(By.XPATH,'//*[@id="BasicTab"]/table[4]/tbody/tr[2]/td[2]')
+            driver.find_element(By.XPATH,'//*[@id="RunningTableRadio_1"]').click()#運行表を作成しないを選択
+            # driver.find_element(By.XPATH,'//*[@id="BasicTab"]/table[4]/tbody/tr[2]/td[4]')
+
+            driver.find_element(By.XPATH, '/html/body').click()  # エンターを押して、次メニューに更新。
+            driver.find_element(By.XPATH, '//*[@id="PlanMakeRadio_1"]').click()#計画書を作成しないを選択
+
             driver.find_element(By.XPATH, '//*[@id="TabItem2"]/span').click()
             # driver.find_element(By.CSS_SELECTOR,'#TabItem2 > span').click()
 
@@ -1010,10 +1017,10 @@ while True:
             window.close()
 
 #=================================要員実績箱作成ルーチン===========================================要員割り当てで自動で入るのでこのルーチンは不要。
-    #G-smartからの実績読み込みに変更しよう。　　　８８８
+    #G-smartからの実績読み込みに変更しよう。　
 
 
-    elif event == '-YOUIN-':#要員実績箱作成ルーチン
+    elif event == '-YOUIN-':#要員実績作成ルーチン
         window.close()
 
 
