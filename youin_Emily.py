@@ -28,7 +28,7 @@ sg.theme('Python')
 
 layout =[[sg.Text('[NT_Emily_自動操作ソフト]',font = ('Noto Serif CJK JP',14))],
 
-         [sg.Text('[Emilyで要員実績の箱を自動作成。要員作成する各自の社員番号でログインしてください。] ',font = ('meiryo',10))],
+         [sg.Text('[Emilyで要員実績予定を勤務表から取り込み入力。要員作成する各自の社員番号でログインしてください。] ',font = ('meiryo',10))],
 
          [sg.Listbox(manNos,size =(25,len(manNos)),key='-MN-')],
 
@@ -266,9 +266,9 @@ layout = [[sg.Text('要員実績を入力する年月を入れてください。
           # [sg.Listbox(manNos,size =(25,len(manNos)),key='-NM-')],
           [sg.Button('入力', button_color=('blue', '#808080'), key='-INPUT-'),sg.Text('作成する要員実績の年月', key = '-text1-')],
           [sg.Button('実行', button_color=('red', '#808080'), key='-SUBMIT-'),
-           sg.Text('入力した年月でログインした人の要員実績の箱が自動作成されます。', font=('Noto Serif CJK JP', 10))]]
+           sg.Text('入力した年月でログインした人の要員実績を勤務表から入力されます。', font=('Noto Serif CJK JP', 10))]]
 
-window = sg.Window('要員実績箱作成ツール', layout, size=(500, 100))
+window = sg.Window('要員実績入力ツール', layout, size=(500, 100))
 
 while True:
     event,values = window.read()
@@ -352,7 +352,34 @@ form.send_keys(kobetsu_No)#案件番号を入力
 
 driver.find_element(By.XPATH,'/html/body').send_keys(Keys.ENTER)#エンターを押して、次メニューに更新。
 #
-#
+#===========================================勤務表取り込みルーチンGet_Kinmu.py
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#===========================================
+
 driver.find_element(By.XPATH,'//*[@id="TargetMonthBox"]').clear()
 
 driver.find_element(By.XPATH,'//*[@id="TargetMonthBox"]').send_keys(taishou_mon)#対象年月を変更。
